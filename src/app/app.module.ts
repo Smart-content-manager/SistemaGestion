@@ -15,19 +15,19 @@ import { MatListModule } from '@angular/material/list';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatCardModule } from '@angular/material/card';
 import { AppRoutingModule } from './app-routing/app-routing.module';
-import { DragDropComponent } from './drag-drop/drag-drop.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { FileFormComponent } from './file-form/file-form.component';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatRadioModule } from '@angular/material/radio';
 import { ReactiveFormsModule } from '@angular/forms';
+import {MainPanelModule} from "./main-panel/main-panel.module";
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 @NgModule({
   declarations: [
     AppComponent,
     NavigationComponent,
-    DragDropComponent,
     FileFormComponent
   ],
   imports: [
@@ -48,7 +48,9 @@ import { ReactiveFormsModule } from '@angular/forms';
     MatInputModule,
     MatSelectModule,
     MatRadioModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MainPanelModule,
+
   ],
   providers: [],
   bootstrap: [AppComponent]
