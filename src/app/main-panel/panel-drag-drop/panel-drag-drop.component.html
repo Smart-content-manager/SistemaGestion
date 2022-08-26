@@ -1,0 +1,9 @@
+<div class="main-panel">
+  <ng-container *ngFor="let object of listFiles">
+    <app-icon-object-file
+      (fileClickLeft)="clickLeft($event)"
+      (fileClickRight)="clickRight($event)"
+      [fileObject]="object"
+    ></app-icon-object-file>
+  </ng-container>
+</div>
