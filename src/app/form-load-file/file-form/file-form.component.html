@@ -1,0 +1,42 @@
+<form [formGroup]="fileForm" novalidate (ngSubmit)="onSubmit()">
+  <mat-card class="shipping-card">
+    <mat-card-header>
+      <mat-card-title>Shipping Information</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <mat-grid-list cols="1" rowHeight="250px">
+        <div>
+          <label>Drag and drop the file over the red box: </label>
+        </div>
+        <mat-grid-tile>
+          <mat-card class="full-width card">
+            <input
+              type="file"
+              (change)="getFile($event)"
+              class="file full-width"
+            />
+          </mat-card>
+        </mat-grid-tile>
+      </mat-grid-list>
+      <div class="row" *ngIf="file != undefined">
+        <div class="col">
+          <h2>{{ file.name }}</h2>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <mat-form-field class="full-width">
+            <input
+              matInput
+              placeholder="File name"
+              formControlName="fileName"
+            />
+          </mat-form-field>
+        </div>
+      </div>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-raised-button color="primary" type="submit">Submit</button>
+    </mat-card-actions>
+  </mat-card>
+</form>

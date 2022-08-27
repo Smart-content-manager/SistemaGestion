@@ -15,7 +15,7 @@ describe('FileFormComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ FileFormComponent ],
+      declarations: [FileFormComponent],
       imports: [
         NoopAnimationsModule,
         ReactiveFormsModule,
