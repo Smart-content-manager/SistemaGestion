@@ -4,6 +4,14 @@
       (fileClickLeft)="clickLeft($event)"
       (fileClickRight)="clickRight($event)"
       [fileObject]="object"
+      [menu]="appMenu"
     ></app-icon-object-file>
+
+    <mat-menu #appMenu="matMenu">
+      <ng-template matMenuContent let-name="name">
+        <button mat-menu-item>Settings</button>
+        <button mat-menu-item>Log off {{name}}</button>
+      </ng-template>
+    </mat-menu>
   </ng-container>
 </div>

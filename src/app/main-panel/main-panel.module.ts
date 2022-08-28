@@ -5,18 +5,24 @@ import {MatIconModule} from "@angular/material/icon";
 import {FontAwesomeModule} from "@fortawesome/angular-fontawesome";
 import {MatCardModule} from "@angular/material/card";
 import { IconObjectFileComponent } from './icon-object-file/icon-object-file.component';
+import { MenuFileOptionsComponent } from './menu-file-options/menu-file-options.component';
+import {MatMenuModule} from "@angular/material/menu";
+import {MatButtonModule} from "@angular/material/button";
 
 
 @NgModule({
   declarations: [
     PanelDragDropComponent,
-    IconObjectFileComponent
+    IconObjectFileComponent,
+    MenuFileOptionsComponent
   ],
   imports: [
     CommonModule,
     MatIconModule,
     FontAwesomeModule,
-    MatCardModule
+    MatCardModule,
+    MatMenuModule,
+    MatButtonModule
   ],
   exports: [PanelDragDropComponent]
 })

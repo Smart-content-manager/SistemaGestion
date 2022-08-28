@@ -1,4 +1,11 @@
-<div (click)="clickFileLeft()" (contextmenu)="clickFileRight($event)" class="container-icon">
+<div
+  (click)="clickFileLeft()"
+  (contextmenu)="clickFileRight($event)"
+  [matMenuTriggerData]="{name: fileObject!.name}"
+  [matMenuTriggerFor]="menu"
+  #iconFileTrigger="matMenuTrigger"
+  class="container-icon"
+>
   <fa-icon [icon]="fileObject!.icon" size="5x"></fa-icon>
   <span>{{fileObject!.name}}</span>
 </div>

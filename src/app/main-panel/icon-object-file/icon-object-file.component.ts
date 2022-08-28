@@ -1,5 +1,6 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {FileObject} from "../models/FileType";
+import {MatMenuPanel, MatMenuTrigger} from "@angular/material/menu";
 
 @Component({
   selector: 'app-icon-object-file',
@@ -8,7 +9,11 @@ import {FileObject} from "../models/FileType";
 })
 export class IconObjectFileComponent implements OnInit {
 
-  @Input() fileObject: FileObject | null = null
+  @ViewChild('iconFileTrigger') iconFileTrigger: MatMenuTrigger | undefined;
+
+  @Input() fileObject: FileObject | null = null;
+  @Input() menu: MatMenuPanel | null = null;
+
   @Output() fileClickLeft = new EventEmitter<FileObject>();
   @Output() fileClickRight = new EventEmitter<FileObject>();
 
@@ -20,10 +25,12 @@ export class IconObjectFileComponent implements OnInit {
 
   clickFileLeft() {
     this.fileClickLeft.emit(this.fileObject!)
+    this.iconFileTrigger?.closeMenu()
   }
   clickFileRight(event:any) {
     event.preventDefault()
     this.fileClickRight.emit(this.fileObject!)
+    this.iconFileTrigger?.openMenu()
   }
 
 }

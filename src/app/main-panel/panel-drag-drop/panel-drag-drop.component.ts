@@ -20,6 +20,8 @@ export class PanelDragDropComponent implements OnInit {
     {name: "archivo3.docx", type: FileType.FILE, link: "", icon: faFile},
   ]
 
+  fileSelected: FileObject | null = null
+
   constructor() {
   }
 
@@ -27,10 +29,12 @@ export class PanelDragDropComponent implements OnInit {
   }
 
   clickLeft(file: FileObject) {
-    console.log("Se hizo click izquierdo en el archivo " + file.name)
+    console.log("Se hizo click izquierdo en angulael archivo " + file.name)
+    this.fileSelected=file;
   }
 
   clickRight(file: FileObject) {
     console.log("Se hizo click derecho en el archivo " + file.name)
+    this.fileSelected=file;
   }
 }
