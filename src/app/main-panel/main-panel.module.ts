@@ -4,10 +4,11 @@ import {PanelDragDropComponent} from './panel-drag-drop/panel-drag-drop.componen
 import {MatIconModule} from "@angular/material/icon";
 import {FontAwesomeModule} from "@fortawesome/angular-fontawesome";
 import {MatCardModule} from "@angular/material/card";
-import { IconObjectFileComponent } from './icon-object-file/icon-object-file.component';
-import { MenuFileOptionsComponent } from './menu-file-options/menu-file-options.component';
+import {IconObjectFileComponent} from './icon-object-file/icon-object-file.component';
+import {MenuFileOptionsComponent} from './menu-file-options/menu-file-options.component';
 import {MatMenuModule} from "@angular/material/menu";
 import {MatButtonModule} from "@angular/material/button";
+import {MatDividerModule} from "@angular/material/divider";
 
 
 @NgModule({
@@ -22,7 +23,8 @@ import {MatButtonModule} from "@angular/material/button";
     FontAwesomeModule,
     MatCardModule,
     MatMenuModule,
-    MatButtonModule
+    MatButtonModule,
+    MatDividerModule
   ],
   exports: [PanelDragDropComponent]
 })

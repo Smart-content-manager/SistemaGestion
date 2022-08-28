@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
-import {FileObject, FileType} from "../models/FileType";
+import {FileObject, FileType} from "../models/FileObject";
 import {faFile, faFolder} from "@fortawesome/free-solid-svg-icons";
+import {ActionsFile} from "./ActionsFile";
 
 @Component({
   selector: 'app-panel-drag-drop',
@@ -29,12 +30,16 @@ export class PanelDragDropComponent implements OnInit {
   }
 
   clickLeft(file: FileObject) {
-    console.log("Se hizo click izquierdo en angulael archivo " + file.name)
-    this.fileSelected=file;
+    // console.log("Se hizo click izquierdo en angulael archivo " + file.name)
+    this.fileSelected = file;
   }
 
   clickRight(file: FileObject) {
-    console.log("Se hizo click derecho en el archivo " + file.name)
-    this.fileSelected=file;
+    // console.log("Se hizo click derecho en el archivo " + file.name)
+    this.fileSelected = file;
+  }
+
+  listerClickAction(event: { action: ActionsFile; file: FileObject }) {
+    console.log(`accion recibida ${ActionsFile[event.action]} en el archivo ${event.file.name}`)
   }
 }

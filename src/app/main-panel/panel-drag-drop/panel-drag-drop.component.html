@@ -10,7 +10,9 @@
     <!-- only create a one  menu context for all files-->
     <mat-menu #appMenu="matMenu">
       <ng-template let-file="file" matMenuContent>
-        <app-menu-file-options [currentFile]="file"></app-menu-file-options>
+        <app-menu-file-options
+          (clickOptionEvent)="listerClickAction($event)"
+          [currentFile]="file"></app-menu-file-options>
       </ng-template>
     </mat-menu>
   </ng-container>

@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
-import {FileObject} from "../models/FileType";
+import {FileObject} from "../models/FileObject";
 import {MatMenuPanel, MatMenuTrigger} from "@angular/material/menu";
 
 @Component({
@@ -11,8 +11,10 @@ export class IconObjectFileComponent implements OnInit {
 
   @ViewChild('iconFileTrigger') iconFileTrigger: MatMenuTrigger | undefined;
 
-  @Input() fileObject: FileObject | null = null;
   @Input() menu: MatMenuPanel | null = null;
+
+  @Input() fileObject: FileObject | undefined;
+  @Input() currentSelectedFile: FileObject | undefined
 
   @Output() fileClickLeft = new EventEmitter<FileObject>();
   @Output() fileClickRight = new EventEmitter<FileObject>();
