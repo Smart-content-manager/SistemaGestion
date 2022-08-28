@@ -1,5 +1,5 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
-import {MatMenuTrigger} from "@angular/material/menu";
+import {Component, Input, OnInit} from '@angular/core';
+import {FileObject} from "../models/FileType";
 
 @Component({
   selector: 'app-menu-file-options',
@@ -8,9 +8,10 @@ import {MatMenuTrigger} from "@angular/material/menu";
 })
 export class MenuFileOptionsComponent implements OnInit {
 
-  @ViewChild(MatMenuTrigger) trigger: MatMenuTrigger | undefined;
+  @Input() currentFile: FileObject | undefined;
 
-  constructor() { }
+  constructor() {
+  }
 
   ngOnInit(): void {
   }
