@@ -9,13 +9,19 @@ import {MatMenuPanel, MatMenuTrigger} from "@angular/material/menu";
 })
 export class IconObjectFileComponent implements OnInit {
 
+  // * get trigger for open or close menu programmatically
   @ViewChild('iconFileTrigger') iconFileTrigger: MatMenuTrigger | undefined;
 
+  // * get menu trigger for another component
   @Input() menu: MatMenuPanel | null = null;
 
+  // * get file object for paining property's
   @Input() fileObject: FileObject | undefined;
+
+  // * get the curren file selected for change the background color if is needed
   @Input() currentSelectedFile: FileObject | undefined
 
+  // * capture the click events
   @Output() fileClickLeft = new EventEmitter<FileObject>();
   @Output() fileClickRight = new EventEmitter<FileObject>();
 
@@ -25,11 +31,15 @@ export class IconObjectFileComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  // * send event click left and no open the contextual menu
+  // ! os no has "no open action", so close menu
   clickFileLeft() {
     this.fileClickLeft.emit(this.fileObject!)
     this.iconFileTrigger?.closeMenu()
   }
-  clickFileRight(event:any) {
+
+  // * prevent normal menu when clicked right and show owner menu
+  clickFileRight(event: any) {
     event.preventDefault()
     this.fileClickRight.emit(this.fileObject!)
     this.iconFileTrigger?.openMenu()
