@@ -3,7 +3,7 @@
   <!-- * init panel with listener clicks for list file -->
   <!-- ! is import pass "fileMenu", this is a ref for open mat menu -->
 
-  <ng-container *ngFor="let object of listFiles">
+  <ng-container *ngFor="let object of listFiles | async">
     <app-icon-object-file
       (fileClickLeft)="clickLeft($event)"
       (fileClickRight)="clickRight($event)"

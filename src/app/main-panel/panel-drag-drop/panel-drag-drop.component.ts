@@ -1,7 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {FileObject, FileType} from "../models/FileObject";
-import {faFile, faFolder} from "@fortawesome/free-solid-svg-icons";
 import {ActionsFile} from "./ActionsFile";
+import {StorageService} from "../../services/storage.service";
+import {Observable} from "rxjs";
 
 @Component({
   selector: 'app-panel-drag-drop',
@@ -10,20 +11,14 @@ import {ActionsFile} from "./ActionsFile";
 })
 export class PanelDragDropComponent implements OnInit {
 
-  listFiles: FileObject[] = [
-    {name: "folder1", type: FileType.FOLDER, link: "", icon: faFolder},
-    {name: "folder2", type: FileType.FOLDER, link: "", icon: faFolder},
-    {name: "folder3", type: FileType.FOLDER, link: "", icon: faFolder},
-    {name: "folder4", type: FileType.FOLDER, link: "", icon: faFolder},
-    {name: "foto.jpg", type: FileType.FILE, link: "", icon: faFile},
-    {name: "archivo.png", type: FileType.FILE, link: "", icon: faFile},
-    {name: "archivo2.pdf", type: FileType.FILE, link: "", icon: faFile},
-    {name: "archivo3.docx", type: FileType.FILE, link: "", icon: faFile},
-  ]
 
   fileSelected: FileObject | null = null
+  listFiles: Observable<FileObject[]>
 
-  constructor() {
+  constructor(
+    private storage: StorageService
+  ) {
+    this.listFiles = storage.listFilesInFolder
   }
 
   ngOnInit(): void {
@@ -31,12 +26,20 @@ export class PanelDragDropComponent implements OnInit {
 
   clickLeft(file: FileObject) {
     // console.log("Se hizo click izquierdo en angulael archivo " + file.name)
-    this.fileSelected = file;
+    if (this.fileSelected == file) {
+      if(file.type == FileType.FOLDER){
+        console.log(`dir = ${file.link}`)
+        this.storage.reloadFilesFromPath(file.link)
+      }
+    } else {
+      this.fileSelected = file;
+    }
   }
 
   clickRight(file: FileObject) {
     // console.log("Se hizo click derecho en el archivo " + file.name)
     this.fileSelected = file;
+
   }
 
   listerClickAction(event: { action: ActionsFile; file: FileObject }) {
