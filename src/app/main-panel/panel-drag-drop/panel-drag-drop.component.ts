@@ -1,7 +1,9 @@
-import {Component, OnInit} from '@angular/core';
-import {FileObject, FileType} from "../models/FileObject";
-import {faFile, faFolder} from "@fortawesome/free-solid-svg-icons";
-import {ActionsFile} from "./ActionsFile";
+import { Component, OnInit } from '@angular/core';
+import { FileObject, FileType } from "../models/FileObject";
+import { faFile, faFolder } from "@fortawesome/free-solid-svg-icons";
+import { ActionsFile } from "./ActionsFile";
+import { ServiceService } from 'src/app/services/service.service';
+import { getDownloadURL } from '@angular/fire/storage';
 
 @Component({
   selector: 'app-panel-drag-drop',
@@ -10,23 +12,43 @@ import {ActionsFile} from "./ActionsFile";
 })
 export class PanelDragDropComponent implements OnInit {
 
-  listFiles: FileObject[] = [
-    {name: "folder1", type: FileType.FOLDER, link: "", icon: faFolder},
-    {name: "folder2", type: FileType.FOLDER, link: "", icon: faFolder},
-    {name: "folder3", type: FileType.FOLDER, link: "", icon: faFolder},
-    {name: "folder4", type: FileType.FOLDER, link: "", icon: faFolder},
-    {name: "foto.jpg", type: FileType.FILE, link: "", icon: faFile},
-    {name: "archivo.png", type: FileType.FILE, link: "", icon: faFile},
-    {name: "archivo2.pdf", type: FileType.FILE, link: "", icon: faFile},
-    {name: "archivo3.docx", type: FileType.FILE, link: "", icon: faFile},
-  ]
+  listFiles: FileObject[] = []
 
   fileSelected: FileObject | null = null
 
-  constructor() {
+  constructor(private serviceS: ServiceService) {
   }
 
   ngOnInit(): void {
+    // ! Falta implementar el sistema de cache
+    this.serviceS.listAllFile().then(response => {
+      response.prefixes.forEach((prefix: any) => {
+        this.listFiles.push(
+          {
+            'name': prefix.name,
+            'type': FileType.FOLDER,
+            'link': "",
+            'icon': faFolder
+          }
+        )
+      });
+      response.items.forEach((item: any) => {
+        let fileUrl = getDownloadURL(item)
+        this.listFiles.push(
+          {
+            'name': item.name,
+            'type': FileType.FOLDER,
+            'link': fileUrl,
+            'icon': faFile
+          }
+        )
+      });
+      if (response.nextPageToken != undefined) {
+        response.nextPageToken.forEach((token: any) => {
+          console.log(token);
+        });
+      }
+    })
   }
 
   clickLeft(file: FileObject) {
