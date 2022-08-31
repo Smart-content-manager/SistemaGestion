@@ -1,5 +1,5 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {FileObject} from "../models/FileObject";
+import {Component, EventEmitter, Input, OnInit, Output, SimpleChanges} from '@angular/core';
+import {FileObject, FileType} from "../models/FileObject";
 import {ActionsFile, ItemActionFile} from "../panel-drag-drop/ActionsFile";
 import {faDownload, faLink, faPen, faTrash} from "@fortawesome/free-solid-svg-icons";
 
@@ -16,14 +16,25 @@ export class MenuFileOptionsComponent implements OnInit {
   @Output() clickOptionEvent = new EventEmitter<{ action: ActionsFile, file: FileObject }>();
 
   // * show all options with icon and text
-  listOptions: ItemActionFile[] = [
+  listFileOptions: ItemActionFile[] = [
     {name: "Remombrar", action: ActionsFile.RENAME, iconAction: faPen},
     {name: "Eliminar", action: ActionsFile.DELETE, iconAction: faTrash},
     {name: "Descargar", action: ActionsFile.DOWNLOAD, iconAction: faDownload},
     {name: "Obtener link", action: ActionsFile.GET_LINK, iconAction: faLink}
   ];
 
+  listFolderOptions: ItemActionFile[] = [
+    {name: "Remombrar", action: ActionsFile.RENAME, iconAction: faPen},
+    {name: "Eliminar", action: ActionsFile.DELETE, iconAction: faTrash},
+  ];
+
+  listCurrentOptions: ItemActionFile[] = []
+
   constructor() {
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    this.changeOptions(changes["currentFile"].currentValue);
   }
 
   ngOnInit(): void {
@@ -34,4 +45,14 @@ export class MenuFileOptionsComponent implements OnInit {
     this.clickOptionEvent.emit({action: selectAction.action, file: this.currentFile!})
   }
 
+  private changeOptions(currentValue: FileObject) {
+    switch (currentValue.type) {
+      case FileType.FILE:
+        this.listCurrentOptions = this.listFileOptions
+        break;
+      case FileType.FOLDER:
+        this.listCurrentOptions = this.listFolderOptions
+        break;
+    }
+  }
 }

@@ -1,9 +1,16 @@
 <!-- header and divider with name file -->
-<p class="name-file">{{currentFile!.name}}</p>
+
+<div class="container-header">
+  <fa-icon
+    [icon]="currentFile!.icon"
+    class="icon-header"
+  ></fa-icon>
+  <span class="name-file">{{currentFile!.name}}</span>
+</div>
 <mat-divider></mat-divider>
 
 <!-- show all options -->
-<ng-container *ngFor="let item of listOptions">
+<ng-container *ngFor="let item of listCurrentOptions">
   <button (click)="clickOption(item)" mat-menu-item>
     <fa-icon [icon]="item.iconAction"></fa-icon>
     <span class="item-option">{{item.name}}</span>
