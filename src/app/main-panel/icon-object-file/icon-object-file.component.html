@@ -4,6 +4,7 @@
   [matMenuTriggerData]="{file: fileObject!}"
   [matMenuTriggerFor]="menu"
   #iconFileTrigger="matMenuTrigger"
+  [class.file-selected]="currentSelectedFile==fileObject"
   class="container-icon"
 >
   <fa-icon [icon]="fileObject!.icon" size="5x"></fa-icon>

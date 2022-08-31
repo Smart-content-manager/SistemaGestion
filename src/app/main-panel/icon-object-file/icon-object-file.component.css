@@ -18,10 +18,19 @@
   cursor: pointer;
   background-color: #bd93f9;
 }
-.container-icon:active {
+
+.file-selected:hover {
+  cursor: pointer;
   background-color: #ff79c6;
+}
+
+.file-selected{
+  background-color: #ff79c6;
+}
+
+.container-icon:active {
   transform: scale(0.95);
-  transition: transform 0.2s;
+  transition: transform 0.1s;
 }
 
 .noselect {

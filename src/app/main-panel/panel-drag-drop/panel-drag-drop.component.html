@@ -1,4 +1,4 @@
-<div class="main-panel">
+<div id="main-panel">
 
   <!-- * init panel with listener clicks for list file -->
   <!-- ! is import pass "fileMenu", this is a ref for open mat menu -->
@@ -9,6 +9,7 @@
       (fileClickRight)="clickRight($event)"
       [fileObject]="object"
       [menu]="fileMenu"
+      [currentSelectedFile]="fileSelected"
     ></app-icon-object-file>
 
     <!-- * only create a one  menu context for all files -->

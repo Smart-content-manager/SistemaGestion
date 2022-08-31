@@ -14,8 +14,8 @@ import {DialogCreateOrUploadComponent} from "../dialog-create-or-upload/dialog-c
 export class PanelDragDropComponent implements OnInit {
 
 
-  fileSelected: FileObject | null = null
-  listFiles: Observable<FileObject[]>
+  fileSelected: FileObject | undefined;
+  listFiles: Observable<FileObject[]>;
 
   constructor(
     private storage: StorageService,
