@@ -9,13 +9,16 @@ import {MenuFileOptionsComponent} from './menu-file-options/menu-file-options.co
 import {MatMenuModule} from "@angular/material/menu";
 import {MatButtonModule} from "@angular/material/button";
 import {MatDividerModule} from "@angular/material/divider";
+import { DialogCreateOrUploadComponent } from './dialog-create-or-upload/dialog-create-or-upload.component';
+import {MatDialogModule} from '@angular/material/dialog';
 
 
 @NgModule({
   declarations: [
     PanelDragDropComponent,
     IconObjectFileComponent,
-    MenuFileOptionsComponent
+    MenuFileOptionsComponent,
+    DialogCreateOrUploadComponent
   ],
   imports: [
     CommonModule,
@@ -24,7 +27,8 @@ import {MatDividerModule} from "@angular/material/divider";
     MatCardModule,
     MatMenuModule,
     MatButtonModule,
-    MatDividerModule
+    MatDividerModule,
+    MatDialogModule
   ],
   exports: [PanelDragDropComponent]
 })

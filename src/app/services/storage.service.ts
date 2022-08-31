@@ -10,7 +10,7 @@ import {faFile, faFolder} from "@fortawesome/free-solid-svg-icons";
 export class StorageService {
 
   constructor(private storage: Storage) {
-    this.reloadFilesFromPath(this._currentPath.value);
+    //this.reloadFilesFromPath(this._currentPath.value);
   }
 
   private _listFilesInFolder = new BehaviorSubject<FileObject[]>([]);
