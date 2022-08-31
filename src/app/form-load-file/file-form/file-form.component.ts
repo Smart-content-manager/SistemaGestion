@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { ServiceService } from 'src/app/services/service.service';
+import { StorageService } from 'src/app/services/storage.service';
 
 
 @Component({
@@ -16,7 +16,7 @@ export class FileFormComponent {
 
   constructor(
     private fb: FormBuilder,
-    private serviceS: ServiceService
+    private serviceS: StorageService
   ) { }
 
   file: any

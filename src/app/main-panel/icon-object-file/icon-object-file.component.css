@@ -1,4 +1,4 @@
-.container-icon{
+.container-icon {
   margin: 0 auto;
   width: 100px;
   height: 100px;
@@ -7,12 +7,19 @@
   justify-content: center;
   align-items: center;
   padding: 10px;
+  border-radius: 15px;
+  -webkit-border-radius: 15px;
+  -moz-border-radius: 15px;
+  -ms-border-radius: 15px;
+  -o-border-radius: 15px;
 }
 
-.container-icon:hover{
+.container-icon:hover {
   cursor: pointer;
+  background-color: #bd93f9;
 }
-.container-icon:active{
+.container-icon:active {
+  background-color: #ff79c6;
   transform: scale(0.95);
   transition: transform 0.2s;
 }
