@@ -1,7 +1,7 @@
-import {Component, EventEmitter, Input, OnInit, Output, SimpleChanges} from '@angular/core';
-import {FileObject, FileType} from "../models/FileObject";
-import {ActionsFile, ItemActionFile} from "../panel-drag-drop/ActionsFile";
-import {faDownload, faLink, faPen, faTrash} from "@fortawesome/free-solid-svg-icons";
+import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
+import { FileObject, FileType } from "../models/FileObject";
+import { ActionsFile, ItemActionFile } from "../panel-drag-drop/ActionsFile";
+import { faDownload, faLink, faPen, faTrash } from "@fortawesome/free-solid-svg-icons";
 
 @Component({
   selector: 'app-menu-file-options',
@@ -17,15 +17,13 @@ export class MenuFileOptionsComponent implements OnInit {
 
   // * show all options with icon and text
   listFileOptions: ItemActionFile[] = [
-    {name: "Remombrar", action: ActionsFile.RENAME, iconAction: faPen},
-    {name: "Eliminar", action: ActionsFile.DELETE, iconAction: faTrash},
-    {name: "Descargar", action: ActionsFile.DOWNLOAD, iconAction: faDownload},
-    {name: "Obtener link", action: ActionsFile.GET_LINK, iconAction: faLink}
+    { name: "Eliminar", action: ActionsFile.DELETE, iconAction: faTrash },
+    { name: "Descargar", action: ActionsFile.DOWNLOAD, iconAction: faDownload },
+    { name: "Obtener link", action: ActionsFile.GET_LINK, iconAction: faLink }
   ];
 
   listFolderOptions: ItemActionFile[] = [
-    {name: "Remombrar", action: ActionsFile.RENAME, iconAction: faPen},
-    {name: "Eliminar", action: ActionsFile.DELETE, iconAction: faTrash},
+    { name: "Eliminar", action: ActionsFile.DELETE, iconAction: faTrash },
   ];
 
   listCurrentOptions: ItemActionFile[] = []
@@ -42,7 +40,7 @@ export class MenuFileOptionsComponent implements OnInit {
 
   // * when select option emits this action
   clickOption(selectAction: ItemActionFile): void {
-    this.clickOptionEvent.emit({action: selectAction.action, file: this.currentFile!})
+    this.clickOptionEvent.emit({ action: selectAction.action, file: this.currentFile! })
   }
 
   private changeOptions(currentValue: FileObject) {

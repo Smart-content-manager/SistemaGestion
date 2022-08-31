@@ -1,10 +1,10 @@
-import {Component, HostListener, OnInit} from '@angular/core';
-import {FileObject, FileType} from "../models/FileObject";
-import {ActionsFile} from "./ActionsFile";
-import {StorageService} from "../../services/storage.service";
-import {Observable} from "rxjs";
-import {MatDialog} from "@angular/material/dialog";
-import {DialogCreateOrUploadComponent} from "../dialog-create-or-upload/dialog-create-or-upload.component";
+import { Component, HostListener, OnInit } from '@angular/core';
+import { FileObject, FileType } from "../models/FileObject";
+import { ActionsFile } from "./ActionsFile";
+import { StorageService } from "../../services/storage.service";
+import { Observable } from "rxjs";
+import { MatDialog } from "@angular/material/dialog";
+import { DialogCreateOrUploadComponent } from "../dialog-create-or-upload/dialog-create-or-upload.component";
 
 @Component({
   selector: 'app-panel-drag-drop',
@@ -36,8 +36,8 @@ export class PanelDragDropComponent implements OnInit {
         case FileType.FILE:
           console.log("Se selecciono subir un archivo");
           break;
-          case FileType.FOLDER:
-            console.log("Se selecciono crear un directorio")
+        case FileType.FOLDER:
+          console.log("Se selecciono crear un directorio")
           break;
         default:
           console.log("No se selecciono una opcion valida")
@@ -68,13 +68,22 @@ export class PanelDragDropComponent implements OnInit {
 
   listerClickAction(event: { action: ActionsFile; file: FileObject }) {
     console.log(`accion recibida ${ActionsFile[event.action]} en el archivo ${event.file.name}`)
+    if (ActionsFile[event.action] == 'DOWNLOAD') {
+      this.storage.downloadFile(event.file.link)
+    }
+    if (ActionsFile[event.action] == 'GET_LINK') {
+      this.storage.copyToClipboard(event.file.link)
+    }
+    if (ActionsFile[event.action] == 'DELETE') {
+      this.storage.deleteFile(event.file.name)
+    }
   }
 
   @HostListener('document:click', ['$event'])
   documentClick(event: any) {
-    const elementRef=(event.target as Element)
-    if (elementRef.id=== 'main-panel' || elementRef.className === 'ng-star-inserted') {
-      this.fileSelected=undefined
+    const elementRef = (event.target as Element)
+    if (elementRef.id === 'main-panel' || elementRef.className === 'ng-star-inserted') {
+      this.fileSelected = undefined
     }
   }
 }

@@ -1,9 +1,14 @@
 import { Injectable } from '@angular/core';
-import { getDownloadURL, listAll, ref, Storage, uploadBytes, ListResult } from "@angular/fire/storage";
+import { getDownloadURL, listAll, ref, Storage, uploadBytes, ListResult, getStorage, getBytes, deleteObject } from "@angular/fire/storage";
 import { BehaviorSubject } from "rxjs";
 import { FileObject, FileType } from "../main-panel/models/FileObject";
 import { faFile, faFolder } from "@fortawesome/free-solid-svg-icons";
 import { Router } from '@angular/router';
+import { Clipboard } from '@angular/cdk/clipboard';
+import { MatDialog } from "@angular/material/dialog";
+import { DialogClipboardComponent } from '../main-panel/dialog-clipboard/dialog-clipboard.component';
+import { DialogDeleteComponent } from '../main-panel/dialog-delete/dialog-delete.component';
+
 
 @Injectable({
   providedIn: 'root'
@@ -11,6 +16,8 @@ import { Router } from '@angular/router';
 export class StorageService {
 
   constructor(
+    private dialog: MatDialog,
+    private clipboard: Clipboard,
     private storage: Storage,
     private router: Router
   ) {
@@ -91,6 +98,37 @@ export class StorageService {
         })
       }).catch(error => console.log(error))
     })
+  }
+
+  downloadFile(fileUrl: any) {
+    const xhr = new XMLHttpRequest();
+    xhr.responseType = 'blob';
+    xhr.onload = (event) => {
+      const blob = xhr.response;
+    };
+    xhr.open('GET', fileUrl);
+    xhr.send();
+  }
+
+  copyToClipboard(fileLink: string): void {
+    this.clipboard.copy(fileLink);
+    const dialogRef = this.dialog.open(DialogClipboardComponent, {
+      width: '250px',
+    });
+    dialogRef.afterClosed().subscribe();
+  }
+
+  deleteFile(fileName: string) {
+    const fileRef = ref(this.storage, fileName);
+    deleteObject(fileRef).then(() => {
+      const dialogRef = this.dialog.open(DialogDeleteComponent, {
+        width: '250px',
+      });
+      dialogRef.afterClosed().subscribe();
+    }).catch((error) => {
+      console.log(error);
+
+    });
   }
 
 }
