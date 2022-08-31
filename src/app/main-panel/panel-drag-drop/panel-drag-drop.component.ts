@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, HostListener, OnInit} from '@angular/core';
 import {FileObject, FileType} from "../models/FileObject";
 import {ActionsFile} from "./ActionsFile";
 import {StorageService} from "../../services/storage.service";
@@ -68,5 +68,13 @@ export class PanelDragDropComponent implements OnInit {
 
   listerClickAction(event: { action: ActionsFile; file: FileObject }) {
     console.log(`accion recibida ${ActionsFile[event.action]} en el archivo ${event.file.name}`)
+  }
+
+  @HostListener('document:click', ['$event'])
+  documentClick(event: any) {
+    const elementRef=(event.target as Element)
+    if (elementRef.id=== 'main-panel' || elementRef.className === 'ng-star-inserted') {
+      this.fileSelected=undefined
+    }
   }
 }

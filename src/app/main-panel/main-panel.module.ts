@@ -11,6 +11,7 @@ import {MatButtonModule} from "@angular/material/button";
 import {MatDividerModule} from "@angular/material/divider";
 import { DialogCreateOrUploadComponent } from './dialog-create-or-upload/dialog-create-or-upload.component';
 import {MatDialogModule} from '@angular/material/dialog';
+import { ClickOutsideDirective } from './click-outside.directive';
 
 
 @NgModule({
@@ -18,7 +19,8 @@ import {MatDialogModule} from '@angular/material/dialog';
     PanelDragDropComponent,
     IconObjectFileComponent,
     MenuFileOptionsComponent,
-    DialogCreateOrUploadComponent
+    DialogCreateOrUploadComponent,
+    ClickOutsideDirective
   ],
   imports: [
     CommonModule,

@@ -3,7 +3,9 @@
   grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
   grid-gap: 10px;
   justify-items: center;
-  padding: 10px;
+  width: 100%;
+  /* * remove height from toolbar */
+  height: calc(100% - 64px);
 }
 
 #button-add{
