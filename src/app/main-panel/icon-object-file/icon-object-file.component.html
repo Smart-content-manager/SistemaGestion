@@ -1,12 +1,13 @@
 <div
   (click)="clickFileLeft()"
   (contextmenu)="clickFileRight($event)"
-  [matMenuTriggerData]="{file: fileObject!}"
+  [matMenuTriggerData]="{ file: fileObject! }"
   [matMenuTriggerFor]="menu"
   #iconFileTrigger="matMenuTrigger"
-  [class.file-selected]="currentSelectedFile==fileObject"
+  [class.file-selected]="currentSelectedFile == fileObject"
   class="container-icon"
+  *ngIf="fileObject!.name"
 >
   <fa-icon [icon]="fileObject!.icon" size="5x"></fa-icon>
-  <span class="noselect">{{fileObject!.name}}</span>
+  <span class="noselect">{{ fileObject!.name }}</span>
 </div>

@@ -21,7 +21,7 @@ export class StorageService {
     private storage: Storage,
     private router: Router
   ) {
-    this.reloadFilesFromPath(this._currentPath.value);
+    this.reloadFilesFromPath(this._currentPath.value, this._currectFolder);
   }
 
   private _listFilesInFolder = new BehaviorSubject<FileObject[]>([]);
@@ -31,12 +31,16 @@ export class StorageService {
   }
 
   private _currentPath = new BehaviorSubject<string>('');
+  private _currectFolder: string = ''
 
   get currentPath() {
     return this._currentPath.asObservable();
   }
 
-  reloadFilesFromPath(path: string) {
+  reloadFilesFromPath(path: string, currentFolder: string) {
+    console.log();
+
+    let finalListFiles: FileObject[]
     this._currentPath.next(path);
     const storageRef = ref(this.storage, path);
     listAll(storageRef).then(async (response) => {
@@ -60,7 +64,19 @@ export class StorageService {
         }
       })
 
-      let finalListFiles = [...listFolders, ...await Promise.all(listFiles)]
+      if (path != "") {
+        finalListFiles = [{
+          name: "../",
+          type: FileType.FOLDER,
+          link: currentFolder,
+          icon: faFolder
+        }, ...listFolders, ...await Promise.all(listFiles)]
+      }
+      else {
+        finalListFiles = [...listFolders, ...await Promise.all(listFiles)]
+      }
+      console.log(finalListFiles);
+
 
       this._listFilesInFolder.next(finalListFiles)
     }).catch(() => {
@@ -100,15 +116,21 @@ export class StorageService {
     })
   }
 
-  downloadFile(fileUrl: any) {
+  downloadFile(fileUrl: any, fileName: any) {
     const xhr = new XMLHttpRequest();
     xhr.responseType = 'blob';
     xhr.onload = (event) => {
       const blob = xhr.response;
-      console.log("blob", blob);
+      const url = window.URL.createObjectURL(blob)
+      const link = document.createElement("a")
+      link.href = url
+      link.download = fileName
+      link.click()
     };
     xhr.open('GET', fileUrl);
     xhr.send();
+
+
 
   }
 
@@ -127,6 +149,7 @@ export class StorageService {
         width: '250px',
       });
       dialogRef.afterClosed().subscribe();
+      this.router.navigate([""])
     }).catch((error) => {
       console.log(error);
 

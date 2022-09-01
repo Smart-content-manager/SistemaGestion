@@ -5,6 +5,7 @@ import { StorageService } from "../../services/storage.service";
 import { Observable } from "rxjs";
 import { MatDialog } from "@angular/material/dialog";
 import { DialogCreateOrUploadComponent } from "../dialog-create-or-upload/dialog-create-or-upload.component";
+import { faFile, faFolder } from "@fortawesome/free-solid-svg-icons";
 
 @Component({
   selector: 'app-panel-drag-drop',
@@ -16,6 +17,7 @@ export class PanelDragDropComponent implements OnInit {
 
   fileSelected: FileObject | undefined;
   listFiles: Observable<FileObject[]>;
+  historialPath: string[] = [""]
 
   constructor(
     private storage: StorageService,
@@ -49,11 +51,17 @@ export class PanelDragDropComponent implements OnInit {
   }
 
   clickLeft(file: FileObject) {
-    // console.log("Se hizo click izquierdo en angulael archivo " + file.name)
+    // console.log("Se hizo click izquierdo en angula el archivo " + file.name)
     if (this.fileSelected == file) {
       if (file.type == FileType.FOLDER) {
-        console.log(`dir = ${file.link}`)
-        this.storage.reloadFilesFromPath(file.link)
+        this.historialPath.push(file.link)
+        let currentFolder = (file.link).split('/')
+        console.log(currentFolder.splice(currentFolder.length - 1, 1), currentFolder);
+        let folder = currentFolder.splice(currentFolder.length - 1, 1)
+        folder = folder.join('/')
+        console.log(folder, "folder");
+        folder = folder == undefined ? "" : folder
+        this.storage.reloadFilesFromPath(file.link, folder)
       }
     } else {
       this.fileSelected = file;
@@ -67,9 +75,8 @@ export class PanelDragDropComponent implements OnInit {
   }
 
   listerClickAction(event: { action: ActionsFile; file: FileObject }) {
-    console.log(`accion recibida ${ActionsFile[event.action]} en el archivo ${event.file.name}`)
     if (ActionsFile[event.action] == 'DOWNLOAD') {
-      this.storage.downloadFile(event.file.link)
+      this.storage.downloadFile(event.file.link, event.file.name)
     }
     if (ActionsFile[event.action] == 'GET_LINK') {
       this.storage.copyToClipboard(event.file.name)

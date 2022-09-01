@@ -1,6 +1,6 @@
-import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
-import {FileObject} from "../models/FileObject";
-import {MatMenuPanel, MatMenuTrigger} from "@angular/material/menu";
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { FileObject } from "../models/FileObject";
+import { MatMenuPanel, MatMenuTrigger } from "@angular/material/menu";
 
 @Component({
   selector: 'app-icon-object-file',

@@ -1,5 +1,4 @@
 <div id="main-panel">
-
   <!-- * init panel with listener clicks for list file -->
   <!-- ! is import pass "fileMenu", this is a ref for open mat menu -->
 
@@ -16,13 +15,13 @@
     <!-- ! this for no has multiples menus options -->
 
     <mat-menu #fileMenu="matMenu">
-
       <!-- * get the var (file) passed as argument when click left in file -->
       <!-- ! for that is necessary "matMenuContent" for lazy component -->
       <ng-template let-file="file" matMenuContent>
         <app-menu-file-options
           (clickOptionEvent)="listerClickAction($event)"
-          [currentFile]="file"></app-menu-file-options>
+          [currentFile]="file"
+        ></app-menu-file-options>
       </ng-template>
     </mat-menu>
   </ng-container>

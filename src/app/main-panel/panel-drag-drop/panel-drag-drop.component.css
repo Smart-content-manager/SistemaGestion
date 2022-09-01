@@ -4,12 +4,12 @@
   grid-gap: 10px;
   justify-items: center;
   width: 100%;
+  margin-top: 20px;
   /* * remove height from toolbar */
-  height: calc(100% - 64px);
 }
 
-#button-add{
- position: absolute;
+#button-add {
+  position: absolute;
   right: 10px;
   bottom: 10px;
 }

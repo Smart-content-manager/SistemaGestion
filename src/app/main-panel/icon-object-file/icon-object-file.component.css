@@ -18,13 +18,21 @@
   cursor: pointer;
   background-color: #bd93f9;
 }
+.noselect {
+  height: 25px;
+  width: 100px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  text-align: center;
+}
 
 .file-selected:hover {
   cursor: pointer;
   background-color: #ff79c6;
 }
 
-.file-selected{
+.file-selected {
   background-color: #ff79c6;
 }
 
