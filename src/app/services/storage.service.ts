@@ -21,7 +21,7 @@ export class StorageService {
     private storage: Storage,
     private router: Router
   ) {
-    this.reloadFilesFromPath(this._currentPath.value, this._currectFolder);
+    this.reloadFilesFromPath(this._currentPath.value);
   }
 
   private _listFilesInFolder = new BehaviorSubject<FileObject[]>([]);
@@ -31,14 +31,12 @@ export class StorageService {
   }
 
   private _currentPath = new BehaviorSubject<string>('');
-  private _currectFolder: string = ''
 
   get currentPath() {
     return this._currentPath.asObservable();
   }
 
-  reloadFilesFromPath(path: string, currentFolder: string) {
-    console.log();
+  reloadFilesFromPath(path: string) {
 
     let finalListFiles: FileObject[]
     this._currentPath.next(path);
@@ -68,14 +66,13 @@ export class StorageService {
         finalListFiles = [{
           name: "../",
           type: FileType.FOLDER,
-          link: currentFolder,
+          link: path,
           icon: faFolder
         }, ...listFolders, ...await Promise.all(listFiles)]
       }
       else {
         finalListFiles = [...listFolders, ...await Promise.all(listFiles)]
       }
-      console.log(finalListFiles);
 
 
       this._listFilesInFolder.next(finalListFiles)
@@ -149,10 +146,9 @@ export class StorageService {
         width: '250px',
       });
       dialogRef.afterClosed().subscribe();
-      this.router.navigate([""])
+      window.location.reload()
     }).catch((error) => {
       console.log(error);
-
     });
   }
 

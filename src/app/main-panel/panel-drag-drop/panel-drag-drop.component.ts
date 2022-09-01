@@ -5,7 +5,6 @@ import { StorageService } from "../../services/storage.service";
 import { Observable } from "rxjs";
 import { MatDialog } from "@angular/material/dialog";
 import { DialogCreateOrUploadComponent } from "../dialog-create-or-upload/dialog-create-or-upload.component";
-import { faFile, faFolder } from "@fortawesome/free-solid-svg-icons";
 
 @Component({
   selector: 'app-panel-drag-drop',
@@ -16,8 +15,9 @@ export class PanelDragDropComponent implements OnInit {
 
 
   fileSelected: FileObject | undefined;
+  fileSelectedLeft: FileObject | any;
   listFiles: Observable<FileObject[]>;
-  historialPath: string[] = [""]
+  historyPath: string[] = [""]  //* Si regresa a commits anteriores guarde este fracmento de codigo ya que existia un bug
 
   constructor(
     private storage: StorageService,
@@ -50,23 +50,18 @@ export class PanelDragDropComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  //* Si regresa a commits anteriores guarde este fracmento de codigo ya que existia un bug
   clickLeft(file: FileObject) {
-    // console.log("Se hizo click izquierdo en angula el archivo " + file.name)
-    if (this.fileSelected == file) {
-      if (file.type == FileType.FOLDER) {
-        this.historialPath.push(file.link)
-        let currentFolder = (file.link).split('/')
-        console.log(currentFolder.splice(currentFolder.length - 1, 1), currentFolder);
-        let folder = currentFolder.splice(currentFolder.length - 1, 1)
-        folder = folder.join('/')
-        console.log(folder, "folder");
-        folder = folder == undefined ? "" : folder
-        this.storage.reloadFilesFromPath(file.link, folder)
+    if (file.type === FileType.FOLDER) {
+      if (this.fileSelectedLeft === file) {
+        file.name != "../" ? this.historyPath.push(file.link) : this.historyPath.pop()
+        this.storage.reloadFilesFromPath(this.historyPath[this.historyPath.length - 1]);
+      } else {
+        this.fileSelectedLeft = file;
       }
-    } else {
-      this.fileSelected = file;
     }
   }
+  //* --------------------------------------------------------------------------------------
 
   clickRight(file: FileObject) {
     // console.log("Se hizo click derecho en el archivo " + file.name)
@@ -79,10 +74,10 @@ export class PanelDragDropComponent implements OnInit {
       this.storage.downloadFile(event.file.link, event.file.name)
     }
     if (ActionsFile[event.action] == 'GET_LINK') {
-      this.storage.copyToClipboard(event.file.name)
+      this.storage.copyToClipboard(event.file.link)
     }
     if (ActionsFile[event.action] == 'DELETE') {
-      this.storage.deleteFile(event.file.name)
+      this.storage.deleteFile(event.file.link)
     }
   }
 
@@ -90,7 +85,7 @@ export class PanelDragDropComponent implements OnInit {
   documentClick(event: any) {
     const elementRef = (event.target as Element)
     if (elementRef.id === 'main-panel' || elementRef.className === 'ng-star-inserted') {
-      this.fileSelected = undefined
+      this.fileSelectedLeft = undefined
     }
   }
 }

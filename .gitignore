@@ -47,4 +47,8 @@ Thumbs.db
 .runtimeconfig.json
 
 firebase.json
+.firebaserc
+storage.rules
+.firebase
+.vscode
 src/environments/

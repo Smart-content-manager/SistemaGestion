@@ -26,6 +26,10 @@ export class MenuFileOptionsComponent implements OnInit {
     { name: "Eliminar", action: ActionsFile.DELETE, iconAction: faTrash },
   ];
 
+  //!No borrar es de una clase de css
+  lock = "lock"
+
+
   listCurrentOptions: ItemActionFile[] = []
 
   constructor() {
