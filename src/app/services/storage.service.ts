@@ -105,9 +105,11 @@ export class StorageService {
     xhr.responseType = 'blob';
     xhr.onload = (event) => {
       const blob = xhr.response;
+      console.log("blob", blob);
     };
     xhr.open('GET', fileUrl);
     xhr.send();
+
   }
 
   copyToClipboard(fileLink: string): void {

@@ -72,7 +72,7 @@ export class PanelDragDropComponent implements OnInit {
       this.storage.downloadFile(event.file.link)
     }
     if (ActionsFile[event.action] == 'GET_LINK') {
-      this.storage.copyToClipboard(event.file.link)
+      this.storage.copyToClipboard(event.file.name)
     }
     if (ActionsFile[event.action] == 'DELETE') {
       this.storage.deleteFile(event.file.name)
