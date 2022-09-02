@@ -1,10 +1,12 @@
-import { Component, HostListener, OnInit } from '@angular/core';
-import { FileObject, FileType } from "../models/FileObject";
-import { ActionsFile } from "./ActionsFile";
-import { StorageService } from "../../services/storage.service";
-import { Observable } from "rxjs";
-import { MatDialog } from "@angular/material/dialog";
-import { DialogCreateOrUploadComponent } from "../dialog-create-or-upload/dialog-create-or-upload.component";
+import {Component, HostListener, OnInit} from '@angular/core';
+import {FileObject, FileType} from "../models/FileObject";
+import {ActionsFile} from "./ActionsFile";
+import {StorageService} from "../../services/storage.service";
+import {Observable} from "rxjs";
+import {MatDialog} from "@angular/material/dialog";
+import {DialogCreateOrUploadComponent} from "../dialog-create-or-upload/dialog-create-or-upload.component";
+import {MatSnackBar} from "@angular/material/snack-bar";
+import {Clipboard} from "@angular/cdk/clipboard";
 
 @Component({
   selector: 'app-panel-drag-drop',
@@ -21,7 +23,9 @@ export class PanelDragDropComponent implements OnInit {
 
   constructor(
     private storage: StorageService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private _snackBar: MatSnackBar,
+    private _clipboard: Clipboard,
   ) {
     // * add listener for change files for current directory
     this.listFiles = storage.listFilesInFolder
@@ -74,7 +78,8 @@ export class PanelDragDropComponent implements OnInit {
       this.storage.downloadFile(event.file.link, event.file.name)
     }
     if (ActionsFile[event.action] == 'GET_LINK') {
-      this.storage.copyToClipboard(event.file.link)
+      this._clipboard.copy(event.file.link)
+      this._snackBar.open("Enlace copiado al portapapeles", "", {duration: 3000});
     }
     if (ActionsFile[event.action] == 'DELETE') {
       this.storage.deleteFile(event.file.link)

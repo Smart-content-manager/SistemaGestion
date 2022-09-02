@@ -123,6 +123,7 @@ export class StorageService {
       link.href = url
       link.download = fileName
       link.click()
+      link.remove();
     };
     xhr.open('GET', fileUrl);
     xhr.send();

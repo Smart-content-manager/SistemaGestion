@@ -11,9 +11,10 @@ import { MatButtonModule } from "@angular/material/button";
 import { MatDividerModule } from "@angular/material/divider";
 import { DialogCreateOrUploadComponent } from './dialog-create-or-upload/dialog-create-or-upload.component';
 import { MatDialogModule } from '@angular/material/dialog';
-import { ClickOutsideDirective } from './click-outside.directive';
 import { DialogClipboardComponent } from './dialog-clipboard/dialog-clipboard.component';
 import { DialogDeleteComponent } from './dialog-delete/dialog-delete.component';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
+
 
 
 @NgModule({
@@ -22,7 +23,6 @@ import { DialogDeleteComponent } from './dialog-delete/dialog-delete.component';
     IconObjectFileComponent,
     MenuFileOptionsComponent,
     DialogCreateOrUploadComponent,
-    ClickOutsideDirective,
     DialogClipboardComponent,
     DialogDeleteComponent
   ],
@@ -34,7 +34,8 @@ import { DialogDeleteComponent } from './dialog-delete/dialog-delete.component';
     MatMenuModule,
     MatButtonModule,
     MatDividerModule,
-    MatDialogModule
+    MatDialogModule,
+    MatSnackBarModule
   ],
   exports: [PanelDragDropComponent]
 })
