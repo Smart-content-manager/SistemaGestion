@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { getDownloadURL, listAll, ref, Storage, uploadBytes, ListResult, getStorage, getBytes, deleteObject } from "@angular/fire/storage";
-import { BehaviorSubject } from "rxjs";
+import { BehaviorSubject, Observable } from 'rxjs';
 import { FileObject, FileType } from "../main-panel/models/FileObject";
 import { faFile, faFolder } from "@fortawesome/free-solid-svg-icons";
 import { Router } from '@angular/router';
@@ -8,12 +8,19 @@ import { Clipboard } from '@angular/cdk/clipboard';
 import { MatDialog } from "@angular/material/dialog";
 import { DialogClipboardComponent } from '../main-panel/dialog-clipboard/dialog-clipboard.component';
 import { DialogDeleteComponent } from '../main-panel/dialog-delete/dialog-delete.component';
+import { Download } from '../main-panel/models/downloadInterface';
+
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class StorageService {
+  private _progressBar = new BehaviorSubject<Download>({
+    flag: 'PENDING',
+    state: 'PENDING',
+    progress: 0
+  });
 
   constructor(
     private dialog: MatDialog,
@@ -34,6 +41,10 @@ export class StorageService {
 
   get currentPath() {
     return this._currentPath.asObservable();
+  }
+
+  get progressBar() {
+    return this._progressBar.asObservable()
   }
 
   reloadFilesFromPath(path: string) {
@@ -81,16 +92,41 @@ export class StorageService {
     });
   }
 
+  uploadProgressBar() {
+    this._progressBar.next({
+      flag: "UPLOAD",
+      state: 'IN PROGRESS',
+      progress: 0
+    })
+  }
+
+  cleanProgressBar() {
+    this._progressBar.next({
+      flag: 'PENDING',
+      state: 'PENDING',
+      progress: 0
+    })
+  }
+
   uploadFile(file: any, fileName: null | undefined) {
     if (file) {
       let raiz = fileName ? `raiz/${fileName}.${this.getType(file.name)}` : `raiz/${file.name}`
       const fileRef = ref(this.storage, raiz);
       uploadBytes(fileRef, file)
-        .then(response => {
-          this.router.navigate([""])
+        .then((res) => {
+
         })
-        .catch(error => console.log(error));
+        .catch(error => console.log(error)).finally(
+          () => {
+            this._progressBar.next({
+              flag: "UPLOAD",
+              state: 'DONE',
+              progress: 0
+            })
+          }
+        )
     }
+
   }
 
   getType(file: string) {
@@ -114,6 +150,12 @@ export class StorageService {
   }
 
   downloadFile(fileUrl: any, fileName: any) {
+    let progressBar = this._progressBar
+    progressBar.next({
+      flag: "DOWNLOAD",
+      state: 'IN PROGRESS',
+      progress: 0
+    })
     const xhr = new XMLHttpRequest();
     xhr.responseType = 'blob';
     xhr.onload = (event) => {
@@ -123,12 +165,21 @@ export class StorageService {
       link.href = url
       link.download = fileName
       link.click()
+
     };
     xhr.open('GET', fileUrl);
+    xhr.addEventListener("progress", function (event) {
+      if (event.lengthComputable) {
+        var percentLoaded = Math.round((event.loaded / event.total) * 100);
+        progressBar.next({
+          flag: 'DOWNLOAD',
+          state: percentLoaded != 100 ? "IN PROGRESS" : "DONE",
+          progress: percentLoaded
+        })
+        console.debug(progressBar.value.progress)
+      }
+    });
     xhr.send();
-
-
-
   }
 
   copyToClipboard(fileLink: string): void {
@@ -146,7 +197,7 @@ export class StorageService {
         width: '250px',
       });
       dialogRef.afterClosed().subscribe();
-      window.location.reload()
+      this.reloadFilesFromPath(this._currentPath.value)
     }).catch((error) => {
       console.log(error);
     });

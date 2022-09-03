@@ -5,6 +5,9 @@ import { StorageService } from "../../services/storage.service";
 import { Observable } from "rxjs";
 import { MatDialog } from "@angular/material/dialog";
 import { DialogCreateOrUploadComponent } from "../dialog-create-or-upload/dialog-create-or-upload.component";
+import { ProgressBarComponent } from '../progress-bar/progress-bar.component';
+import { Download } from '../models/downloadInterface';
+
 
 @Component({
   selector: 'app-panel-drag-drop',
@@ -18,13 +21,16 @@ export class PanelDragDropComponent implements OnInit {
   fileSelectedLeft: FileObject | any;
   listFiles: Observable<FileObject[]>;
   historyPath: string[] = [""]  //* Si regresa a commits anteriores guarde este fracmento de codigo ya que existia un bug
+  _progressBar: Observable<Download>;
+  progressBar: Download | any;
 
   constructor(
     private storage: StorageService,
     private dialog: MatDialog
   ) {
     // * add listener for change files for current directory
-    this.listFiles = storage.listFilesInFolder
+    this.listFiles = storage.listFilesInFolder,
+      this._progressBar = storage.progressBar
 
   }
 
@@ -48,9 +54,11 @@ export class PanelDragDropComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.historyPath = [""]
+    this.storage.reloadFilesFromPath(this.historyPath[this.historyPath.length - 1]);
   }
 
-  //* Si regresa a commits anteriores guarde este fracmento de codigo ya que existia un bug
+  //* Si regresa a commits anteriores guarde este framento de codigo ya que existia un bug
   clickLeft(file: FileObject) {
     if (file.type === FileType.FOLDER) {
       if (this.fileSelectedLeft === file) {
@@ -71,7 +79,16 @@ export class PanelDragDropComponent implements OnInit {
 
   listerClickAction(event: { action: ActionsFile; file: FileObject }) {
     if (ActionsFile[event.action] == 'DOWNLOAD') {
+      const dialogRef = this.dialog.open(ProgressBarComponent, {
+        width: '250px',
+        height: '170px',
+        disableClose: true
+      });
+
       this.storage.downloadFile(event.file.link, event.file.name)
+      dialogRef.afterClosed().subscribe(res => {
+        this.storage.cleanProgressBar()
+      })
     }
     if (ActionsFile[event.action] == 'GET_LINK') {
       this.storage.copyToClipboard(event.file.link)

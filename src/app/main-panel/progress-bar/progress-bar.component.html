@@ -1,0 +1,40 @@
+<div *ngIf="progressBar.flag === 'DOWNLOAD'">
+  <mat-grid-list cols="1" rowHeight="30px">
+    <mat-grid-tile>
+      {{ progressBar.flag }}
+    </mat-grid-tile>
+  </mat-grid-list>
+
+  <mat-grid-list cols="1" rowHeight="5px">
+    <mat-grid-tile>
+      <mat-progress-bar
+        mode="determinate"
+        value="{{ progressBar.progress }}"
+      ></mat-progress-bar>
+    </mat-grid-tile>
+  </mat-grid-list>
+
+  <mat-grid-list cols="1" rowHeight="40px" class="center">
+    <mat-grid-tile>
+      {{ progressBar.state }} {{ progressBar.progress }} %
+    </mat-grid-tile>
+  </mat-grid-list>
+
+  <mat-dialog-actions *ngIf="progressBar.state === 'DONE'">
+    <button mat-button mat-dialog-close class="button">Listo</button>
+  </mat-dialog-actions>
+</div>
+
+<div *ngIf="progressBar.flag === 'UPLOAD'">
+  <mat-grid-list cols="1" rowHeight="30px">
+    <mat-grid-tile>
+      {{ progressBar.flag }}
+    </mat-grid-tile>
+  </mat-grid-list>
+
+  <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+
+  <mat-dialog-actions *ngIf="progressBar.state === 'DONE'">
+    <button mat-button mat-dialog-close class="button">Listo</button>
+  </mat-dialog-actions>
+</div>

@@ -14,6 +14,9 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { ClickOutsideDirective } from './click-outside.directive';
 import { DialogClipboardComponent } from './dialog-clipboard/dialog-clipboard.component';
 import { DialogDeleteComponent } from './dialog-delete/dialog-delete.component';
+import { ProgressBarComponent } from './progress-bar/progress-bar.component';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatGridListModule } from '@angular/material/grid-list';
 
 
 @NgModule({
@@ -24,7 +27,8 @@ import { DialogDeleteComponent } from './dialog-delete/dialog-delete.component';
     DialogCreateOrUploadComponent,
     ClickOutsideDirective,
     DialogClipboardComponent,
-    DialogDeleteComponent
+    DialogDeleteComponent,
+    ProgressBarComponent
   ],
   imports: [
     CommonModule,
@@ -34,7 +38,9 @@ import { DialogDeleteComponent } from './dialog-delete/dialog-delete.component';
     MatMenuModule,
     MatButtonModule,
     MatDividerModule,
-    MatDialogModule
+    MatDialogModule,
+    MatProgressBarModule,
+    MatGridListModule
   ],
   exports: [PanelDragDropComponent]
 })
