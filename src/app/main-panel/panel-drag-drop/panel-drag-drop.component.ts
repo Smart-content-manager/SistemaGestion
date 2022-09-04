@@ -1,5 +1,5 @@
 import { Component, HostListener, OnInit } from '@angular/core';
-import { FileObject, FileType } from "../models/FileObject";
+import { FileObject, FileType } from '../models/FileObject';
 import { ActionsFile } from "./ActionsFile";
 import { StorageService } from "../../services/storage.service";
 import { Observable } from "rxjs";
@@ -23,6 +23,8 @@ export class PanelDragDropComponent implements OnInit {
   historyPath: string[] = [""]  //* Si regresa a commits anteriores guarde este fracmento de codigo ya que existia un bug
   _progressBar: Observable<Download>;
   progressBar: Download | any;
+  typeFolder = FileType.FOLDER
+  typeFile = FileType.FILE
 
   constructor(
     private storage: StorageService,
