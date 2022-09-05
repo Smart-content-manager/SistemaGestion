@@ -32,7 +32,15 @@
     </mat-grid-tile>
   </mat-grid-list>
 
-  <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+  <mat-progress-bar
+    *ngIf="progressBar.state != 'DONE'"
+    mode="indeterminate"
+  ></mat-progress-bar>
+  <mat-progress-bar
+    *ngIf="progressBar.state === 'DONE'"
+    mode="determinate"
+    value="100"
+  ></mat-progress-bar>
 
   <mat-dialog-actions *ngIf="progressBar.state === 'DONE'">
     <button mat-button mat-dialog-close class="button">Listo</button>

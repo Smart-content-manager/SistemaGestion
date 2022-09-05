@@ -16,12 +16,14 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatRadioModule } from '@angular/material/radio';
 import { ReactiveFormsModule } from '@angular/forms';
+import { CreateDirComponent } from './create-dir/create-dir.component';
 
 
 
 @NgModule({
   declarations: [
-    FileFormComponent
+    FileFormComponent,
+    CreateDirComponent
   ],
   imports: [
     CommonModule,

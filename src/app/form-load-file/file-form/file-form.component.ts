@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { StorageService } from 'src/app/services/storage.service';
 import { ProgressBarComponent } from '../../main-panel/progress-bar/progress-bar.component';
 import { Observable } from 'rxjs';
 import { Download } from 'src/app/main-panel/models/downloadInterface';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 
 
@@ -26,6 +26,7 @@ export class FileFormComponent implements OnInit {
     private dialog: MatDialog,
     private router: Router,
     private storage: StorageService,
+    public dialogRef: MatDialogRef<FileFormComponent>
   ) {
     this._progressBar = storage.progressBar
   }
@@ -41,6 +42,7 @@ export class FileFormComponent implements OnInit {
 
   getFile(event: any) {
     this.file = event.target.files[0]
+    console.debug(event.target)
   }
 
   onSubmit(): void {
@@ -53,7 +55,7 @@ export class FileFormComponent implements OnInit {
     dialogRef.afterClosed().subscribe(res => {
       this.storage.cleanProgressBar()
     })
-    this.router.navigate([""])
+    this.dialogRef.close()
   }
 
 }

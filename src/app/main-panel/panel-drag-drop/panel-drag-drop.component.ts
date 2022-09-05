@@ -7,6 +7,9 @@ import { MatDialog } from "@angular/material/dialog";
 import { DialogCreateOrUploadComponent } from "../dialog-create-or-upload/dialog-create-or-upload.component";
 import { ProgressBarComponent } from '../progress-bar/progress-bar.component';
 import { Download } from '../models/downloadInterface';
+import { Router } from '@angular/router';
+import { FileFormComponent } from 'src/app/form-load-file/file-form/file-form.component';
+import { CreateDirComponent } from 'src/app/form-load-file/create-dir/create-dir.component';
 
 
 @Component({
@@ -28,7 +31,8 @@ export class PanelDragDropComponent implements OnInit {
 
   constructor(
     private storage: StorageService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private router: Router
   ) {
     // * add listener for change files for current directory
     this.listFiles = storage.listFilesInFolder,
@@ -44,10 +48,13 @@ export class PanelDragDropComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       switch (result) {
         case FileType.FILE:
-          console.log("Se selecciono subir un archivo");
+          //!this.router.navigate(["add-file"])
+          const dialogAddFile = this.dialog.open(FileFormComponent, {
+          });
           break;
         case FileType.FOLDER:
-          console.log("Se selecciono crear un directorio")
+          const dialogDirFile = this.dialog.open(CreateDirComponent, {
+          });
           break;
         default:
           console.log("No se selecciono una opcion valida")

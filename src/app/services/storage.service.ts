@@ -114,7 +114,7 @@ export class StorageService {
       const fileRef = ref(this.storage, raiz);
       uploadBytes(fileRef, file)
         .then((res) => {
-
+          this.reloadFilesFromPath(this._currentPath.value)
         })
         .catch(error => console.log(error)).finally(
           () => {
@@ -129,6 +129,21 @@ export class StorageService {
 
   }
 
+  createDir(newDirectory: string) {
+    const file: Blob = new Blob([""], {
+      type: 'text/plain'
+    });
+    if (newDirectory.length > 0) {
+      let raiz = `${newDirectory}/.sgkeep`
+      const dirRef = ref(this.storage, raiz);
+      uploadBytes(dirRef, file)
+        .then((res) => {
+          this.reloadFilesFromPath(this._currentPath.value)
+        })
+        .catch(error => console.error(error))
+    }
+  }
+
   getType(file: string) {
     let extencion = file.split('.').pop()
     return extencion
@@ -136,7 +151,6 @@ export class StorageService {
   }
 
   listAllFile(): Promise<any> {
-    let respuesta: ListResult
     return new Promise((resolve, reject) => {
       const fileRef = ref(this.storage, '');
       listAll(fileRef).then(response => {
@@ -191,6 +205,7 @@ export class StorageService {
   }
 
   deleteFile(fileName: string) {
+    console.log("🚀 ~ file: storage.service.ts ~ line 214 ~ StorageService ~ deleteFile ~ fileName", fileName)
     const fileRef = ref(this.storage, fileName);
     deleteObject(fileRef).then(() => {
       const dialogRef = this.dialog.open(DialogDeleteComponent, {
@@ -199,7 +214,7 @@ export class StorageService {
       dialogRef.afterClosed().subscribe();
       this.reloadFilesFromPath(this._currentPath.value)
     }).catch((error) => {
-      console.log(error);
+      console.error(error);
     });
   }
 
