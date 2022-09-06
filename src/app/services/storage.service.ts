@@ -2,7 +2,6 @@ import {Injectable} from '@angular/core';
 import {deleteObject, listAll, ref, Storage, uploadBytesResumable} from "@angular/fire/storage";
 import {BehaviorSubject} from 'rxjs';
 import {FileObject, getFilesAndFolders} from "../main-panel/models/FileObject";
-import {Router} from '@angular/router';
 import {Clipboard} from '@angular/cdk/clipboard';
 import {MatDialog} from "@angular/material/dialog";
 import {FilePercent, StateFile, TaskDownload} from '../main-panel/models/FilePercent';
@@ -24,7 +23,6 @@ export class StorageService {
     private dialog: MatDialog,
     private clipboard: Clipboard,
     private storage: Storage,
-    private router: Router
   ) {
     this.reloadFilesFromPath(this._currentPath.value);
   }
@@ -55,7 +53,7 @@ export class StorageService {
     });
   }
 
-  async uploadFile(file: any, fileName: null | undefined) {
+  async uploadFile(file: any, fileName: string) {
     if (file) {
       const fullPathFile = `${this._currentPath.value}/${fileName}`
       const fileRef = ref(this.storage, fullPathFile);
@@ -88,12 +86,6 @@ export class StorageService {
         console.log(`error uploading file: ${file} ${e}`)
       }
     }
-  }
-
-  getType(file: string) {
-    let extencion = file.split('.').pop()
-    return extencion
-
   }
 
   downloadFile(fileUrl: string, fileName: string) {
@@ -140,7 +132,7 @@ export class StorageService {
     } catch (e) {
       console.log(e);
     } finally {
-      this.reloadFilesFromPath(this._currentPath.value)
+      this.reloadFilesFromPath()
     }
   }
 

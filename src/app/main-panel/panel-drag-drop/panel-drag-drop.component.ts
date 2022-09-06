@@ -9,6 +9,7 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 import {Clipboard} from "@angular/cdk/clipboard";
 import {ProgressBarComponent} from "../progress-bar/progress-bar.component";
 import {FileType} from "../models/FileType";
+import {DialogAddFileComponent} from "../dialog-add-file/dialog-add-file.component";
 
 @Component({
   selector: 'app-panel-drag-drop',
@@ -21,7 +22,7 @@ export class PanelDragDropComponent implements OnInit {
   fileSelected: FileObject | undefined;
   listFiles: Observable<FileObject[]>;
 
-  openDialog(): void {
+  openDialogCreate(): void {
     const dialogRef = this.dialog.open(DialogCreateOrUploadComponent, {
       width: '250px',
     });
@@ -30,11 +31,19 @@ export class PanelDragDropComponent implements OnInit {
       switch (result) {
         case FileType.FILE:
           console.log("Se selecciono subir un archivo");
+          this.openDialogAddFile()
           break;
         case FileType.FOLDER:
           console.log("Se selecciono crear un directorio")
           break;
       }
+    });
+  }
+
+  openDialogAddFile(){
+    const dialogRef = this.dialog.open(DialogAddFileComponent, {
+      width: '550px',
+      height: '450px',
     });
   }
 

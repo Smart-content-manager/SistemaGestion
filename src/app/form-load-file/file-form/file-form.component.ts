@@ -40,7 +40,7 @@ export class FileFormComponent implements OnInit {
       disableClose: true,
       data: {type: 'UPLOAD'}
     });
-    await this.serviceS.uploadFile(this.file, this.fileForm.value.fileName)
+    // await this.serviceS.uploadFile(this.file, this.fileForm.value.fileName)
 
   }
 

@@ -1,0 +1,37 @@
+<form (ngSubmit)="onSubmit()" [formGroup]="fileForm" class="container-dialog-add-file" novalidate>
+
+  <div class="img-upload">
+    <ng-lottie [options]="options"></ng-lottie>
+    <input
+      (change)="getFile($event)"
+      class="file-select"
+      type="file"
+    />
+  </div>
+
+  <!--  <div class="container-form-add-file">-->
+  <!--    <form [formGroup]="formControlFile">-->
+  <!--      <mat-form-field appearance="outline">-->
+  <!--        <mat-label>Name file</mat-label>-->
+  <!--        <input-->
+  <!--          #inputFileName-->
+  <!--          [formControl]="formControlFile.controls.nameFile"-->
+  <!--          matInput-->
+  <!--          placeholder="Write name from file"-->
+  <!--          type="text">-->
+  <!--        <mat-icon matSuffix>edit</mat-icon>-->
+  <!--        <mat-hint-->
+  <!--          [ngStyle]="{'color' : inputFileName.value.length > MAX_LENGTH_NAME ? 'red' : 'black'}"-->
+  <!--          align="end"-->
+  <!--        >{{inputFileName.value.length}} /{{MAX_LENGTH_NAME}}</mat-hint>-->
+  <!--        <mat-error *ngIf="formControlFile.controls.nameFile.invalid">name is invalid</mat-error>-->
+  <!--      </mat-form-field>-->
+
+  <!--    </form>-->
+  <p>{{fileName == "" ? "Select a file to upload or drop it." : fileName}}</p>
+  <div mat-dialog-actions>
+    <button *ngIf="fileName!=''" color="primary" mat-raised-button type="submit">Upload</button>
+    <button mat-dialog-close mat-raised-button>Cancel</button>
+  </div>
+
+</form>

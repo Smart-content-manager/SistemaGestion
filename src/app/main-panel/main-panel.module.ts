@@ -16,6 +16,10 @@ import {MatProgressBarModule} from '@angular/material/progress-bar';
 import {MatGridListModule} from '@angular/material/grid-list';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {LottieModule} from "ngx-lottie";
+import { DialogAddFileComponent } from './dialog-add-file/dialog-add-file.component';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatInputModule} from '@angular/material/input';
+import {ReactiveFormsModule} from "@angular/forms";
 
 
 @NgModule({
@@ -24,7 +28,8 @@ import {LottieModule} from "ngx-lottie";
     IconObjectFileComponent,
     MenuFileOptionsComponent,
     DialogCreateOrUploadComponent,
-    ProgressBarComponent
+    ProgressBarComponent,
+    DialogAddFileComponent
   ],
   imports: [
     CommonModule,
@@ -39,9 +44,12 @@ import {LottieModule} from "ngx-lottie";
     MatDialogModule,
     MatProgressBarModule,
     MatGridListModule,
-    LottieModule
+    LottieModule,
+    MatFormFieldModule,
+    MatInputModule,
+    ReactiveFormsModule
   ],
-  exports: [PanelDragDropComponent]
+  exports: [PanelDragDropComponent, DialogAddFileComponent]
 })
 export class MainPanelModule {
 }
