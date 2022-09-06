@@ -6,11 +6,10 @@
     <app-icon-object-file
       (fileClickLeft)="clickLeft($event)"
       (fileClickRight)="clickRight($event)"
+      [currentSelectedFile]="fileSelected"
       [fileObject]="object"
       [menu]="fileMenu"
-      [currentSelectedFile]="fileSelectedLeft"
     ></app-icon-object-file>
-
     <!-- * only create a one  menu context for all files -->
     <!-- ! this for no has multiples menus options -->
 

@@ -1,6 +1,6 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
-import {FileType} from "../models/FileObject";
+import {MAT_DIALOG_DATA} from "@angular/material/dialog";
+import {FileType} from "../models/FileType";
 
 export interface DialogData {
   fileType: FileType;

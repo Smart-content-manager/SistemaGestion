@@ -25,6 +25,8 @@
     "@fortawesome/fontawesome-svg-core": "^6.1.2",
     "@fortawesome/free-solid-svg-icons": "^6.1.2",
     "firebase-tools": "^11.8.0",
+    "lottie-web": "^5.9.6",
+    "ngx-lottie": "^9.0.1",
     "rxjs": "~7.5.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.11.4"

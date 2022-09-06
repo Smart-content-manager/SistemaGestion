@@ -1,7 +1,8 @@
-import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
-import { FileObject, FileType } from "../models/FileObject";
-import { ActionsFile, ItemActionFile } from "../panel-drag-drop/ActionsFile";
-import { faDownload, faLink, faPen, faTrash } from "@fortawesome/free-solid-svg-icons";
+import {Component, EventEmitter, Input, OnInit, Output, SimpleChanges} from '@angular/core';
+import {FileObject} from "../models/FileObject";
+import {ActionsFile, ItemActionFile} from "../panel-drag-drop/ActionsFile";
+import {faDownload, faLink, faTrash} from "@fortawesome/free-solid-svg-icons";
+import {FileType} from "../models/FileType";
 
 @Component({
   selector: 'app-menu-file-options',

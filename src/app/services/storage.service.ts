@@ -1,19 +1,24 @@
-import { Injectable } from '@angular/core';
-import { getDownloadURL, listAll, ref, Storage, uploadBytes, ListResult, getStorage, getBytes, deleteObject } from "@angular/fire/storage";
-import { BehaviorSubject } from "rxjs";
-import { FileObject, FileType } from "../main-panel/models/FileObject";
-import { faFile, faFolder } from "@fortawesome/free-solid-svg-icons";
-import { Router } from '@angular/router';
-import { Clipboard } from '@angular/cdk/clipboard';
-import { MatDialog } from "@angular/material/dialog";
-import { DialogClipboardComponent } from '../main-panel/dialog-clipboard/dialog-clipboard.component';
-import { DialogDeleteComponent } from '../main-panel/dialog-delete/dialog-delete.component';
+import {Injectable} from '@angular/core';
+import {deleteObject, listAll, ref, Storage, uploadBytesResumable} from "@angular/fire/storage";
+import {BehaviorSubject} from 'rxjs';
+import {FileObject, getFilesAndFolders} from "../main-panel/models/FileObject";
+import {Router} from '@angular/router';
+import {Clipboard} from '@angular/cdk/clipboard';
+import {MatDialog} from "@angular/material/dialog";
+import {FilePercent, StateFile, TaskDownload} from '../main-panel/models/FilePercent';
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class StorageService {
+
+  private init_state = <FilePercent>{
+    state: StateFile.INIT,
+    percent: 0,
+  }
+
+  private _progressBar = new BehaviorSubject<FilePercent>(this.init_state);
 
   constructor(
     private dialog: MatDialog,
@@ -36,60 +41,52 @@ export class StorageService {
     return this._currentPath.asObservable();
   }
 
-  reloadFilesFromPath(path: string) {
+  get progressBar() {
+    return this._progressBar.asObservable()
+  }
 
-    let finalListFiles: FileObject[]
+  reloadFilesFromPath(path: string = this._currentPath.value) {
     this._currentPath.next(path);
     const storageRef = ref(this.storage, path);
     listAll(storageRef).then(async (response) => {
-
-      let listFolders = response.prefixes.map(prefix => {
-        return <FileObject>{
-          name: prefix.name,
-          type: FileType.FOLDER,
-          link: prefix.fullPath,
-          icon: faFolder
-        }
-      })
-
-      let listFiles = response.items.map(async prefix => {
-        let filesUrl = await getDownloadURL(prefix)
-        return <FileObject>{
-          name: prefix.name,
-          type: FileType.FILE,
-          link: filesUrl,
-          icon: faFile
-        }
-      })
-
-      if (path != "") {
-        finalListFiles = [{
-          name: "../",
-          type: FileType.FOLDER,
-          link: path,
-          icon: faFolder
-        }, ...listFolders, ...await Promise.all(listFiles)]
-      }
-      else {
-        finalListFiles = [...listFolders, ...await Promise.all(listFiles)]
-      }
-
-
-      this._listFilesInFolder.next(finalListFiles)
+      this._listFilesInFolder.next(await getFilesAndFolders(path, response))
     }).catch(() => {
       this._listFilesInFolder.next([])
     });
   }
 
-  uploadFile(file: any, fileName: null | undefined) {
+  async uploadFile(file: any, fileName: null | undefined) {
     if (file) {
-      let raiz = fileName ? `raiz/${fileName}.${this.getType(file.name)}` : `raiz/${file.name}`
-      const fileRef = ref(this.storage, raiz);
-      uploadBytes(fileRef, file)
-        .then(response => {
-          this.router.navigate([""])
+      const fullPathFile = `${this._currentPath.value}/${fileName}`
+      const fileRef = ref(this.storage, fullPathFile);
+      try {
+
+        this._progressBar.next(<FilePercent>{
+          state: StateFile.INIT,
+          percent: 0,
         })
-        .catch(error => console.log(error));
+
+        const taskUpload = uploadBytesResumable(fileRef, file)
+        taskUpload.on('state_changed', async (snapshot) => {
+          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          this._progressBar.next(<FilePercent>{
+            state: StateFile.IN_PROGRESS,
+            percent: progress,
+          })
+        })
+
+        await taskUpload
+
+        this._progressBar.next(<FilePercent>{
+          state: StateFile.SUCCESS,
+          percent: 100,
+        })
+
+        this.reloadFilesFromPath()
+
+      } catch (e) {
+        console.log(`error uploading file: ${file} ${e}`)
+      }
     }
   }
 
@@ -99,58 +96,52 @@ export class StorageService {
 
   }
 
-  listAllFile(): Promise<any> {
-    let respuesta: ListResult
-    return new Promise((resolve, reject) => {
-      const fileRef = ref(this.storage, '');
-      listAll(fileRef).then(response => {
-        resolve({
-          'items': response.items,
-          'prefixes': response.prefixes,
-          'nextPageToken': response.nextPageToken
-        })
-      }).catch(error => console.log(error))
+  downloadFile(fileUrl: string, fileName: string) {
+    this._progressBar.next({
+      state: StateFile.INIT,
+      percent: 0
     })
+
+    const request = new TaskDownload(
+      {
+        nameFile: fileName,
+        urlFile: fileUrl,
+        actionAfter: () => {
+          this._progressBar.next(<FilePercent>{
+            state: StateFile.SUCCESS,
+            percent: 100
+          })
+        },
+        actionBefore: () => {
+          this._progressBar.next(<FilePercent>{
+            state: StateFile.INIT,
+            percent: 0
+          })
+        },
+        actionError: (error) => {
+          console.log(`error downloading file: ${fileName} ${error}`)
+        },
+        actionUpdate: (percent) => {
+          this._progressBar.next(<FilePercent>{
+            state: StateFile.IN_PROGRESS,
+            percent: percent
+          })
+        },
+      }
+    )
+
+    request.startRequest()
   }
 
-  downloadFile(fileUrl: any, fileName: any) {
-    const xhr = new XMLHttpRequest();
-    xhr.responseType = 'blob';
-    xhr.onload = (event) => {
-      const blob = xhr.response;
-      const url = window.URL.createObjectURL(blob)
-      const link = document.createElement("a")
-      link.href = url
-      link.download = fileName
-      link.click()
-      link.remove();
-    };
-    xhr.open('GET', fileUrl);
-    xhr.send();
-
-
-
-  }
-
-  copyToClipboard(fileLink: string): void {
-    this.clipboard.copy(fileLink);
-    const dialogRef = this.dialog.open(DialogClipboardComponent, {
-      width: '250px',
-    });
-    dialogRef.afterClosed().subscribe();
-  }
-
-  deleteFile(fileName: string) {
+  async deleteFile(fileName: string) {
     const fileRef = ref(this.storage, fileName);
-    deleteObject(fileRef).then(() => {
-      const dialogRef = this.dialog.open(DialogDeleteComponent, {
-        width: '250px',
-      });
-      dialogRef.afterClosed().subscribe();
-      window.location.reload()
-    }).catch((error) => {
-      console.log(error);
-    });
+    try {
+      await deleteObject(fileRef)
+    } catch (e) {
+      console.log(e);
+    } finally {
+      this.reloadFilesFromPath(this._currentPath.value)
+    }
   }
 
 }

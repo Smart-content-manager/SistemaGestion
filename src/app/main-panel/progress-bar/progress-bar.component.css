@@ -1,0 +1,11 @@
+.container-animation {
+  width: 150px;
+  height: 150px;
+}
+
+.container-progress {
+  display: grid;
+  justify-content: center;
+  align-items: center;
+  justify-items: center;
+}
