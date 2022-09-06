@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {deleteObject, listAll, ref, Storage, uploadBytesResumable} from "@angular/fire/storage";
+import {deleteObject, listAll, ref, Storage, uploadBytes, uploadBytesResumable} from "@angular/fire/storage";
 import {BehaviorSubject} from 'rxjs';
 import {FileObject, getFilesAndFolders} from "../main-panel/models/FileObject";
 import {Clipboard} from '@angular/cdk/clipboard';
@@ -51,6 +51,18 @@ export class StorageService {
     }).catch(() => {
       this._listFilesInFolder.next([])
     });
+  }
+
+  async createDir(nameDirectory: string) {
+    const file: Blob = new Blob([""], {type: 'text/plain'});
+    let refFolder = `${this._currentPath.value}/${nameDirectory}/.sgkeep`
+    const dirRef = ref(this.storage, refFolder);
+    try {
+      await uploadBytes(dirRef, file)
+      this.reloadFilesFromPath()
+    } catch (error) {
+      console.error(error)
+    }
   }
 
   async uploadFile(file: any, fileName: string) {

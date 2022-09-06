@@ -10,6 +10,7 @@ import {Clipboard} from "@angular/cdk/clipboard";
 import {ProgressBarComponent} from "../progress-bar/progress-bar.component";
 import {FileType} from "../models/FileType";
 import {DialogAddFileComponent} from "../dialog-add-file/dialog-add-file.component";
+import {DialogAddFolderComponent} from "../dialog-add-folder/dialog-add-folder.component";
 
 @Component({
   selector: 'app-panel-drag-drop',
@@ -35,12 +36,26 @@ export class PanelDragDropComponent implements OnInit {
           break;
         case FileType.FOLDER:
           console.log("Se selecciono crear un directorio")
+          this.openDialogAddFolder();
           break;
       }
     });
   }
 
-  openDialogAddFile(){
+  openDialogAddFolder(): void {
+    const dialogRef = this.dialog.open(DialogAddFolderComponent, {
+      width: '350px',
+      height: '250px',
+    });
+
+    dialogRef.afterClosed().subscribe(async result => {
+      if (result) {
+        await this.storage.createDir(result)
+      }
+    })
+  }
+
+  openDialogAddFile() {
     const dialogRef = this.dialog.open(DialogAddFileComponent, {
       width: '550px',
       height: '450px',

@@ -1,6 +1,7 @@
 import {getDownloadURL, ListResult, StorageReference} from "@angular/fire/storage";
 import {faFile, faFolder, IconDefinition} from "@fortawesome/free-solid-svg-icons";
 import {FileType} from "./FileType";
+import {filter} from "rxjs";
 
 export interface FileObject {
   name: string;
@@ -49,13 +50,16 @@ export async function getFilesAndFolders(
   response: ListResult
 ): Promise<FileObject[]> {
   const listFolders = response.prefixes.map(prefix => storageRefToFolder(prefix));
-  const listFiles = response.items.map(item => storageRefToFile(item));
+  const listFiles = await Promise.all(response.items.map(item => storageRefToFile(item)));
+  const listFileFilter = listFiles.filter(item => item.name!=".sgkeep")
+
+
   const folderBefore = storageRefToBeforeFolder(currentPath);
 
   if (folderBefore != null) {
-    return [folderBefore, ...listFolders, ...await Promise.all(listFiles)]
+    return [folderBefore, ...listFolders, ...listFileFilter]
   } else {
-    return [...listFolders, ...await Promise.all(listFiles)]
+    return [...listFolders, ...listFileFilter]
   }
 }
 
