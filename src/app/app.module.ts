@@ -27,7 +27,6 @@ import {getAuth, provideAuth} from '@angular/fire/auth';
 import {getDatabase, provideDatabase} from '@angular/fire/database';
 import {getFirestore, provideFirestore} from '@angular/fire/firestore';
 import {getStorage, provideStorage} from '@angular/fire/storage';
-import {FormLoadFileModule} from './form-load-file/form-load-file.module';
 import {LottieModule} from 'ngx-lottie';
 import player from 'lottie-web';
 
@@ -36,39 +35,39 @@ export function playerFactory() {
 }
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    NavigationComponent
-  ],
-  imports: [
-    AppRoutingModule,
-    BrowserModule,
-    BrowserAnimationsModule,
-    MatSliderModule,
-    MatToolbarModule,
-    MatMenuModule,
-    MatIconModule,
-    MatButtonModule,
-    LayoutModule,
-    MatSidenavModule,
-    MatListModule,
-    MatGridListModule,
-    MatCardModule,
-    DragDropModule,
-    MatInputModule,
-    MatSelectModule,
-    MatRadioModule,
-    ReactiveFormsModule,
-    MainPanelModule,
-    provideFirebaseApp(() => initializeApp(environment.firebase)),
-    provideAuth(() => getAuth()),
-    provideDatabase(() => getDatabase()),
-    provideFirestore(() => getFirestore()),
-    provideStorage(() => getStorage()),
-    FormLoadFileModule,
-    LottieModule.forRoot({player: playerFactory})
-  ],
-  providers: [],
-  bootstrap: [AppComponent]
+    declarations: [
+        AppComponent,
+        NavigationComponent
+    ],
+    imports: [
+        AppRoutingModule,
+        BrowserModule,
+        BrowserAnimationsModule,
+        MatSliderModule,
+        MatToolbarModule,
+        MatMenuModule,
+        MatIconModule,
+        MatButtonModule,
+        LayoutModule,
+        MatSidenavModule,
+        MatListModule,
+        MatGridListModule,
+        MatCardModule,
+        DragDropModule,
+        MatInputModule,
+        MatSelectModule,
+        MatRadioModule,
+        ReactiveFormsModule,
+        MainPanelModule,
+        provideFirebaseApp(() => initializeApp(environment.firebase)),
+        provideAuth(() => getAuth()),
+        provideDatabase(() => getDatabase()),
+        provideFirestore(() => getFirestore()),
+        provideStorage(() => getStorage()),
+        LottieModule.forRoot({player: playerFactory})
+    ],
+    providers: [],
+    exports: [],
+    bootstrap: [AppComponent]
 })
 export class AppModule { }

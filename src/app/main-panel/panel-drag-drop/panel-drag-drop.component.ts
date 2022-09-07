@@ -157,4 +157,15 @@ export class PanelDragDropComponent implements OnInit {
       this.fileSelected = undefined
     }
   }
+
+  async onFileDropped(listFiles: any[]) {
+    const listFinalFiles = [...listFiles]
+    this.dialog.open(DialogTaskComponent, {
+      width: '250px',
+      disableClose: true,
+      data: {type: 'UPLOAD'}
+    });
+    const file = listFinalFiles[0]
+    await this.storage.uploadFile(file, file.name)
+  }
 }

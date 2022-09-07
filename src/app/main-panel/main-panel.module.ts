@@ -21,6 +21,7 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import {ReactiveFormsModule} from "@angular/forms";
 import { DialogInputNameItemComponent } from './dialog-input-name/dialog-input-name-item.component';
+import { DndDirective } from './directives/dnd.directive';
 
 
 @NgModule({
@@ -31,7 +32,8 @@ import { DialogInputNameItemComponent } from './dialog-input-name/dialog-input-n
     DialogCreateOrUploadComponent,
     DialogTaskComponent,
     DialogAddFileComponent,
-    DialogInputNameItemComponent
+    DialogInputNameItemComponent,
+    DndDirective
   ],
   imports: [
     CommonModule,
@@ -49,7 +51,7 @@ import { DialogInputNameItemComponent } from './dialog-input-name/dialog-input-n
     LottieModule,
     MatFormFieldModule,
     MatInputModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
   ],
   exports: [PanelDragDropComponent, DialogAddFileComponent]
 })
