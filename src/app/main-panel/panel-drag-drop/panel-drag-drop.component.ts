@@ -10,7 +10,7 @@ import {Clipboard} from "@angular/cdk/clipboard";
 import {ProgressBarComponent} from "../progress-bar/progress-bar.component";
 import {FileType} from "../models/FileType";
 import {DialogAddFileComponent} from "../dialog-add-file/dialog-add-file.component";
-import {DialogAddFolderComponent} from "../dialog-add-folder/dialog-add-folder.component";
+import {DialogInputNameData, DialogInputNameItemComponent} from "../dialog-input-name/dialog-input-name-item.component";
 
 @Component({
   selector: 'app-panel-drag-drop',
@@ -47,23 +47,28 @@ export class PanelDragDropComponent implements OnInit {
           this.openDialogAddFile()
           break;
         case FileType.FOLDER:
-          this.openDialogAddFolder();
+          this.openDialogGetName(<DialogInputNameData>{
+            titleDialog: "Crea una nueva carpeta",
+            nameInput: "Nombre de la carpeta",
+            hintDialog: "Escribe el nombre de la carpeta",
+            maxLengthName: 20,
+            iconDialog: "create_new_folder"
+          }, async name => await this.storage.createDir(name));
           break;
       }
     });
   }
 
-  openDialogAddFolder(): void {
-    const dialogNameFolderRef = this.dialog.open(DialogAddFolderComponent, {
+  openDialogGetName(
+    dataPassed: DialogInputNameData,
+    actionAfterName: (inputName: string) => void
+  ): void {
+    const dialogNameFolderRef = this.dialog.open(DialogInputNameItemComponent, {
       width: '350px',
-
+      data: dataPassed
     });
-
-    dialogNameFolderRef.afterClosed().subscribe(async result => {
-      console.log(result)
-      if (result) {
-        await this.storage.createDir(result)
-      }
+    dialogNameFolderRef.afterClosed().subscribe(result => {
+      if (result) actionAfterName(result)
     })
   }
 
@@ -76,7 +81,7 @@ export class PanelDragDropComponent implements OnInit {
   }
 
 
-  //* Si regresa a commits anteriores guarde este framento de codigo ya que existia un bug
+  // * Si regresa a commits anteriores guarde este framento de codigo ya que existia un bug
   clickLeft(file: FileObject) {
     if (file.type === FileType.FOLDER) {
       if (this.fileSelected === file) {
@@ -101,8 +106,25 @@ export class PanelDragDropComponent implements OnInit {
       case ActionsFile.DELETE:
         await this.storage.deleteFile(file.link)
         this.showToast("Elemento eliminado")
+        this.fileSelected = undefined
         break;
       case ActionsFile.RENAME:
+        const nameFileSelected = this.fileSelected?.name
+        if (nameFileSelected) this.openDialogGetName(
+          <DialogInputNameData>{
+            titleDialog: "Renombrar archivo",
+            nameInput: "Nombre del archivo",
+            hintDialog: "Escribe el nuevo nombre del archivo",
+            maxLengthName: 20,
+            defaultValue: nameFileSelected,
+            iconDialog:"edit"
+          },
+          async inputName => {
+            await this.storage.renameFile(nameFileSelected, inputName)
+            this.showToast("Elemento renombrado")
+            this.fileSelected = undefined
+          }
+        );
         break;
       case ActionsFile.DOWNLOAD:
         this.showDialogDownload(file)

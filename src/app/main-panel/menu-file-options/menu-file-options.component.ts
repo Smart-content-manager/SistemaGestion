@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output, SimpleChanges} from '@angular/core';
 import {FileObject} from "../models/FileObject";
 import {ActionsFile, ItemActionFile} from "../models/ActionsFile";
-import {faDownload, faLink, faTrash} from "@fortawesome/free-solid-svg-icons";
+import {faDownload, faLink, faPen, faTrash} from "@fortawesome/free-solid-svg-icons";
 import {FileType} from "../models/FileType";
 
 @Component({
@@ -18,6 +18,7 @@ export class MenuFileOptionsComponent implements OnInit {
 
   // * show all options with icon and text
   listFileOptions: ItemActionFile[] = [
+    { name: "Renombrar", action: ActionsFile.RENAME, iconAction: faPen },
     { name: "Eliminar", action: ActionsFile.DELETE, iconAction: faTrash },
     { name: "Descargar", action: ActionsFile.DOWNLOAD, iconAction: faDownload },
     { name: "Obtener link", action: ActionsFile.GET_LINK, iconAction: faLink }

@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {deleteObject, listAll, ref, Storage, uploadBytes, uploadBytesResumable} from "@angular/fire/storage";
+import {deleteObject, getBlob, listAll, ref, Storage, uploadBytes, uploadBytesResumable} from "@angular/fire/storage";
 import {BehaviorSubject} from 'rxjs';
 import {FileObject, getFilesAndFolders} from "../main-panel/models/FileObject";
 import {Clipboard} from '@angular/cdk/clipboard';
@@ -66,6 +66,19 @@ export class StorageService {
       this.reloadFilesFromPath()
     } catch (error) {
       console.error(error)
+    }
+  }
+
+  async renameFile(fileName: string, newName: string) {
+    const oldRefFile = ref(this.storage, `${this._currentPath.value}/${fileName}`)
+    const newRefFile = ref(this.storage, `${this._currentPath.value}/${newName}`)
+    try {
+      const bytesFile = await getBlob(oldRefFile)
+      await uploadBytes(newRefFile, bytesFile)
+      await deleteObject(oldRefFile)
+      this.reloadFilesFromPath()
+    } catch (e) {
+      console.error(e)
     }
   }
 

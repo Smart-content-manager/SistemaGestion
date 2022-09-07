@@ -20,7 +20,7 @@ import { DialogAddFileComponent } from './dialog-add-file/dialog-add-file.compon
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import {ReactiveFormsModule} from "@angular/forms";
-import { DialogAddFolderComponent } from './dialog-add-folder/dialog-add-folder.component';
+import { DialogInputNameItemComponent } from './dialog-input-name/dialog-input-name-item.component';
 
 
 @NgModule({
@@ -31,7 +31,7 @@ import { DialogAddFolderComponent } from './dialog-add-folder/dialog-add-folder.
     DialogCreateOrUploadComponent,
     ProgressBarComponent,
     DialogAddFileComponent,
-    DialogAddFolderComponent
+    DialogInputNameItemComponent
   ],
   imports: [
     CommonModule,

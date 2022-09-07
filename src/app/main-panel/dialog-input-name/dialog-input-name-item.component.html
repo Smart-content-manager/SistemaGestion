@@ -1,0 +1,26 @@
+<form (ngSubmit)="validateNameFolder()" [formGroup]="formControlFolder!" class="form-add-folder">
+  <h3>{{titleDialog}}</h3>
+  <mat-form-field appearance="outline">
+    <mat-label>{{nameInput}}</mat-label>
+    <input
+      #inputFileName
+      [formControl]="formControlFolder.controls.nameInput"
+      matInput
+      [placeholder]="hintDialog"
+      type="text">
+    <mat-icon matSuffix>{{iconDialog}}</mat-icon>
+    <mat-hint
+      [ngStyle]="{'color' : inputFileName.value.length > maxLengthName ? 'red' : 'black'}"
+      align="end"
+    >{{inputFileName.value.length}} /{{maxLengthName}}</mat-hint>
+    <mat-error *ngIf="formControlFolder!.controls['nameInput'].errors?.['required']">name is require</mat-error>
+    <mat-error *ngIf="formControlFolder!.controls['nameInput'].errors?.['maxlength']">name is very length</mat-error>
+    <mat-error *ngIf="formControlFolder!.controls['nameInput'].errors?.['exist']">the name already exists</mat-error>
+    <mat-error *ngIf="formControlFolder!.controls['nameInput'].errors?.['sameName']">the name is the same</mat-error>
+  </mat-form-field>
+
+  <div mat-dialog-actions>
+    <button color="primary" mat-raised-button type="submit">Accept</button>
+    <button mat-dialog-close mat-raised-button>Cancel</button>
+  </div>
+</form>
