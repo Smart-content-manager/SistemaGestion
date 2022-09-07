@@ -1,6 +1,6 @@
 import {Component, HostListener, OnInit} from '@angular/core';
 import {FileObject} from "../models/FileObject";
-import {ActionsFile} from "./ActionsFile";
+import {ActionsFile} from "../models/ActionsFile";
 import {StorageService} from "../../services/storage.service";
 import {Observable} from "rxjs";
 import {MatDialog} from "@angular/material/dialog";
@@ -23,48 +23,6 @@ export class PanelDragDropComponent implements OnInit {
   fileSelected: FileObject | undefined;
   listFiles: Observable<FileObject[]>;
 
-  openDialogCreate(): void {
-    const dialogRef = this.dialog.open(DialogCreateOrUploadComponent, {
-      width: '250px',
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      switch (result) {
-        case FileType.FILE:
-          console.log("Se selecciono subir un archivo");
-          this.openDialogAddFile()
-          break;
-        case FileType.FOLDER:
-          console.log("Se selecciono crear un directorio")
-          this.openDialogAddFolder();
-          break;
-      }
-    });
-  }
-
-  openDialogAddFolder(): void {
-    const dialogRef = this.dialog.open(DialogAddFolderComponent, {
-      width: '350px',
-      height: '250px',
-    });
-
-    dialogRef.afterClosed().subscribe(async result => {
-      if (result) {
-        await this.storage.createDir(result)
-      }
-    })
-  }
-
-  openDialogAddFile() {
-    const dialogRef = this.dialog.open(DialogAddFileComponent, {
-      width: '550px',
-      height: '450px',
-    });
-  }
-
-  ngOnInit(): void {
-  }
-
   constructor(
     private storage: StorageService,
     private dialog: MatDialog,
@@ -74,6 +32,49 @@ export class PanelDragDropComponent implements OnInit {
     // * add listener for change files for current directory
     this.listFiles = storage.listFilesInFolder
   }
+
+  ngOnInit(): void {
+  }
+
+  openDialogCreate(): void {
+    const dialogCreateRef = this.dialog.open(DialogCreateOrUploadComponent, {
+      width: '250px',
+    });
+
+    dialogCreateRef.afterClosed().subscribe(result => {
+      switch (result) {
+        case FileType.FILE:
+          this.openDialogAddFile()
+          break;
+        case FileType.FOLDER:
+          this.openDialogAddFolder();
+          break;
+      }
+    });
+  }
+
+  openDialogAddFolder(): void {
+    const dialogNameFolderRef = this.dialog.open(DialogAddFolderComponent, {
+      width: '350px',
+
+    });
+
+    dialogNameFolderRef.afterClosed().subscribe(async result => {
+      console.log(result)
+      if (result) {
+        await this.storage.createDir(result)
+      }
+    })
+  }
+
+  openDialogAddFile() {
+    // * this dialog close automatically
+    this.dialog.open(DialogAddFileComponent, {
+      width: '550px',
+      height: '450px',
+    });
+  }
+
 
   //* Si regresa a commits anteriores guarde este framento de codigo ya que existia un bug
   clickLeft(file: FileObject) {

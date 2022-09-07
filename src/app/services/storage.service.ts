@@ -33,6 +33,10 @@ export class StorageService {
     return this._listFilesInFolder.asObservable();
   }
 
+  get currentListFilesInFolder() {
+    return this._listFilesInFolder.value
+  }
+
   private _currentPath = new BehaviorSubject<string>('');
 
   get currentPath() {
