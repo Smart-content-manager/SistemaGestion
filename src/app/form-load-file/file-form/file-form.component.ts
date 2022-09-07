@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, Validators} from '@angular/forms';
 import {StorageService} from 'src/app/services/storage.service';
-import {ProgressBarComponent} from '../../main-panel/progress-bar/progress-bar.component';
+import {DialogTaskComponent} from '../../main-panel/dialog-task/dialog-task.component';
 import {MatDialog} from '@angular/material/dialog';
 import {Router} from '@angular/router';
 
@@ -35,7 +35,7 @@ export class FileFormComponent implements OnInit {
   }
 
   async onSubmit() {
-    this.dialog.open(ProgressBarComponent, {
+    this.dialog.open(DialogTaskComponent, {
       width: '250px',
       disableClose: true,
       data: {type: 'UPLOAD'}

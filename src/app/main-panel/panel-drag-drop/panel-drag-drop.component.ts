@@ -7,7 +7,7 @@ import {MatDialog} from "@angular/material/dialog";
 import {DialogCreateOrUploadComponent} from "../dialog-create-or-upload/dialog-create-or-upload.component";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {Clipboard} from "@angular/cdk/clipboard";
-import {ProgressBarComponent} from "../progress-bar/progress-bar.component";
+import {DialogTaskComponent} from "../dialog-task/dialog-task.component";
 import {FileType} from "../models/FileType";
 import {DialogAddFileComponent} from "../dialog-add-file/dialog-add-file.component";
 import {DialogInputNameData, DialogInputNameItemComponent} from "../dialog-input-name/dialog-input-name-item.component";
@@ -137,7 +137,7 @@ export class PanelDragDropComponent implements OnInit {
   }
 
   showDialogDownload(file: FileObject) {
-    this.dialog.open(ProgressBarComponent, {
+    this.dialog.open(DialogTaskComponent, {
       width: '350px',
       disableClose: true,
       data: {type: 'DOWNLOAD'}

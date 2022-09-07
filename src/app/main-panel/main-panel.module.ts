@@ -11,7 +11,7 @@ import {MatButtonModule} from "@angular/material/button";
 import {MatDividerModule} from "@angular/material/divider";
 import {DialogCreateOrUploadComponent} from './dialog-create-or-upload/dialog-create-or-upload.component';
 import {MatDialogModule} from '@angular/material/dialog';
-import {ProgressBarComponent} from './progress-bar/progress-bar.component';
+import {DialogTaskComponent} from './dialog-task/dialog-task.component';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
 import {MatGridListModule} from '@angular/material/grid-list';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
@@ -29,7 +29,7 @@ import { DialogInputNameItemComponent } from './dialog-input-name/dialog-input-n
     IconObjectFileComponent,
     MenuFileOptionsComponent,
     DialogCreateOrUploadComponent,
-    ProgressBarComponent,
+    DialogTaskComponent,
     DialogAddFileComponent,
     DialogInputNameItemComponent
   ],

@@ -12,11 +12,11 @@ export interface ProgressData {
 }
 
 @Component({
-  selector: 'app-progress-bar',
-  templateUrl: './progress-bar.component.html',
-  styleUrls: ['./progress-bar.component.css']
+  selector: 'app-dialog-task',
+  templateUrl: './dialog-task.component.html',
+  styleUrls: ['./dialog-task.component.css']
 })
-export class ProgressBarComponent implements OnInit, OnDestroy {
+export class DialogTaskComponent implements OnInit, OnDestroy {
   color: ThemePalette = 'primary';
   mode: ProgressBarMode = 'indeterminate';
   value = 0;
@@ -25,7 +25,7 @@ export class ProgressBarComponent implements OnInit, OnDestroy {
 
   constructor(
     private storage: StorageService,
-    private dialogRef: MatDialogRef<ProgressBarComponent>,
+    private dialogRef: MatDialogRef<DialogTaskComponent>,
     @Inject(MAT_DIALOG_DATA) public data: ProgressData,
   ) {
     this.initAnimation()
