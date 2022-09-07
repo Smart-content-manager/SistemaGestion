@@ -1,8 +1,9 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
-import {MAT_DIALOG_DATA} from "@angular/material/dialog";
+import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
+import {StorageService} from 'src/app/services/storage.service';
 
-export interface DialogFolderData{
+export interface DialogFolderData {
   nameFolder: string;
 }
 
@@ -14,21 +15,36 @@ export interface DialogFolderData{
 export class DialogAddFolderComponent implements OnInit {
 
   MAX_LENGTH_NAME = 20
-  MIN_LENGTH_NAME = 3
 
   formControlFolder = new FormGroup(
     {
       nameFolder: new FormControl("", [Validators.required,
-        Validators.minLength(this.MIN_LENGTH_NAME),
         Validators.maxLength(this.MAX_LENGTH_NAME)])
     }
   )
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) public data: DialogFolderData
-  ) { }
+    @Inject(MAT_DIALOG_DATA) public data: DialogFolderData,
+    private storage: StorageService,
+    private dialogRef: MatDialogRef<DialogAddFolderComponent>
+  ) {
+  }
 
   ngOnInit(): void {
   }
+
+  async validateNameFolder() {
+    const listFolders = this.storage.currentListFilesInFolder
+    if (this.formControlFolder.valid) {
+      const nameFolder = this.formControlFolder.controls.nameFolder.value
+      const findFolder = listFolders.find((value) => value.name == nameFolder)
+      if (findFolder) {
+        this.formControlFolder.controls.nameFolder.setErrors({exist: true})
+      } else {
+        this.dialogRef.close(nameFolder);
+      }
+    }
+  }
+
 
 }
