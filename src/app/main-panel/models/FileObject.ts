@@ -1,7 +1,7 @@
-import {getDownloadURL, ListResult, StorageReference} from "@angular/fire/storage";
-import {faFile, faFolder, IconDefinition} from "@fortawesome/free-solid-svg-icons";
-import {FileType} from "./FileType";
-import {filter} from "rxjs";
+import { getDownloadURL, ListResult, StorageReference } from "@angular/fire/storage";
+import { faFile, faFolder, IconDefinition, faFilm, faImage, faFileWord, faFilePowerpoint, faFileExcel } from "@fortawesome/free-solid-svg-icons";
+import { FileType } from "./FileType";
+import { filter } from "rxjs";
 
 export interface FileObject {
   name: string;
@@ -15,17 +15,20 @@ function storageRefToFolder(reference: StorageReference) {
     name: reference.name,
     type: FileType.FOLDER,
     link: reference.fullPath,
-    icon: faFolder
+    icon: faFolder,
+    extension: undefined
   }
 }
 
 async function storageRefToFile(reference: StorageReference) {
+  console.log(reference);
+
   let filesUrl = await getDownloadURL(reference)
   return <FileObject>{
     name: reference.name,
     type: FileType.FILE,
     link: filesUrl,
-    icon: faFile
+    icon: getIconFile(reference.name)
   }
 }
 
@@ -51,7 +54,7 @@ export async function getFilesAndFolders(
 ): Promise<FileObject[]> {
   const listFolders = response.prefixes.map(prefix => storageRefToFolder(prefix));
   const listFiles = await Promise.all(response.items.map(item => storageRefToFile(item)));
-  const listFileFilter = listFiles.filter(item => item.name!=".sgkeep")
+  const listFileFilter = listFiles.filter(item => item.name != ".sgkeep")
 
 
   const folderBefore = storageRefToBeforeFolder(currentPath);
@@ -61,5 +64,34 @@ export async function getFilesAndFolders(
   } else {
     return [...listFolders, ...listFileFilter]
   }
+
+}
+
+function getFileExtension(filename: string) {
+  return filename.split('.').pop();
+}
+
+function getIconFile(filename: string) {
+  let extencion = getFileExtension(filename)
+  const video = ["mp4", "mov", "wmv", "avi", "avchd", "flv", "f4v", "swf", "mkv", "webm"]
+  const imagen = ["bmp", "gif", "jpg", "tif", "png"]
+  const word = ["Doc", "Docx", "Docm", "Dot"]
+  const excel = [
+    "xlsx",
+    "xlsm",
+    "xlsb",
+    "xltx",
+    "xltm",
+    "xls",
+    "xlt",
+    "xml",
+    "xlam",
+    "xla",
+    "xlw",
+    "xlr"
+  ]
+
+
+  return video.includes(extencion!) ? faFilm : imagen.includes(extencion!) ? faImage : word.includes(extencion!) ? faFileWord : excel.includes(extencion!) ? faFileExcel : faFile
 }
 
