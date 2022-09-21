@@ -3,6 +3,10 @@
     <mat-toolbar color="primary">
       <span>Sistema Gestion</span>
     </mat-toolbar>
+    <div class="container-path">
+      <span class="current-path">C://{{currentPath | async}}</span>
+    </div>
+
     <!-- Add Content Here -->
     <router-outlet></router-outlet>
   </mat-sidenav-content>

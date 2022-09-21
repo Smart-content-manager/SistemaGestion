@@ -95,7 +95,8 @@ export class StorageService {
 
         const taskUpload = uploadBytesResumable(fileRef, file)
         taskUpload.on('state_changed', async (snapshot) => {
-          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          const progress = +((snapshot.bytesTransferred / snapshot.totalBytes) * 100).toFixed(2);
+          console.log(progress)
           this._progressBar.next(<FilePercent>{
             state: StateFile.IN_PROGRESS,
             percent: progress,
@@ -110,6 +111,9 @@ export class StorageService {
         })
 
         this.reloadFilesFromPath()
+
+        // * restore init state
+        this._progressBar.next(this.init_state);
 
       } catch (e) {
         console.log(`error uploading file: ${file} ${e}`)

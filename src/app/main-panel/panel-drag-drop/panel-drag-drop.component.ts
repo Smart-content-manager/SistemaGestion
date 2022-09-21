@@ -77,6 +77,7 @@ export class PanelDragDropComponent implements OnInit {
     this.dialog.open(DialogAddFileComponent, {
       width: '550px',
       height: '450px',
+      disableClose: true,
     });
   }
 

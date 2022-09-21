@@ -1,4 +1,4 @@
-import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
+import {Component, Inject, NgZone, OnDestroy, OnInit} from '@angular/core';
 import {Subscription} from "rxjs";
 import {StorageService} from "../../services/storage.service";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
@@ -27,6 +27,7 @@ export class DialogTaskComponent implements OnInit, OnDestroy {
     private storage: StorageService,
     private dialogRef: MatDialogRef<DialogTaskComponent>,
     @Inject(MAT_DIALOG_DATA) public data: ProgressData,
+    private ngZone: NgZone
   ) {
     this.initAnimation()
     this.subscribePercentWork()
@@ -49,24 +50,27 @@ export class DialogTaskComponent implements OnInit, OnDestroy {
 
   private subscribePercentWork() {
     this.subscribePercent = this.storage.progressBar.subscribe(async (filePercent) => {
-      switch (filePercent.state) {
-        case StateFile.INIT:
-          this.value = 0;
-          this.mode = 'indeterminate';
-          break;
-        case StateFile.IN_PROGRESS:
-          this.mode = 'determinate';
-          this.value = filePercent.percent;
-          break;
-        case StateFile.SUCCESS:
-          this.value = 100;
-          this.mode = 'indeterminate';
+      this.ngZone.run(() => {
+        switch (filePercent.state) {
+          case StateFile.INIT:
+            this.value = 0;
+            this.mode = 'indeterminate';
+            break;
+          case StateFile.IN_PROGRESS:
+            console.log("progress " + filePercent.percent)
+            this.mode = 'determinate';
+            this.value = filePercent.percent;
+            break;
+          case StateFile.SUCCESS:
+            this.value = 100;
+            this.mode = 'indeterminate';
 
-          await new Promise(f => setTimeout(f, 500));
-          this.dialogRef.close()
+            this.dialogRef.close()
 
-          break;
-      }
+            break;
+        }
+      })
+
     })
   }
 
