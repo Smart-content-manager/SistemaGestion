@@ -8,6 +8,6 @@
   class="container-icon"
   *ngIf="fileObject!.name"
 >
-  <fa-icon [icon]="fileObject!.icon" size="5x"></fa-icon>
+  <fa-icon [icon]="fileObject!.icon" [style.color]="fileObject!.color" size="5x"></fa-icon>
   <span class="noselect">{{ fileObject!.name }}</span>
 </div>
