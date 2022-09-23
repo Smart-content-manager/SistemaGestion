@@ -43,8 +43,20 @@ export class StorageService {
     return this._currentPath.asObservable();
   }
 
+  get currentPathValue() {
+    return this._currentPath.value;
+  }
+
   get progressBar() {
     return this._progressBar.asObservable()
+  }
+
+  goBackDirectory() {
+    let currentPath = this._currentPath.value
+    const listPath = currentPath.split("/")
+    listPath.pop()
+    const beforePath = listPath.join("/")
+    this.reloadFilesFromPath(beforePath)
   }
 
   reloadFilesFromPath(path: string = this._currentPath.value) {

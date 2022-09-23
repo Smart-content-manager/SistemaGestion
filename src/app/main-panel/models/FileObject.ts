@@ -29,8 +29,6 @@ function storageRefToFolder(reference: StorageReference) {
 }
 
 async function storageRefToFile(reference: StorageReference) {
-  console.log(reference);
-
   let filesUrl = await getDownloadURL(reference)
   let {color, icon} = getIconFileAndColor(reference.name)
   return <FileObject>{
