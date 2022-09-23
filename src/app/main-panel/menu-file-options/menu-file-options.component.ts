@@ -10,6 +10,7 @@ import {FileType} from "../models/FileType";
   styleUrls: ['./menu-file-options.component.css']
 })
 export class MenuFileOptionsComponent implements OnInit {
+  fileType = FileType.FOLDER
 
   // * get the file for show the correct options
   @Input() currentFile: FileObject | undefined;

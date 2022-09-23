@@ -1,16 +1,16 @@
-import {Component, HostListener, OnInit} from '@angular/core';
-import {FileObject} from "../models/FileObject";
-import {ActionsFile} from "../models/ActionsFile";
-import {StorageService} from "../../services/storage.service";
-import {Observable} from "rxjs";
-import {MatDialog} from "@angular/material/dialog";
-import {DialogCreateOrUploadComponent} from "../dialog-create-or-upload/dialog-create-or-upload.component";
-import {MatSnackBar} from "@angular/material/snack-bar";
-import {Clipboard} from "@angular/cdk/clipboard";
-import {DialogTaskComponent} from "../dialog-task/dialog-task.component";
-import {FileType} from "../models/FileType";
-import {DialogAddFileComponent} from "../dialog-add-file/dialog-add-file.component";
-import {DialogInputNameData, DialogInputNameItemComponent} from "../dialog-input-name/dialog-input-name-item.component";
+import { Component, HostListener, OnInit } from '@angular/core';
+import { FileObject } from "../models/FileObject";
+import { ActionsFile } from "../models/ActionsFile";
+import { StorageService } from "../../services/storage.service";
+import { Observable } from "rxjs";
+import { MatDialog } from "@angular/material/dialog";
+import { DialogCreateOrUploadComponent } from "../dialog-create-or-upload/dialog-create-or-upload.component";
+import { MatSnackBar } from "@angular/material/snack-bar";
+import { Clipboard } from "@angular/cdk/clipboard";
+import { DialogTaskComponent } from "../dialog-task/dialog-task.component";
+import { FileType } from "../models/FileType";
+import { DialogAddFileComponent } from "../dialog-add-file/dialog-add-file.component";
+import { DialogInputNameData, DialogInputNameItemComponent } from "../dialog-input-name/dialog-input-name-item.component";
 
 @Component({
   selector: 'app-panel-drag-drop',
@@ -19,6 +19,7 @@ import {DialogInputNameData, DialogInputNameItemComponent} from "../dialog-input
 })
 export class PanelDragDropComponent implements OnInit {
 
+  type = FileType.FOLDER
 
   fileSelected: FileObject | undefined;
   listFiles: Observable<FileObject[]>;
@@ -96,13 +97,11 @@ export class PanelDragDropComponent implements OnInit {
   }
 
   clickRight(file: FileObject) {
-    // console.log("Se hizo click derecho en el archivo " + file.name)
     this.fileSelected = file;
-
   }
 
   async listerClickAction(event: { action: ActionsFile; file: FileObject }) {
-    const {action, file} = event
+    const { action, file } = event
     switch (action) {
       case ActionsFile.DELETE:
         await this.storage.deleteFile(file.link)
@@ -118,7 +117,7 @@ export class PanelDragDropComponent implements OnInit {
             hintDialog: "Escribe el nuevo nombre del archivo",
             maxLengthName: 20,
             defaultValue: nameFileSelected,
-            iconDialog:"edit"
+            iconDialog: "edit"
           },
           async inputName => {
             await this.storage.renameFile(nameFileSelected, inputName)
@@ -141,14 +140,14 @@ export class PanelDragDropComponent implements OnInit {
     this.dialog.open(DialogTaskComponent, {
       width: '350px',
       disableClose: true,
-      data: {type: 'DOWNLOAD'}
+      data: { type: 'DOWNLOAD' }
     });
 
     this.storage.downloadFile(file.link, file.name)
   }
 
   showToast(message: string) {
-    this._snackBar.open(message, "", {duration: 3000});
+    this._snackBar.open(message, "", { duration: 3000 });
   }
 
   @HostListener('document:click', ['$event'])
@@ -164,7 +163,7 @@ export class PanelDragDropComponent implements OnInit {
     this.dialog.open(DialogTaskComponent, {
       width: '250px',
       disableClose: true,
-      data: {type: 'UPLOAD'}
+      data: { type: 'UPLOAD' }
     });
     const file = listFinalFiles[0]
     await this.storage.uploadFile(file, file.name)

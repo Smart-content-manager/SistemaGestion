@@ -7,11 +7,9 @@
 <mat-divider></mat-divider>
 
 <!-- show all options -->
-<div *ngIf="currentFile!.type != 1">
-  <ng-container *ngFor="let item of listCurrentOptions">
-    <button (click)="clickOption(item)" mat-menu-item>
-      <fa-icon [icon]="item.iconAction"></fa-icon>
-      <span class="item-option">{{ item.name }}</span>
-    </button>
-  </ng-container>
-</div>
+<ng-container *ngFor="let item of listCurrentOptions">
+  <button (click)="clickOption(item)" mat-menu-item>
+    <fa-icon [icon]="item.iconAction"></fa-icon>
+    <span class="item-option">{{ item.name }}</span>
+  </button>
+</ng-container>
