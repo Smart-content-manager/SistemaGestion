@@ -21,17 +21,27 @@ export class NavigationComponent {
     // check if back or forward button is pressed.
 
     this.currentPath.subscribe(path => {
-      history.pushState({path: path}, path, window.location.href)
+      if (path == "") {
+        history.replaceState({path: path}, path)
+      } else {
+        if (path.length > history.state.path.length) {
+          history.pushState({path: path}, path)
+        }
+      }
     })
 
-    this.location.onPopState(() => {
-      storage.goBackDirectory()
+
+    this.location.onPopState((event) => {
+      if (storage.getCurrentPathValue() != "") {
+        storage.goBackDirectory()
+      }
     });
+
   }
 
-  logOut() {
+  async logOut() {
     try {
-      this.authServices.logout()
+      await this.authServices.logout()
     } catch (e) {
       console.log("Error logOut")
     }

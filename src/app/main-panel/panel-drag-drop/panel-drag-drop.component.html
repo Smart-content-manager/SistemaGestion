@@ -1,41 +1,48 @@
-<app-navigation></app-navigation>
-<div id="main-panel" appDnd (fileDropped)="onFileDropped($event)">
-  <!-- * init panel with listener clicks for list file -->
-  <!-- ! is import pass "fileMenu", this is a ref for open mat menu -->
+<div class="container-panel">
+  <app-navigation></app-navigation>
+  <div (fileDropped)="onFileDropped($event)" appDnd id="main-panel">
+    <!-- * init panel with listener clicks for list file -->
+    <!-- ! is import pass "fileMenu", this is a ref for open mat menu -->
 
-  <ng-container *ngFor="let object of listFiles | async">
-    <app-icon-object-file
-      *ngIf="object.type != type"
-      (fileClickLeft)="clickLeft($event)"
-      (fileClickRight)="clickRight($event)"
-      [currentSelectedFile]="fileSelected"
-      [fileObject]="object"
-      [menu]="fileMenu"
-    ></app-icon-object-file>
+    <div *ngIf="(isLoadingFiles | async)" class="container-progress">
+      <mat-spinner [diameter]="40" [strokeWidth]="5"></mat-spinner>
+    </div>
 
-    <app-icon-object-file
-      *ngIf="object.type == type"
-      (fileClickLeft)="clickLeft($event)"
-      (fileClickRight)="clickRight($event)"
-      [currentSelectedFile]="fileSelected"
-      [fileObject]="object"
-    ></app-icon-object-file>
-    <!-- * only create a one  menu context for all files -->
-    <!-- ! this for no has multiples menus options -->
+    <ng-container *ngFor="let object of listFiles | async">
+      <app-icon-object-file
+        (fileClickLeft)="clickLeft($event)"
+        (fileClickRight)="clickRight($event)"
+        *ngIf="object.type != type"
+        [currentSelectedFile]="fileSelected"
+        [fileObject]="object"
+        [menu]="fileMenu"
+      ></app-icon-object-file>
 
-    <mat-menu #fileMenu="matMenu">
-      <!-- * get the var (file) passed as argument when click left in file -->
-      <!-- ! for that is necessary "matMenuContent" for lazy component -->
-      <ng-template let-file="file" matMenuContent>
-        <app-menu-file-options
-          (clickOptionEvent)="listerClickAction($event)"
-          [currentFile]="file"
-        ></app-menu-file-options>
-      </ng-template>
-    </mat-menu>
-  </ng-container>
+      <app-icon-object-file
+        (fileClickLeft)="clickLeft($event)"
+        (fileClickRight)="clickRight($event)"
+        *ngIf="object.type == type"
+        [currentSelectedFile]="fileSelected"
+        [fileObject]="object"
+      ></app-icon-object-file>
+      <!-- * only create a one  menu context for all files -->
+      <!-- ! this for no has multiples menus options -->
 
-  <button mat-fab color="primary" id="button-add" (click)="openDialogCreate()">
-    <mat-icon>add</mat-icon>
-  </button>
+      <mat-menu #fileMenu="matMenu">
+        <!-- * get the var (file) passed as argument when click left in file -->
+        <!-- ! for that is necessary "matMenuContent" for lazy component -->
+        <ng-template let-file="file" matMenuContent>
+          <app-menu-file-options
+            (clickOptionEvent)="listerClickAction($event)"
+            [currentFile]="file"
+          ></app-menu-file-options>
+        </ng-template>
+      </mat-menu>
+    </ng-container>
+
+    <button (click)="openDialogCreate()" color="primary" id="button-add" mat-fab>
+      <mat-icon>add</mat-icon>
+    </button>
+  </div>
+
 </div>

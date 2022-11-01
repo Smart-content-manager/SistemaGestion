@@ -25,6 +25,7 @@ import {DndDirective} from './directives/dnd.directive';
 import {NavigationComponent} from "./navigation/navigation.component";
 import {MatSidenavModule} from "@angular/material/sidenav";
 import {MatToolbarModule} from "@angular/material/toolbar";
+import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 
 
 @NgModule({
@@ -58,6 +59,7 @@ import {MatToolbarModule} from "@angular/material/toolbar";
     ReactiveFormsModule,
     MatSidenavModule,
     MatToolbarModule,
+    MatProgressSpinnerModule,
   ],
   exports: [PanelDragDropComponent, DialogAddFileComponent]
 })

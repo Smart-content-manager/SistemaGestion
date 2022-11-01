@@ -19,6 +19,11 @@ export class StorageService {
 
   private _progressBar = new BehaviorSubject<FilePercent>(this.init_state);
 
+  private _isLoadingFiles = new BehaviorSubject(false);
+  get isLoadingFiles() {
+    return this._isLoadingFiles.asObservable();
+  }
+
   constructor(
     private dialog: MatDialog,
     private clipboard: Clipboard,
@@ -43,7 +48,7 @@ export class StorageService {
     return this._currentPath.asObservable();
   }
 
-  get currentPathValue() {
+  getCurrentPathValue() {
     return this._currentPath.value;
   }
 
@@ -59,14 +64,18 @@ export class StorageService {
     this.reloadFilesFromPath(beforePath)
   }
 
-  reloadFilesFromPath(path: string = this._currentPath.value) {
+  async reloadFilesFromPath(path: string = this._currentPath.value) {
     this._currentPath.next(path);
     const storageRef = ref(this.storage, path);
-    listAll(storageRef).then(async (response) => {
-      this._listFilesInFolder.next(await getFilesAndFolders(path, response))
-    }).catch(() => {
+    try {
+      this._isLoadingFiles.next(true);
+      const listResult = await listAll(storageRef)
+      this._listFilesInFolder.next(await getFilesAndFolders(path, listResult))
+    } catch {
       this._listFilesInFolder.next([])
-    });
+    } finally {
+      this._isLoadingFiles.next(false);
+    }
   }
 
   async createDir(nameDirectory: string) {
@@ -75,7 +84,7 @@ export class StorageService {
     const dirRef = ref(this.storage, refFolder);
     try {
       await uploadBytes(dirRef, file)
-      this.reloadFilesFromPath()
+      await this.reloadFilesFromPath()
     } catch (error) {
       console.error(error)
     }
@@ -88,7 +97,7 @@ export class StorageService {
       const bytesFile = await getBlob(oldRefFile)
       await uploadBytes(newRefFile, bytesFile)
       await deleteObject(oldRefFile)
-      this.reloadFilesFromPath()
+      await this.reloadFilesFromPath()
     } catch (e) {
       console.error(e)
     }
@@ -122,7 +131,7 @@ export class StorageService {
           percent: 100,
         })
 
-        this.reloadFilesFromPath()
+        await this.reloadFilesFromPath()
 
         // * restore init state
         this._progressBar.next(this.init_state);
@@ -177,7 +186,7 @@ export class StorageService {
     } catch (e) {
       console.log(e);
     } finally {
-      this.reloadFilesFromPath()
+      await this.reloadFilesFromPath()
     }
   }
 

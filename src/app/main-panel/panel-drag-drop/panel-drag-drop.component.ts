@@ -1,16 +1,16 @@
-import { Component, HostListener, OnInit } from '@angular/core';
-import { FileObject } from "../models/FileObject";
-import { ActionsFile } from "../models/ActionsFile";
-import { StorageService } from "../../services/storage.service";
-import { Observable } from "rxjs";
-import { MatDialog } from "@angular/material/dialog";
-import { DialogCreateOrUploadComponent } from "../dialog-create-or-upload/dialog-create-or-upload.component";
-import { MatSnackBar } from "@angular/material/snack-bar";
-import { Clipboard } from "@angular/cdk/clipboard";
-import { DialogTaskComponent } from "../dialog-task/dialog-task.component";
-import { FileType } from "../models/FileType";
-import { DialogAddFileComponent } from "../dialog-add-file/dialog-add-file.component";
-import { DialogInputNameData, DialogInputNameItemComponent } from "../dialog-input-name/dialog-input-name-item.component";
+import {Component, HostListener, OnInit} from '@angular/core';
+import {FileObject} from "../models/FileObject";
+import {ActionsFile} from "../models/ActionsFile";
+import {StorageService} from "../../services/storage.service";
+import {Observable} from "rxjs";
+import {MatDialog} from "@angular/material/dialog";
+import {DialogCreateOrUploadComponent} from "../dialog-create-or-upload/dialog-create-or-upload.component";
+import {MatSnackBar} from "@angular/material/snack-bar";
+import {Clipboard} from "@angular/cdk/clipboard";
+import {DialogTaskComponent} from "../dialog-task/dialog-task.component";
+import {FileType} from "../models/FileType";
+import {DialogAddFileComponent} from "../dialog-add-file/dialog-add-file.component";
+import {DialogInputNameData, DialogInputNameItemComponent} from "../dialog-input-name/dialog-input-name-item.component";
 
 @Component({
   selector: 'app-panel-drag-drop',
@@ -24,6 +24,8 @@ export class PanelDragDropComponent implements OnInit {
   fileSelected: FileObject | undefined;
   listFiles: Observable<FileObject[]>;
 
+  isLoadingFiles: Observable<boolean>;
+
   constructor(
     private storage: StorageService,
     private dialog: MatDialog,
@@ -31,7 +33,8 @@ export class PanelDragDropComponent implements OnInit {
     private _clipboard: Clipboard,
   ) {
     // * add listener for change files for current directory
-    this.listFiles = storage.listFilesInFolder
+    this.listFiles = storage.listFilesInFolder;
+    this.isLoadingFiles = storage.isLoadingFiles;
   }
 
   ngOnInit(): void {
