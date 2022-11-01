@@ -1,0 +1,48 @@
+<div class="container-auth">
+  <div class="container-form">
+    <form (ngSubmit)="validateAndSend()" [formGroup]="formAuth">
+
+      <h3>Panel de Autenticación</h3>
+
+      <!-- * input email -->
+      <div class="container-field-form">
+        <mat-form-field appearance="outline">
+          <mat-label>Email</mat-label>
+          <input #inputEmail [attr.disabled]="isAuthenticating" [type]="'text'" formControlName="email" matInput
+                 required>
+          <mat-icon matSuffix>email</mat-icon>
+          <mat-hint
+            [class.error-hint]="(inputEmail?.value?.length || 0) > MAX_LENGTH_EMAIL "
+            align="end">{{inputEmail?.value?.length || 0}}/{{MAX_LENGTH_EMAIL}}</mat-hint>
+        </mat-form-field>
+      </div>
+
+      <!-- * input pasword -->
+      <div class="container-field-form">
+        <mat-form-field appearance="outline">
+          <mat-label>Password</mat-label>
+          <input #inputPassword [attr.disabled]="isAuthenticating" [type]="hide ? 'password' : 'text'"
+                 formControlName="password" matInput
+                 required>
+          <button (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide" mat-icon-button
+                  matSuffix>
+            <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+          </button>
+          <mat-hint
+            [class.error-hint]="(inputPassword?.value?.length || 0) > MAX_LENGTH_PASSWORD "
+            align="end">{{inputPassword?.value?.length || 0}}/{{MAX_LENGTH_PASSWORD}}</mat-hint>
+        </mat-form-field>
+      </div>
+
+      <!-- * input submit -->
+
+      <div class="container-submit">
+        <button *ngIf="!isAuthenticating; else blockSpinner" color="primary" mat-flat-button type="submit">Login
+        </button>
+        <ng-template #blockSpinner>
+          <mat-spinner [diameter]="36" [strokeWidth]="5"></mat-spinner>
+        </ng-template>
+      </div>
+    </form>
+  </div>
+</div>

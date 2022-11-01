@@ -1,0 +1,11 @@
+<mat-toolbar color="primary">
+  <span>Sistema Gestion</span>
+  <span class="example-spacer"></span>
+  <button (click)="logOut()" color="warn" mat-raised-button>
+    LogOut
+    <mat-icon>logout</mat-icon>
+  </button>
+</mat-toolbar>
+<div class="container-path">
+  <span class="current-path">C://{{currentPath | async}}</span>
+</div>

@@ -23,6 +23,15 @@
 
 .container-path {
   height: 20px;
-  width: 100%;
+  width: calc(100% - 2px);
   border: solid black 1px;
+}
+
+.example-spacer {
+  flex: 1 1 auto;
+}
+
+mat-icon {
+  margin-left: 5px;
+  font-size: 20px;
 }

@@ -8,13 +8,12 @@ import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatMenuModule} from '@angular/material/menu';
 import {MatIconModule} from '@angular/material/icon';
 import {MatButtonModule} from '@angular/material/button';
-import {NavigationComponent} from './navigation/navigation.component';
 import {LayoutModule} from '@angular/cdk/layout';
 import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatListModule} from '@angular/material/list';
 import {MatGridListModule} from '@angular/material/grid-list';
 import {MatCardModule} from '@angular/material/card';
-import {AppRoutingModule} from './app-routing/app-routing.module';
+import {AppRoutingModule} from './app-routing.module';
 import {DragDropModule} from '@angular/cdk/drag-drop';
 import {MatInputModule} from '@angular/material/input';
 import {MatSelectModule} from '@angular/material/select';
@@ -29,17 +28,18 @@ import {getFirestore, provideFirestore} from '@angular/fire/firestore';
 import {getStorage, provideStorage} from '@angular/fire/storage';
 import {LottieModule} from 'ngx-lottie';
 import player from 'lottie-web';
+import {AuthModule} from "./auth/auth.module";
+import {MyAuthGuard} from "./MyAuthGuard";
 
 export function playerFactory() {
   return player;
 }
 
 @NgModule({
-    declarations: [
-        AppComponent,
-        NavigationComponent
-    ],
-    imports: [
+  declarations: [
+    AppComponent,
+  ],
+  imports: [
         AppRoutingModule,
         BrowserModule,
         BrowserAnimationsModule,
@@ -54,20 +54,23 @@ export function playerFactory() {
         MatGridListModule,
         MatCardModule,
         DragDropModule,
-        MatInputModule,
-        MatSelectModule,
-        MatRadioModule,
-        ReactiveFormsModule,
-        MainPanelModule,
-        provideFirebaseApp(() => initializeApp(environment.firebase)),
-        provideAuth(() => getAuth()),
-        provideDatabase(() => getDatabase()),
-        provideFirestore(() => getFirestore()),
-        provideStorage(() => getStorage()),
-        LottieModule.forRoot({player: playerFactory})
-    ],
-    providers: [],
-    exports: [],
-    bootstrap: [AppComponent]
+    MatInputModule,
+    MatSelectModule,
+    MatRadioModule,
+    ReactiveFormsModule,
+    MainPanelModule,
+    provideFirebaseApp(() => initializeApp(environment.firebase)),
+    provideAuth(() => getAuth()),
+    provideDatabase(() => getDatabase()),
+    provideFirestore(() => getFirestore()),
+    provideStorage(() => getStorage()),
+    LottieModule.forRoot({player: playerFactory}),
+    AuthModule
+  ],
+  providers: [
+    MyAuthGuard
+  ],
+  exports: [],
+  bootstrap: [AppComponent]
 })
 export class AppModule { }
