@@ -59,7 +59,10 @@ export class PanelDragDropComponent implements OnInit {
             hintDialog: "Escribe el nombre de la carpeta",
             maxLengthName: 20,
             iconDialog: "create_new_folder"
-          }, async name => await this.storage.createDir(name));
+          }, async name => {
+            // await this.storage.createDir(name)
+            await this.database.createNewFolder(name)
+          });
           break;
       }
     });

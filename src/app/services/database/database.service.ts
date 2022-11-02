@@ -1,7 +1,9 @@
 import {Injectable} from '@angular/core';
-import {collection, collectionData, Firestore,} from '@angular/fire/firestore';
-import {FileObject, MapToFileObject} from "../../main-panel/models/FileObject";
+import {collection, collectionData, doc, Firestore, setDoc} from '@angular/fire/firestore';
+import {FileObject, FileObjectToMap, MapToFileObject} from "../../main-panel/models/FileObject";
 import {BehaviorSubject, catchError, map, Observable, switchMap} from "rxjs";
+import {FileType} from "../../main-panel/models/FileType";
+import {v4 as uuidv4} from 'uuid';
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +22,9 @@ export class DatabaseService {
     this.listFiles = this.currentPath.pipe(
       switchMap(path => {
         return collectionData(collection(this.afs, `${path}/files`), {idField: "id"}).pipe(
-          map(listDocument => listDocument.map(doc => MapToFileObject(doc))),
+          map(listDocument =>
+            listDocument.map(doc => MapToFileObject(doc))
+              .sort((doc1, doc2) => doc2.type.valueOf() - doc1.type.valueOf())),
           catchError((error: any) => {
             console.log(`error get list files: ${error}`)
             return []
@@ -55,6 +59,22 @@ export class DatabaseService {
     listFiles.pop()
     this.showPath.next(listFiles.join("/"))
 
+  }
+
+  async createNewFolder(nameFolder: string) {
+    const idFolder = uuidv4()
+    const objectFolder = FileObjectToMap(
+      <FileObject>{
+        name: nameFolder,
+        type: FileType.FOLDER,
+        link: `${this.currentPath.value}/files/${idFolder}`
+      }
+    )
+    console.log(`id folder ${idFolder}`)
+    console.log(`current path: ${this.currentPath.value}`)
+    const newDoc = doc(this.afs, `${this.currentPath.value}/files`, idFolder)
+    console.log(`new doc: ${newDoc}`)
+    await setDoc(newDoc, objectFolder)
   }
 
 }
