@@ -1,8 +1,9 @@
 import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
+import {FormBuilder, Validators} from "@angular/forms";
 import {DialogTaskComponent} from "../dialog-task/dialog-task.component";
-import {StorageService} from "../../services/storage.service";
+import {StorageService} from "../../services/storage/storage.service";
 import {MatDialog, MatDialogRef} from "@angular/material/dialog";
+import {DatabaseService} from "../../services/database/database.service";
 
 @Component({
   selector: 'app-dialog-add-file',
@@ -30,10 +31,11 @@ export class DialogAddFileComponent implements OnInit {
   // )
 
   constructor(
-    private serviceS: StorageService,
+    private storage: StorageService,
     private dialog: MatDialog,
     private fb: FormBuilder,
     private dialogRef: MatDialogRef<DialogTaskComponent>,
+    private database: DatabaseService
   ) {
   }
 
@@ -52,7 +54,7 @@ export class DialogAddFileComponent implements OnInit {
       disableClose: true,
       data: {type: 'UPLOAD'}
     });
-    await this.serviceS.uploadFile(this.file,this.fileName)
+    await this.storage.uploadFile(this.file, this.fileName)
     this.dialogRef.close()
   }
 

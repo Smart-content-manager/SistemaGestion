@@ -1,7 +1,7 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
-import {StorageService} from 'src/app/services/storage.service';
+import {StorageService} from 'src/app/services/storage/storage.service';
 
 export interface DialogInputNameData {
   defaultValue: string | "";

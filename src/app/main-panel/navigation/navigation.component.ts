@@ -1,8 +1,9 @@
 import {Component} from '@angular/core';
 import {Observable} from 'rxjs';
-import {StorageService} from "../../services/storage.service";
+import {StorageService} from "../../services/storage/storage.service";
 import {LocationStrategy} from "@angular/common";
 import {AuthService} from "../../auth/services/auth.service";
+import {DatabaseService} from 'src/app/services/database/database.service';
 
 @Component({
   selector: 'app-navigation',
@@ -15,9 +16,10 @@ export class NavigationComponent {
   constructor(
     private storage: StorageService,
     private location: LocationStrategy,
-    private authServices: AuthService
+    private authServices: AuthService,
+    private database: DatabaseService
   ) {
-    this.currentPath = this.storage.currentPath
+    this.currentPath = this.database.showPath
     // check if back or forward button is pressed.
 
     this.currentPath.subscribe(path => {
@@ -32,8 +34,9 @@ export class NavigationComponent {
 
 
     this.location.onPopState((event) => {
-      if (storage.getCurrentPathValue() != "") {
+      if (database.currentShowPath != "") {
         storage.goBackDirectory()
+        database.backDirectory()
       }
     });
 

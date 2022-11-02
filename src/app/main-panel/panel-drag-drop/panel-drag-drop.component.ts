@@ -1,7 +1,7 @@
 import {Component, HostListener, OnInit} from '@angular/core';
 import {FileObject} from "../models/FileObject";
 import {ActionsFile} from "../models/ActionsFile";
-import {StorageService} from "../../services/storage.service";
+import {StorageService} from "../../services/storage/storage.service";
 import {Observable} from "rxjs";
 import {MatDialog} from "@angular/material/dialog";
 import {DialogCreateOrUploadComponent} from "../dialog-create-or-upload/dialog-create-or-upload.component";
@@ -11,6 +11,7 @@ import {DialogTaskComponent} from "../dialog-task/dialog-task.component";
 import {FileType} from "../models/FileType";
 import {DialogAddFileComponent} from "../dialog-add-file/dialog-add-file.component";
 import {DialogInputNameData, DialogInputNameItemComponent} from "../dialog-input-name/dialog-input-name-item.component";
+import {DatabaseService} from "../../services/database/database.service";
 
 @Component({
   selector: 'app-panel-drag-drop',
@@ -31,9 +32,10 @@ export class PanelDragDropComponent implements OnInit {
     private dialog: MatDialog,
     private _snackBar: MatSnackBar,
     private _clipboard: Clipboard,
+    private database: DatabaseService
   ) {
     // * add listener for change files for current directory
-    this.listFiles = storage.listFilesInFolder;
+    this.listFiles = database.listFiles;
     this.isLoadingFiles = storage.isLoadingFiles;
   }
 
@@ -91,6 +93,7 @@ export class PanelDragDropComponent implements OnInit {
     if (file.type === FileType.FOLDER) {
       if (this.fileSelected === file) {
         this.storage.reloadFilesFromPath(file.link);
+        this.database.forwardDirectory(file);
       } else {
         this.fileSelected = file;
       }

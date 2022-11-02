@@ -1,10 +1,10 @@
 import {Injectable} from '@angular/core';
 import {deleteObject, getBlob, listAll, ref, Storage, uploadBytes, uploadBytesResumable} from "@angular/fire/storage";
 import {BehaviorSubject} from 'rxjs';
-import {FileObject, getFilesAndFolders} from "../main-panel/models/FileObject";
+import {FileObject, getFilesAndFolders} from "../../main-panel/models/FileObject";
 import {Clipboard} from '@angular/cdk/clipboard';
 import {MatDialog} from "@angular/material/dialog";
-import {FilePercent, StateFile, TaskDownload} from '../main-panel/models/FilePercent';
+import {FilePercent, StateFile, TaskDownload} from '../../main-panel/models/FilePercent';
 
 
 @Injectable({

@@ -8,7 +8,8 @@ import {
   faImage,
   IconDefinition
 } from "@fortawesome/free-solid-svg-icons";
-import {FileType} from "./FileType";
+import {FileType, FileTypeFile, FileTypeFolder} from "./FileType";
+import {DocumentData} from "@angular/fire/firestore";
 
 export interface FileObject {
   name: string;
@@ -16,7 +17,35 @@ export interface FileObject {
   link: any;
   icon: IconDefinition;
   color: string;
+  id: string;
 }
+
+export function FileObjectToMap(object: FileObject) {
+  const typeEnum = object.type == FileType.FILE ? FileTypeFile : FileTypeFolder
+  return {
+    name: object.name,
+    type: typeEnum,
+    link: object.link,
+  }
+}
+
+export function MapToFileObject(map: DocumentData) {
+  const typeEnum = map["type"] == FileTypeFile ? FileType.FILE : FileType.FOLDER
+
+  const {icon, color} = typeEnum == FileType.FILE ? getIconFileAndColor(map["name"]) : {
+    icon: faFolder,
+    color: "#fff176"
+  }
+  return <FileObject>{
+    name: map["name"],
+    type: typeEnum,
+    link: map["link"],
+    icon: icon,
+    color: color,
+    id: map["id"],
+  }
+}
+
 
 function storageRefToFolder(reference: StorageReference) {
   return <FileObject>{

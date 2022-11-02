@@ -1,6 +1,6 @@
 import {Component, Inject, NgZone, OnDestroy, OnInit} from '@angular/core';
 import {Subscription} from "rxjs";
-import {StorageService} from "../../services/storage.service";
+import {StorageService} from "../../services/storage/storage.service";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {ThemePalette} from "@angular/material/core";
 import {ProgressBarMode} from "@angular/material/progress-bar";
