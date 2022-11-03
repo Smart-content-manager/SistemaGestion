@@ -2,7 +2,7 @@ import {ComponentFixture, TestBed} from '@angular/core/testing';
 
 import {DialogTaskComponent} from './dialog-task.component';
 
-describe('ProgressBarComponent', () => {
+describe('DialogTaskComponent', () => {
   let component: DialogTaskComponent;
   let fixture: ComponentFixture<DialogTaskComponent>;
 

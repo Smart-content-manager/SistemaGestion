@@ -4,14 +4,14 @@ import {ActionsFile} from "../models/ActionsFile";
 import {StorageService} from "../../services/storage/storage.service";
 import {Observable} from "rxjs";
 import {MatDialog} from "@angular/material/dialog";
-import {DialogCreateOrUploadComponent} from "../dialog-create-or-upload/dialog-create-or-upload.component";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {Clipboard} from "@angular/cdk/clipboard";
-import {DialogTaskComponent} from "../dialog-task/dialog-task.component";
 import {FileType} from "../models/FileType";
-import {DialogAddFileComponent} from "../dialog-add-file/dialog-add-file.component";
-import {DialogInputNameData, DialogInputNameItemComponent} from "../dialog-input-name/dialog-input-name-item.component";
 import {DatabaseService} from "../../services/database/database.service";
+import {DialogTaskComponent, TaskType} from "../../dialogs/dialog-task/dialog-task.component";
+import {SelectAddDialogComponent} from "../../dialogs/select-add-dialog/select-add-dialog.component";
+import {DialogInputNameComponent, TypeInput} from "../../dialogs/dialog-input-name/dialog-input-name.component";
+import {v4 as uuidv4} from "uuid";
 
 @Component({
   selector: 'app-panel-drag-drop',
@@ -44,9 +44,7 @@ export class PanelDragDropComponent implements OnInit {
 
   openDialogCreate(): void {
     this.fileSelected = undefined
-    const dialogCreateRef = this.dialog.open(DialogCreateOrUploadComponent, {
-      width: '250px',
-    });
+    const dialogCreateRef = SelectAddDialogComponent.openDialog(this.dialog);
 
     dialogCreateRef.afterClosed().subscribe(result => {
       switch (result) {
@@ -54,41 +52,37 @@ export class PanelDragDropComponent implements OnInit {
           this.openDialogAddFile()
           break;
         case FileType.FOLDER:
-          this.openDialogGetName(<DialogInputNameData>{
-            titleDialog: "Crea una nueva carpeta",
-            nameInput: "Nombre de la carpeta",
-            hintDialog: "Escribe el nombre de la carpeta",
-            maxLengthName: 20,
-            iconDialog: "create_new_folder"
-          }, async name => {
-            // await this.storage.createDir(name)
-            await this.database.createNewFolder(name)
-          });
+          this.openDialogInputName(
+            TypeInput.CREATE_FOLDER,
+            async (name: string) => {
+              console.log(`name (${name})`)
+              if (name != "") {
+                await this.database.createNewFolder(name)
+              }
+            }
+          )
           break;
       }
     });
   }
 
-  openDialogGetName(
-    dataPassed: DialogInputNameData,
-    actionAfterName: (inputName: string) => void
+  openDialogInputName(
+    typeInput: TypeInput,
+    actionAfterName: (inputName: string) => void,
+    namePassed: string = "",
   ): void {
-    const dialogNameFolderRef = this.dialog.open(DialogInputNameItemComponent, {
-      width: '350px',
-      data: dataPassed
-    });
-    dialogNameFolderRef.afterClosed().subscribe(result => {
-      if (result) actionAfterName(result)
+    const refDialogName = DialogInputNameComponent.openDialog(
+      typeInput,
+      this.dialog,
+      namePassed
+    )
+    refDialogName.afterClosed().subscribe(async name => {
+      if (name != "") actionAfterName(name)
     })
   }
 
   openDialogAddFile() {
-    // * this dialog close automatically
-    this.dialog.open(DialogAddFileComponent, {
-      width: '550px',
-      height: '450px',
-      disableClose: true,
-    });
+
   }
 
   clickLeft(file: FileObject) {
@@ -111,27 +105,24 @@ export class PanelDragDropComponent implements OnInit {
     const { action, file } = event
     switch (action) {
       case ActionsFile.DELETE:
-        // await this.storage.deleteFile(file.link)
+        await this.database.deleteFile(file.id)
+        await this.storage.deleteFile(file.id)
         this.showToast("Elemento eliminado")
         this.fileSelected = undefined
         break;
       case ActionsFile.RENAME:
         const nameFileSelected = this.fileSelected?.name
-        if (nameFileSelected) this.openDialogGetName(
-          <DialogInputNameData>{
-            titleDialog: "Renombrar archivo",
-            nameInput: "Nombre del archivo",
-            hintDialog: "Escribe el nuevo nombre del archivo",
-            maxLengthName: 20,
-            defaultValue: nameFileSelected,
-            iconDialog: "edit"
-          },
-          async inputName => {
-            // await this.storage.renameFile(nameFileSelected, inputName)
-            this.showToast("Elemento renombrado")
-            this.fileSelected = undefined
-          }
-        );
+        if (nameFileSelected) {
+          this.openDialogInputName(
+            TypeInput.RENAME_FILE,
+            async (name: string) => {
+              await this.database.updateName(name, file.id)
+              this.showToast("Elemento renombrado")
+              this.fileSelected = undefined
+            },
+            file.name
+          )
+        }
         break;
       case ActionsFile.DOWNLOAD:
         this.showDialogDownload(file)
@@ -144,12 +135,7 @@ export class PanelDragDropComponent implements OnInit {
   }
 
   showDialogDownload(file: FileObject) {
-    this.dialog.open(DialogTaskComponent, {
-      width: '350px',
-      disableClose: true,
-      data: { type: 'DOWNLOAD' }
-    });
-
+    DialogTaskComponent.openDialog(this.dialog, TaskType.DOWNLOAD)
     this.storage.downloadFile(file.link, file.name)
   }
 
@@ -167,13 +153,10 @@ export class PanelDragDropComponent implements OnInit {
 
   async onFileDropped(listFiles: any[]) {
     const listFinalFiles = [...listFiles]
-    this.dialog.open(DialogTaskComponent, {
-      width: '250px',
-      disableClose: true,
-      data: {type: 'UPLOAD'}
-    });
+    DialogTaskComponent.openDialog(this.dialog, TaskType.UPLOAD)
     const file = listFinalFiles[0]
-    const linkFile = await this.storage.uploadFile(this.database.currentPath.value, file, file.name)
-    await this.database.createNewFile(file.name, linkFile)
+    const idFile = uuidv4()
+    const linkFile = await this.storage.uploadFile(idFile, file)
+    await this.database.createNewFile(file.name, idFile, linkFile)
   }
 }

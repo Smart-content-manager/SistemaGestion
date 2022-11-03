@@ -25,25 +25,37 @@ export class StorageService {
     return this.progressState.progressState
   }
 
-  async uploadFile(currentPath: string, file: any, fileName: string) {
-    const fullPathFile = `${currentPath}/files/${fileName}`
-    const fileRef = ref(this.storage, fullPathFile);
+  async uploadFile(fileId: string, file: any) {
+    const fileRef = ref(this.storage, fileId);
     let linkFile = ""
     try {
+      // * set init state in progress state
       this.progressState.setInitialState()
 
+      // * create upload task
       const taskUpload = uploadBytesResumable(fileRef, file)
+
+      // * adding listener for progress
       taskUpload.on('state_changed', async (snapshot) => {
         const progress = +((snapshot.bytesTransferred / snapshot.totalBytes) * 100).toFixed(2);
-        console.log(progress)
         this.progressState.setProgress(progress)
       })
+
+      // ? await finish task
       const result = await taskUpload
+
+      // * get url to download download
       linkFile = await getDownloadURL(result.ref)
 
+      // * set finish state
       this.progressState.setSuccess()
     } catch (e) {
       console.log(`error uploading file: ${file} ${e}`)
+    } finally {
+
+      // * restore init state
+      this.progressState.setInitialState()
+
     }
     return linkFile
 
@@ -63,13 +75,12 @@ export class StorageService {
     request.startRequest()
   }
 
-  async deleteFile(currentPath: string, fileName: string) {
-    const fullPathFile = `${currentPath}/${fileName}`
-    const fileRef = ref(this.storage, fullPathFile);
+  async deleteFile(fileId: string) {
+    const fileRef = ref(this.storage, fileId);
     try {
       await deleteObject(fileRef)
     } catch (e) {
-      console.log(e);
+      console.log(`Error deleting file: ${e}`)
     }
   }
 

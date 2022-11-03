@@ -1,0 +1,11 @@
+<div class="container-progress">
+  <!-- * title -->
+  <h3>{{titleTask}}</h3>
+  <!-- * animation -->
+  <div class="container-animation">
+    <ng-lottie [options]="animateOptions!"></ng-lottie>
+  </div>
+  <!-- * percentage -->
+  <span>{{percentTask + " %"}}</span>
+  <mat-progress-bar [color]="colorProgressBar" [mode]="progressBarMode" [value]="percentTask"></mat-progress-bar>
+</div>
