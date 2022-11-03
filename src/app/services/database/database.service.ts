@@ -22,6 +22,7 @@ export class DatabaseService {
   ) {
 
     this.listFiles = this.currentPath.pipe(
+      tap(() => this._isLoadingFiles.next(true)),
       switchMap(path => {
         return collectionData(collection(this.afs, `${path}/files`), {idField: "id"}).pipe(
           map(listDocument =>
@@ -31,7 +32,8 @@ export class DatabaseService {
           catchError((error: any) => {
             console.log(`error get list files: ${error}`)
             return []
-          })
+          }),
+          tap(() => this._isLoadingFiles.next(false)),
         )
       }),
     )
@@ -49,21 +51,16 @@ export class DatabaseService {
 
   forwardDirectory(folder: FileObject) {
 
-    this._isLoadingFiles.next(true);
-
     if (this.showPath.value != "") {
       this.showPath.next(this.showPath.value + "/" + folder.name)
     } else {
       this.showPath.next(folder.name)
     }
     this.currentPath.next(folder.link);
-
-    this._isLoadingFiles.next(false);
   }
 
   backDirectory() {
 
-    this._isLoadingFiles.next(true);
 
     const listPath = this.currentPath.value.split("/files/")
     listPath.pop()
@@ -75,8 +72,6 @@ export class DatabaseService {
     const listFiles = this.showPath.value.split("/")
     listFiles.pop()
     this.showPath.next(listFiles.join("/"))
-
-    this._isLoadingFiles.next(false);
 
   }
 
