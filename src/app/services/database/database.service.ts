@@ -98,11 +98,11 @@ export class DatabaseService {
     const objectFolder = FileObjectToMap(
       <FileObject>{
         name: nameFile,
-        type: FileType.FOLDER,
+        type: FileType.FILE,
         link: linkFile
       }
     )
-    const newDoc = doc(this.afs, `${this.currentPath.value}`, idFile)
+    const newDoc = doc(this.afs, `${this.currentPath.value}/files`, idFile)
     await setDoc(newDoc, objectFolder)
   }
 

@@ -1,4 +1,4 @@
-import {Component, HostListener, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FileObject} from "../models/FileObject";
 import {ActionsFile} from "../models/ActionsFile";
 import {StorageService} from "../../services/storage/storage.service";
@@ -43,6 +43,7 @@ export class PanelDragDropComponent implements OnInit {
   }
 
   openDialogCreate(): void {
+    this.fileSelected = undefined
     const dialogCreateRef = this.dialog.open(DialogCreateOrUploadComponent, {
       width: '250px',
     });
@@ -90,8 +91,6 @@ export class PanelDragDropComponent implements OnInit {
     });
   }
 
-
-  // * Si regresa a commits anteriores guarde este framento de codigo ya que existia un bug
   clickLeft(file: FileObject) {
     if (file.type === FileType.FOLDER) {
       if (this.fileSelected === file) {
@@ -158,7 +157,7 @@ export class PanelDragDropComponent implements OnInit {
     this._snackBar.open(message, "", { duration: 3000 });
   }
 
-  @HostListener('document:click', ['$event'])
+
   documentClick(event: any) {
     const elementRef = (event.target as Element)
     if (elementRef.id === 'main-panel' || elementRef.className === 'ng-star-inserted') {
