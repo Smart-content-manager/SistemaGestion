@@ -18,24 +18,30 @@ export class DatabaseService {
   listCurrent: FileObject[] = []
 
   constructor(
-    private afs: Firestore
+    private firestore: Firestore
   ) {
 
     this.listFiles = this.currentPath.pipe(
+      // * first set state loading
       tap(() => this._isLoadingFiles.next(true)),
-      switchMap(path => {
-        return collectionData(collection(this.afs, `${path}/files`), {idField: "id"}).pipe(
+      // * convert this path in a collection data, this for listener all changes
+      switchMap(path =>
+        collectionData(collection(this.firestore, `${path}/files`), {idField: "id"}).pipe(
+          // * mapper this collection of map un FileObject
           map(listDocument =>
             listDocument.map(doc => MapToFileObject(doc))
+              // * before order list files. First folders and after files
               .sort((doc1, doc2) => doc2.type.valueOf() - doc1.type.valueOf())),
+          // * save one copy of list of files
           tap(list => this.listCurrent = list.filter(item => item.type === FileType.FOLDER)),
+          // * in case of error, send empty list
           catchError((error: any) => {
-            console.log(`error get list files: ${error}`)
+            console.error(`error get list files: ${error}`)
             return []
           }),
+          // * for last, change state is loading
           tap(() => this._isLoadingFiles.next(false)),
-        )
-      }),
+        )),
     )
   }
 
@@ -84,7 +90,7 @@ export class DatabaseService {
         link: `${this.currentPath.value}/files/${idFolder}`
       }
     )
-    const newDoc = doc(this.afs, `${this.currentPath.value}/files`, idFolder)
+    const newDoc = doc(this.firestore, `${this.currentPath.value}/files`, idFolder)
     await setDoc(newDoc, objectFolder)
   }
 
@@ -97,7 +103,7 @@ export class DatabaseService {
         link: linkFile
       }
     )
-    const newDoc = doc(this.afs, `${this.currentPath.value}/files`, idFile)
+    const newDoc = doc(this.firestore, `${this.currentPath.value}/files`, idFile)
     await setDoc(newDoc, objectFolder)
   }
 
