@@ -1,11 +1,4 @@
-export enum StateFile {
-  INIT, IN_PROGRESS, SUCCESS
-}
 
-export interface FilePercent {
-  state: StateFile,
-  percent: number
-}
 
 export interface TaskListener {
   nameFile: string,

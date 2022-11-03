@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {collection, collectionData, doc, Firestore, setDoc} from '@angular/fire/firestore';
 import {FileObject, FileObjectToMap, MapToFileObject} from "../../main-panel/models/FileObject";
-import {BehaviorSubject, catchError, map, Observable, switchMap} from "rxjs";
+import {BehaviorSubject, catchError, map, Observable, switchMap, tap} from "rxjs";
 import {FileType} from "../../main-panel/models/FileType";
 import {v4 as uuidv4} from 'uuid';
 
@@ -15,6 +15,8 @@ export class DatabaseService {
 
   readonly listFiles: Observable<FileObject[]>
 
+  listCurrent: FileObject[] = []
+
   constructor(
     private afs: Firestore
   ) {
@@ -25,6 +27,7 @@ export class DatabaseService {
           map(listDocument =>
             listDocument.map(doc => MapToFileObject(doc))
               .sort((doc1, doc2) => doc2.type.valueOf() - doc1.type.valueOf())),
+          tap(list => this.listCurrent = list.filter(item => item.type === FileType.FOLDER)),
           catchError((error: any) => {
             console.log(`error get list files: ${error}`)
             return []
@@ -34,20 +37,34 @@ export class DatabaseService {
     )
   }
 
+  private _isLoadingFiles = new BehaviorSubject(false);
+
+  get isLoadingFiles() {
+    return this._isLoadingFiles.asObservable();
+  }
+
   get currentShowPath() {
     return this.showPath.value
   }
 
   forwardDirectory(folder: FileObject) {
+
+    this._isLoadingFiles.next(true);
+
     if (this.showPath.value != "") {
       this.showPath.next(this.showPath.value + "/" + folder.name)
     } else {
       this.showPath.next(folder.name)
     }
     this.currentPath.next(folder.link);
+
+    this._isLoadingFiles.next(false);
   }
 
   backDirectory() {
+
+    this._isLoadingFiles.next(true);
+
     const listPath = this.currentPath.value.split("/files/")
     listPath.pop()
     const newPath = listPath.join("/files/")
@@ -58,6 +75,8 @@ export class DatabaseService {
     const listFiles = this.showPath.value.split("/")
     listFiles.pop()
     this.showPath.next(listFiles.join("/"))
+
+    this._isLoadingFiles.next(false);
 
   }
 
@@ -70,10 +89,20 @@ export class DatabaseService {
         link: `${this.currentPath.value}/files/${idFolder}`
       }
     )
-    console.log(`id folder ${idFolder}`)
-    console.log(`current path: ${this.currentPath.value}`)
     const newDoc = doc(this.afs, `${this.currentPath.value}/files`, idFolder)
-    console.log(`new doc: ${newDoc}`)
+    await setDoc(newDoc, objectFolder)
+  }
+
+  async createNewFile(nameFile: string, linkFile: string) {
+    const idFile = uuidv4()
+    const objectFolder = FileObjectToMap(
+      <FileObject>{
+        name: nameFile,
+        type: FileType.FOLDER,
+        link: linkFile
+      }
+    )
+    const newDoc = doc(this.afs, `${this.currentPath.value}`, idFile)
     await setDoc(newDoc, objectFolder)
   }
 

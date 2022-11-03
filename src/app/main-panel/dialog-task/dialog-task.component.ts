@@ -4,8 +4,8 @@ import {StorageService} from "../../services/storage/storage.service";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {ThemePalette} from "@angular/material/core";
 import {ProgressBarMode} from "@angular/material/progress-bar";
-import {StateFile} from "../models/FilePercent";
 import {AnimationOptions} from "ngx-lottie";
+import {StateFile} from "../../services/storage/ProgressState";
 
 export interface ProgressData {
   type: "DOWNLOAD" | "UPLOAD"

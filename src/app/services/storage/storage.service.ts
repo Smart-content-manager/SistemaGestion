@@ -1,10 +1,9 @@
 import {Injectable} from '@angular/core';
-import {deleteObject, getBlob, listAll, ref, Storage, uploadBytes, uploadBytesResumable} from "@angular/fire/storage";
-import {BehaviorSubject} from 'rxjs';
-import {FileObject, getFilesAndFolders} from "../../main-panel/models/FileObject";
+import {deleteObject, getDownloadURL, ref, Storage, uploadBytesResumable} from "@angular/fire/storage";
 import {Clipboard} from '@angular/cdk/clipboard';
 import {MatDialog} from "@angular/material/dialog";
-import {FilePercent, StateFile, TaskDownload} from '../../main-panel/models/FilePercent';
+import {TaskDownload} from '../../main-panel/models/FilePercent';
+import {ProgressState} from "./ProgressState";
 
 
 @Injectable({
@@ -12,181 +11,65 @@ import {FilePercent, StateFile, TaskDownload} from '../../main-panel/models/File
 })
 export class StorageService {
 
-  private init_state = <FilePercent>{
-    state: StateFile.INIT,
-    percent: 0,
-  }
-
-  private _progressBar = new BehaviorSubject<FilePercent>(this.init_state);
-
-  private _isLoadingFiles = new BehaviorSubject(false);
-  get isLoadingFiles() {
-    return this._isLoadingFiles.asObservable();
-  }
-
   constructor(
     private dialog: MatDialog,
     private clipboard: Clipboard,
     private storage: Storage,
   ) {
-    this.reloadFilesFromPath(this._currentPath.value);
+
   }
 
-  private _listFilesInFolder = new BehaviorSubject<FileObject[]>([]);
-
-  get listFilesInFolder() {
-    return this._listFilesInFolder.asObservable();
-  }
-
-  get currentListFilesInFolder() {
-    return this._listFilesInFolder.value
-  }
-
-  private _currentPath = new BehaviorSubject<string>('');
-
-  get currentPath() {
-    return this._currentPath.asObservable();
-  }
-
-  getCurrentPathValue() {
-    return this._currentPath.value;
-  }
+  private progressState = new ProgressState();
 
   get progressBar() {
-    return this._progressBar.asObservable()
+    return this.progressState.progressState
   }
 
-  goBackDirectory() {
-    let currentPath = this._currentPath.value
-    const listPath = currentPath.split("/")
-    listPath.pop()
-    const beforePath = listPath.join("/")
-    this.reloadFilesFromPath(beforePath)
-  }
-
-  async reloadFilesFromPath(path: string = this._currentPath.value) {
-    this._currentPath.next(path);
-    const storageRef = ref(this.storage, path);
+  async uploadFile(currentPath: string, file: any, fileName: string) {
+    const fullPathFile = `${currentPath}/files/${fileName}`
+    const fileRef = ref(this.storage, fullPathFile);
+    let linkFile = ""
     try {
-      this._isLoadingFiles.next(true);
-      const listResult = await listAll(storageRef)
-      this._listFilesInFolder.next(await getFilesAndFolders(path, listResult))
-    } catch {
-      this._listFilesInFolder.next([])
-    } finally {
-      this._isLoadingFiles.next(false);
-    }
-  }
+      this.progressState.setInitialState()
 
-  async createDir(nameDirectory: string) {
-    const file: Blob = new Blob([""], {type: 'text/plain'});
-    let refFolder = `${this._currentPath.value}/${nameDirectory}/.sgkeep`
-    const dirRef = ref(this.storage, refFolder);
-    try {
-      await uploadBytes(dirRef, file)
-      await this.reloadFilesFromPath()
-    } catch (error) {
-      console.error(error)
-    }
-  }
+      const taskUpload = uploadBytesResumable(fileRef, file)
+      taskUpload.on('state_changed', async (snapshot) => {
+        const progress = +((snapshot.bytesTransferred / snapshot.totalBytes) * 100).toFixed(2);
+        console.log(progress)
+        this.progressState.setProgress(progress)
+      })
+      const result = await taskUpload
+      linkFile = await getDownloadURL(result.ref)
 
-  async renameFile(fileName: string, newName: string) {
-    const oldRefFile = ref(this.storage, `${this._currentPath.value}/${fileName}`)
-    const newRefFile = ref(this.storage, `${this._currentPath.value}/${newName}`)
-    try {
-      const bytesFile = await getBlob(oldRefFile)
-      await uploadBytes(newRefFile, bytesFile)
-      await deleteObject(oldRefFile)
-      await this.reloadFilesFromPath()
+      this.progressState.setSuccess()
     } catch (e) {
-      console.error(e)
+      console.log(`error uploading file: ${file} ${e}`)
     }
-  }
+    return linkFile
 
-  async uploadFile(file: any, fileName: string) {
-    if (file) {
-      const fullPathFile = `${this._currentPath.value}/${fileName}`
-      const fileRef = ref(this.storage, fullPathFile);
-      try {
-
-        this._progressBar.next(<FilePercent>{
-          state: StateFile.INIT,
-          percent: 0,
-        })
-
-        const taskUpload = uploadBytesResumable(fileRef, file)
-        taskUpload.on('state_changed', async (snapshot) => {
-          const progress = +((snapshot.bytesTransferred / snapshot.totalBytes) * 100).toFixed(2);
-          console.log(progress)
-          this._progressBar.next(<FilePercent>{
-            state: StateFile.IN_PROGRESS,
-            percent: progress,
-          })
-        })
-
-        await taskUpload
-
-        this._progressBar.next(<FilePercent>{
-          state: StateFile.SUCCESS,
-          percent: 100,
-        })
-
-        await this.reloadFilesFromPath()
-
-        // * restore init state
-        this._progressBar.next(this.init_state);
-
-      } catch (e) {
-        console.log(`error uploading file: ${file} ${e}`)
-      }
-    }
   }
 
   downloadFile(fileUrl: string, fileName: string) {
-    this._progressBar.next({
-      state: StateFile.INIT,
-      percent: 0
-    })
-
     const request = new TaskDownload(
       {
         nameFile: fileName,
         urlFile: fileUrl,
-        actionAfter: () => {
-          this._progressBar.next(<FilePercent>{
-            state: StateFile.SUCCESS,
-            percent: 100
-          })
-        },
-        actionBefore: () => {
-          this._progressBar.next(<FilePercent>{
-            state: StateFile.INIT,
-            percent: 0
-          })
-        },
-        actionError: (error) => {
-          console.log(`error downloading file: ${fileName} ${error}`)
-        },
-        actionUpdate: (percent) => {
-          this._progressBar.next(<FilePercent>{
-            state: StateFile.IN_PROGRESS,
-            percent: percent
-          })
-        },
+        actionAfter: () => this.progressState.setSuccess(),
+        actionBefore: () => this.progressState.setInitialState(),
+        actionUpdate: (percent) => this.progressState.setProgress(percent),
+        actionError: (error) => console.log(`error downloading file: ${fileName} ${error}`)
       }
     )
-
     request.startRequest()
   }
 
-  async deleteFile(fileName: string) {
-    const fileRef = ref(this.storage, fileName);
+  async deleteFile(currentPath: string, fileName: string) {
+    const fullPathFile = `${currentPath}/${fileName}`
+    const fileRef = ref(this.storage, fullPathFile);
     try {
       await deleteObject(fileRef)
     } catch (e) {
       console.log(e);
-    } finally {
-      await this.reloadFilesFromPath()
     }
   }
 

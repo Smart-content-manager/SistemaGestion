@@ -2,6 +2,7 @@ import {Component, Inject, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {StorageService} from 'src/app/services/storage/storage.service';
+import {DatabaseService} from "../../services/database/database.service";
 
 export interface DialogInputNameData {
   defaultValue: string | "";
@@ -31,7 +32,8 @@ export class DialogInputNameItemComponent implements OnInit {
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: DialogInputNameData,
     private storage: StorageService,
-    private dialogRef: MatDialogRef<DialogInputNameItemComponent>
+    private dialogRef: MatDialogRef<DialogInputNameItemComponent>,
+    private database: DatabaseService
   ) {
     this.iconDialog = data.iconDialog
     this.titleDialog = data.titleDialog
@@ -52,7 +54,7 @@ export class DialogInputNameItemComponent implements OnInit {
   }
 
   async validateNameFolder() {
-    const listFolders = this.storage.currentListFilesInFolder
+    const listFolders = this.database.listCurrent;
     if (this.formControlFolder!.valid) {
 
       const nameFolder = this.formControlFolder!.controls['nameInput'].value

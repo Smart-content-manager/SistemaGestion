@@ -54,7 +54,8 @@ export class DialogAddFileComponent implements OnInit {
       disableClose: true,
       data: {type: 'UPLOAD'}
     });
-    await this.storage.uploadFile(this.file, this.fileName)
+    const linkFile = await this.storage.uploadFile(this.database.currentPath.value, this.file, this.file.name)
+    await this.database.createNewFile(this.file.name, linkFile)
     this.dialogRef.close()
   }
 

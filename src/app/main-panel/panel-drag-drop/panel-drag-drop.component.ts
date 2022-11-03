@@ -36,7 +36,7 @@ export class PanelDragDropComponent implements OnInit {
   ) {
     // * add listener for change files for current directory
     this.listFiles = database.listFiles;
-    this.isLoadingFiles = storage.isLoadingFiles;
+    this.isLoadingFiles = database.isLoadingFiles;
   }
 
   ngOnInit(): void {
@@ -95,7 +95,6 @@ export class PanelDragDropComponent implements OnInit {
   clickLeft(file: FileObject) {
     if (file.type === FileType.FOLDER) {
       if (this.fileSelected === file) {
-        this.storage.reloadFilesFromPath(file.link);
         this.database.forwardDirectory(file);
       } else {
         this.fileSelected = file;
@@ -113,7 +112,7 @@ export class PanelDragDropComponent implements OnInit {
     const { action, file } = event
     switch (action) {
       case ActionsFile.DELETE:
-        await this.storage.deleteFile(file.link)
+        // await this.storage.deleteFile(file.link)
         this.showToast("Elemento eliminado")
         this.fileSelected = undefined
         break;
@@ -129,7 +128,7 @@ export class PanelDragDropComponent implements OnInit {
             iconDialog: "edit"
           },
           async inputName => {
-            await this.storage.renameFile(nameFileSelected, inputName)
+            // await this.storage.renameFile(nameFileSelected, inputName)
             this.showToast("Elemento renombrado")
             this.fileSelected = undefined
           }
@@ -172,9 +171,10 @@ export class PanelDragDropComponent implements OnInit {
     this.dialog.open(DialogTaskComponent, {
       width: '250px',
       disableClose: true,
-      data: { type: 'UPLOAD' }
+      data: {type: 'UPLOAD'}
     });
     const file = listFinalFiles[0]
-    await this.storage.uploadFile(file, file.name)
+    const linkFile = await this.storage.uploadFile(this.database.currentPath.value, file, file.name)
+    await this.database.createNewFile(file.name, linkFile)
   }
 }

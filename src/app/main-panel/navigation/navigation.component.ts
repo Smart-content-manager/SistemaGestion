@@ -1,6 +1,5 @@
 import {Component} from '@angular/core';
 import {Observable} from 'rxjs';
-import {StorageService} from "../../services/storage/storage.service";
 import {LocationStrategy} from "@angular/common";
 import {AuthService} from "../../auth/services/auth.service";
 import {DatabaseService} from 'src/app/services/database/database.service';
@@ -14,7 +13,6 @@ export class NavigationComponent {
   currentPath: Observable<string>
 
   constructor(
-    private storage: StorageService,
     private location: LocationStrategy,
     private authServices: AuthService,
     private database: DatabaseService
@@ -35,7 +33,6 @@ export class NavigationComponent {
 
     this.location.onPopState((event) => {
       if (database.currentShowPath != "") {
-        storage.goBackDirectory()
         database.backDirectory()
       }
     });
