@@ -12,6 +12,7 @@ import {DialogTaskComponent, TaskType} from "../../dialogs/dialog-task/dialog-ta
 import {SelectAddDialogComponent} from "../../dialogs/select-add-dialog/select-add-dialog.component";
 import {DialogInputNameComponent, TypeInput} from "../../dialogs/dialog-input-name/dialog-input-name.component";
 import {v4 as uuidv4} from "uuid";
+import {DialogDropFileComponent} from "../../dialogs/dialog-drop-file/dialog-drop-file.component";
 
 @Component({
   selector: 'app-panel-drag-drop',
@@ -82,7 +83,7 @@ export class PanelDragDropComponent implements OnInit {
   }
 
   openDialogAddFile() {
-
+    DialogDropFileComponent.openDialog(this.dialog)
   }
 
   clickLeft(file: FileObject) {

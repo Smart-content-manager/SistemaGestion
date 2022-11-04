@@ -11,13 +11,15 @@ import {ReactiveFormsModule} from "@angular/forms";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
 import {MatButtonModule} from "@angular/material/button";
-
+import {DialogDropFileComponent} from './dialog-drop-file/dialog-drop-file.component';
+import {ShareModule} from "../share/share.module";
 
 @NgModule({
   declarations: [
     DialogTaskComponent,
     SelectAddDialogComponent,
-    DialogInputNameComponent
+    DialogInputNameComponent,
+    DialogDropFileComponent,
   ],
   imports: [
     CommonModule,
@@ -28,7 +30,8 @@ import {MatButtonModule} from "@angular/material/button";
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
-    MatButtonModule
+    MatButtonModule,
+    ShareModule,
   ],
   exports: [
     DialogTaskComponent,

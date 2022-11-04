@@ -17,7 +17,6 @@ import {LottieModule} from "ngx-lottie";
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import {ReactiveFormsModule} from "@angular/forms";
-import {DndDirective} from './directives/dnd.directive';
 import {NavigationComponent} from "./navigation/navigation.component";
 import {MatSidenavModule} from "@angular/material/sidenav";
 import {MatToolbarModule} from "@angular/material/toolbar";
@@ -30,8 +29,7 @@ import {DialogsModule} from "../dialogs/dialogs.module";
     PanelDragDropComponent,
     IconObjectFileComponent,
     MenuFileOptionsComponent,
-    DndDirective,
-    NavigationComponent
+    NavigationComponent,
   ],
   imports: [
     CommonModule,

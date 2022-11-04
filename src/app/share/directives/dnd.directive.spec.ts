@@ -1,4 +1,4 @@
-import { DndDirective } from './dnd.directive';
+import {DndDirective} from './dnd.directive';
 
 describe('DndDirective', () => {
   it('should create an instance', () => {

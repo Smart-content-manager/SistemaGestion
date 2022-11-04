@@ -1,0 +1,20 @@
+<form (click)="clickInput($event)" (fileDropped)="onFileDropped($event)" (ngSubmit)="onSubmit()"
+      [formGroup]="fileForm" appDnd
+      class="container-dialog-add-file"
+>
+  <h3>Arrasta o da click para seleccionar tu archivo</h3>
+  <div class="img-upload">
+    <ng-lottie [options]="options"></ng-lottie>
+    <input
+      (change)="onClickInputFile($event)"
+      class="file-select"
+      id="input-file"
+      type="file"
+    />
+  </div>
+  <div mat-dialog-actions>
+    <button [disabled]="!fileForm.valid" color="primary" mat-raised-button type="submit">Upload</button>
+    <button mat-dialog-close mat-raised-button>Cancel</button>
+  </div>
+
+</form>

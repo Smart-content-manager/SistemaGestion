@@ -1,0 +1,25 @@
+.container-dialog-add-file {
+  width: calc(100% - 2px);
+  height: calc(100% - 2px);
+  border: 1px solid grey;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.img-upload {
+  height: calc(100% - 68px - 28px);
+  position: relative;
+}
+
+h3 {
+  text-align: center;
+  margin: 0;
+}
+
+.mat-dialog-actions {
+  justify-content: center;
+}
+
+.file-select {
+  display: none;
+}
