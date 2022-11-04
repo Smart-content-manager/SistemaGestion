@@ -13,6 +13,7 @@ import {MatInputModule} from "@angular/material/input";
 import {MatButtonModule} from "@angular/material/button";
 import {DialogDropFileComponent} from './dialog-drop-file/dialog-drop-file.component';
 import {ShareModule} from "../share/share.module";
+import {FontAwesomeModule} from "@fortawesome/angular-fontawesome";
 
 @NgModule({
   declarations: [
@@ -32,6 +33,7 @@ import {ShareModule} from "../share/share.module";
     MatInputModule,
     MatButtonModule,
     ShareModule,
+    FontAwesomeModule,
   ],
   exports: [
     DialogTaskComponent,

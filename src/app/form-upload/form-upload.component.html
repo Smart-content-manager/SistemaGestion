@@ -1,0 +1,21 @@
+<div class="container-form-file">
+  <form [formGroup]="formFile">
+
+    <mat-form-field appearance="outline">
+      <mat-label>Name</mat-label>
+      <input #inputName [type]="'text'" formControlName="name" matInput required>
+      <mat-hint
+        [class.error-hint]="(inputName?.value?.length || 0) > MAX_LENGTH_NAME "
+        align="end">{{inputName?.value?.length || 0}}/{{MAX_LENGTH_NAME}}</mat-hint>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Description</mat-label>
+      <input #inputDescription [type]="'text'" formControlName="description" matInput required>
+      <mat-hint
+        [class.error-hint]="(inputDescription?.value?.length || 0) > MAX_LENGTH_DESCRIPTION "
+        align="end">{{inputDescription?.value?.length || 0}}/{{MAX_LENGTH_DESCRIPTION}}</mat-hint>
+    </mat-form-field>
+
+  </form>
+</div>

@@ -83,7 +83,12 @@ export class PanelDragDropComponent implements OnInit {
   }
 
   openDialogAddFile() {
-    DialogDropFileComponent.openDialog(this.dialog)
+    const refDialog = DialogDropFileComponent.openDialog(this.dialog)
+    refDialog.afterClosed().subscribe(file => {
+      if (file != null) {
+
+      }
+    })
   }
 
   clickLeft(file: FileObject) {

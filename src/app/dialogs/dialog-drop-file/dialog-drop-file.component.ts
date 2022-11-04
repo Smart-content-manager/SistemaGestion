@@ -1,6 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
-import {MatDialog} from "@angular/material/dialog";
+import {MatDialog, MatDialogRef} from "@angular/material/dialog";
+import {IconDefinition} from "@fortawesome/free-solid-svg-icons";
+import {getIconFileAndColor} from "../../main-panel/models/FileObject";
 
 @Component({
   selector: 'app-dialog-drop-file',
@@ -11,8 +13,12 @@ export class DialogDropFileComponent implements OnInit {
 
   options = {path: "/assets/select-file.json"}
   fileForm: FormGroup
+  fileSelected: File | null = null;
+  iconFile: { color: string; icon: IconDefinition } | null = null;
 
-  constructor() {
+  constructor(
+    public dialogRef: MatDialogRef<DialogDropFileComponent>,
+  ) {
     this.fileForm = new FormGroup({
       'name': new FormControl('', [
         Validators.required,
@@ -21,7 +27,7 @@ export class DialogDropFileComponent implements OnInit {
   }
 
   static openDialog(dialog: MatDialog) {
-    dialog.open(DialogDropFileComponent, {
+    return dialog.open(DialogDropFileComponent, {
       width: '550px',
       height: '350px',
       disableClose: true,
@@ -32,18 +38,24 @@ export class DialogDropFileComponent implements OnInit {
   }
 
   onSubmit() {
-
+    if (this.fileForm.valid) {
+      this.dialogRef.close(this.fileSelected)
+    }
   }
 
   async onFileDropped(listFiles: any[]) {
     const listFinalFiles = [...listFiles]
     const file = listFinalFiles[0]
+    this.fileSelected = file
     this.fileForm.controls["name"].setValue(file.name)
+    this.iconFile = getIconFileAndColor(file.name)
   }
 
   onClickInputFile(event: any) {
     const file = event.target.files[0]
+    this.fileSelected = file
     this.fileForm.controls["name"].setValue(file.name)
+    this.iconFile = getIconFileAndColor(file.name)
   }
 
   clickInput(event: any) {

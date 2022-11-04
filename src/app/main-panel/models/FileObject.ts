@@ -109,7 +109,7 @@ function getFileExtension(filename: string) {
   return filename.toLowerCase().split('.').pop();
 }
 
-function getIconFileAndColor(filename: string): { color: string, icon: IconDefinition } {
+export function getIconFileAndColor(filename: string): { color: string, icon: IconDefinition } {
   let extension = getFileExtension(filename)
   const video = ["mp4", "mov", "wmv", "avi", "avchd", "flv", "f4v", "swf", "mkv", "webm"]
   const image = ["bmp", "gif", "jpg", "tif", "png", "svg"]

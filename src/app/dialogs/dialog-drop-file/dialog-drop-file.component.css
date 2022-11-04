@@ -8,7 +8,9 @@
 
 .img-upload {
   height: calc(100% - 68px - 28px);
-  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 h3 {

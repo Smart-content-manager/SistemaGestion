@@ -2,19 +2,22 @@
       [formGroup]="fileForm" appDnd
       class="container-dialog-add-file"
 >
-  <h3>Arrasta o da click para seleccionar tu archivo</h3>
-  <div class="img-upload">
-    <ng-lottie [options]="options"></ng-lottie>
-    <input
-      (change)="onClickInputFile($event)"
-      class="file-select"
-      id="input-file"
-      type="file"
-    />
+  <h3>{{ fileSelected == null ? 'Arrasta o da click para seleccionar tu archivo' : fileSelected.name}}</h3>
+  <div [style.display]="fileSelected==null ? 'block' : 'flex' " class="img-upload">
+    <fa-icon
+      *ngIf="iconFile; else blockIcon"
+      [icon]="iconFile.icon"
+      [style.color]="iconFile.color"
+      size="10x"
+    ></fa-icon>
+    <ng-template #blockIcon>
+      <ng-lottie [options]="options"></ng-lottie>
+    </ng-template>
+    <input (change)="onClickInputFile($event)" class="file-select" id="input-file" type="file"/>
   </div>
   <div mat-dialog-actions>
-    <button [disabled]="!fileForm.valid" color="primary" mat-raised-button type="submit">Upload</button>
-    <button mat-dialog-close mat-raised-button>Cancel</button>
+    <button [disabled]="!fileForm.valid" color="primary" mat-raised-button type="submit">Siguiente</button>
+    <button [mat-dialog-close]="null" mat-raised-button>Cancel</button>
   </div>
 
 </form>

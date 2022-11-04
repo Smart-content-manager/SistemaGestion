@@ -30,6 +30,7 @@ import {LottieModule} from 'ngx-lottie';
 import player from 'lottie-web';
 import {AuthModule} from "./auth/auth.module";
 import {MyAuthGuard} from "./MyAuthGuard";
+import {FormUploadComponent} from './form-upload/form-upload.component';
 
 export function playerFactory() {
   return player;
@@ -38,6 +39,7 @@ export function playerFactory() {
 @NgModule({
   declarations: [
     AppComponent,
+    FormUploadComponent,
   ],
   imports: [
         AppRoutingModule,
