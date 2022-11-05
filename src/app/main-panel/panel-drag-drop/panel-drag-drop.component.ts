@@ -12,7 +12,7 @@ import {DialogTaskComponent, TaskType} from "../../dialogs/dialog-task/dialog-ta
 import {SelectAddDialogComponent} from "../../dialogs/select-add-dialog/select-add-dialog.component";
 import {DialogInputNameComponent, TypeInput} from "../../dialogs/dialog-input-name/dialog-input-name.component";
 import {v4 as uuidv4} from "uuid";
-import {DialogDropFileComponent} from "../../dialogs/dialog-drop-file/dialog-drop-file.component";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-panel-drag-drop',
@@ -33,7 +33,8 @@ export class PanelDragDropComponent implements OnInit {
     private dialog: MatDialog,
     private _snackBar: MatSnackBar,
     private _clipboard: Clipboard,
-    private database: DatabaseService
+    private database: DatabaseService,
+    private router: Router
   ) {
     // * add listener for change files for current directory
     this.listFiles = database.listFiles;
@@ -83,12 +84,13 @@ export class PanelDragDropComponent implements OnInit {
   }
 
   openDialogAddFile() {
-    const refDialog = DialogDropFileComponent.openDialog(this.dialog)
-    refDialog.afterClosed().subscribe(file => {
-      if (file != null) {
-
-      }
-    })
+    // const refDialog = DialogDropFileComponent.openDialog(this.dialog)
+    // refDialog.afterClosed().subscribe(file => {
+    //   if (file != null) {
+    //     , {state: {data: file}});
+    //   }
+    // })
+    this.router.navigate(['/new-file'])
   }
 
   clickLeft(file: FileObject) {

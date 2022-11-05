@@ -1,0 +1,31 @@
+<div class="container-form">
+  <form (ngSubmit)="sendFile()" [formGroup]="formFile">
+
+    <!-- * name -->
+    <mat-form-field appearance="outline">
+      <mat-label>Nombre</mat-label>
+      <input #inputName formControlName="name" matInput required type="text">
+      <mat-hint
+        [class.error-hint]="(inputName?.value?.length || 0) > MAX_LENGTH_NAME "
+        align="end">{{inputName?.value?.length || 0}}/{{MAX_LENGTH_NAME}}</mat-hint>
+    </mat-form-field>
+
+    <!-- * description -->
+    <mat-form-field appearance="outline">
+      <mat-label>Descripcion</mat-label>
+      <input #inputDescription formControlName="description" matInput required type="text">
+      <mat-hint
+        [class.error-hint]="(inputDescription?.value?.length || 0) > MAX_LENGTH_DESCRIPTION"
+        align="end">{{inputDescription?.value?.length || 0}}/{{MAX_LENGTH_DESCRIPTION}}</mat-hint>
+    </mat-form-field>
+
+    <!-- * description -->
+    <mat-form-field appearance="outline">
+      <mat-label>Fecha de creacion</mat-label>
+      <input #inputDescription formControlName="dateCreate" matInput required type="date">
+    </mat-form-field>
+
+
+  </form>
+
+</div>
