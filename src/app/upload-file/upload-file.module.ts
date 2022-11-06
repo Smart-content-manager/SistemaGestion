@@ -5,10 +5,16 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatIconModule} from "@angular/material/icon";
 import {MatInputModule} from "@angular/material/input";
+import {MatSelectModule} from "@angular/material/select";
+import {FontAwesomeModule} from "@fortawesome/angular-fontawesome";
+import {LottieModule} from "ngx-lottie";
+import {ShareModule} from '../share/share.module';
+import {MatToolbarModule} from "@angular/material/toolbar";
+import {MatButtonModule} from "@angular/material/button";
 
 @NgModule({
   declarations: [
-    FormUploadFileComponent
+    FormUploadFileComponent,
   ],
   imports: [
     CommonModule,
@@ -16,7 +22,13 @@ import {MatInputModule} from "@angular/material/input";
     FormsModule,
     MatFormFieldModule,
     MatIconModule,
-    MatInputModule
+    MatInputModule,
+    MatSelectModule,
+    FontAwesomeModule,
+    LottieModule,
+    ShareModule,
+    MatToolbarModule,
+    MatButtonModule
   ],
   exports: [
     FormUploadFileComponent

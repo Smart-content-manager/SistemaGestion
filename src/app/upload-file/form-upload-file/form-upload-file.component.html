@@ -1,30 +1,89 @@
+<mat-toolbar color="primary">
+  <button aria-label="Example icon-button with menu icon" class="example-icon" mat-icon-button>
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+  <span>Nuevo Archivo</span>
+</mat-toolbar>
+
 <div class="container-form">
   <form (ngSubmit)="sendFile()" [formGroup]="formFile">
 
-    <!-- * name -->
-    <mat-form-field appearance="outline">
-      <mat-label>Nombre</mat-label>
-      <input #inputName formControlName="name" matInput required type="text">
-      <mat-hint
-        [class.error-hint]="(inputName?.value?.length || 0) > MAX_LENGTH_NAME "
-        align="end">{{inputName?.value?.length || 0}}/{{MAX_LENGTH_NAME}}</mat-hint>
-    </mat-form-field>
+    <div (click)="onFakeClickFile()" (fileDropped)="onFileDropped($event)" appDnd class="container-drop-item">
+      <h3>{{ fileSelected == null ? 'Arrasta o da click para seleccionar tu archivo' : fileSelected.name}}</h3>
+      <div class="img-upload">
+        <fa-icon
+          *ngIf="iconFile; else blockIcon"
+          [icon]="iconFile.icon"
+          [style.color]="iconFile.color"
+          size="10x"
+        ></fa-icon>
+        <ng-template #blockIcon>
+          <ng-lottie [options]="options"></ng-lottie>
+        </ng-template>
+        <input (change)="onClickInputFile($event)" id="input-file" type="file"/>
+      </div>
+    </div>
 
-    <!-- * description -->
-    <mat-form-field appearance="outline">
-      <mat-label>Descripcion</mat-label>
-      <input #inputDescription formControlName="description" matInput required type="text">
-      <mat-hint
-        [class.error-hint]="(inputDescription?.value?.length || 0) > MAX_LENGTH_DESCRIPTION"
-        align="end">{{inputDescription?.value?.length || 0}}/{{MAX_LENGTH_DESCRIPTION}}</mat-hint>
-    </mat-form-field>
+    <div class="container-field">
+      <!-- * name -->
+      <mat-form-field appearance="outline">
+        <mat-label>Nombre</mat-label>
+        <input #inputName formControlName="name" matInput required type="text">
+        <mat-hint
+          [class.error-hint]="(inputName?.value?.length || 0) > MAX_LENGTH_NAME "
+          align="end">{{inputName?.value?.length || 0}}/{{MAX_LENGTH_NAME}}</mat-hint>
+      </mat-form-field>
 
-    <!-- * description -->
-    <mat-form-field appearance="outline">
-      <mat-label>Fecha de creacion</mat-label>
-      <input #inputDescription formControlName="dateCreate" matInput required type="date">
-    </mat-form-field>
+      <!-- * author -->
+      <mat-form-field appearance="outline">
+        <mat-label>Autor</mat-label>
+        <input #inputAuthor formControlName="author" matInput required type="text">
+        <mat-hint
+          [class.error-hint]="(inputAuthor?.value?.length || 0) > MAX_LENGTH_AUTHOR"
+          align="end">{{inputAuthor?.value?.length || 0}}/{{MAX_LENGTH_AUTHOR}}</mat-hint>
+      </mat-form-field>
 
+      <!-- * description -->
+      <mat-form-field appearance="outline" class="container-description">
+        <mat-label>Descripcion</mat-label>
+        <textarea #inputDescription formControlName="author" matInput required type="text"></textarea>
+        <mat-hint
+          [class.error-hint]="(inputDescription?.value?.length || 0) > MAX_LENGTH_DESCRIPTION"
+          align="end">{{inputDescription?.value?.length || 0}}/{{MAX_LENGTH_DESCRIPTION}}</mat-hint>
+      </mat-form-field>
+
+
+      <mat-form-field appearance="outline">
+        <mat-label>Color del material</mat-label>
+        <mat-select formControlName="color">
+          <mat-option
+            *ngFor="let type of listColor"
+            [value]="type">{{type.value}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Sonido del material</mat-label>
+        <mat-select formControlName="sound">
+          <mat-option
+            *ngFor="let type of listSound"
+            [value]="type">{{type.value}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+
+      <!-- * description -->
+      <mat-form-field appearance="outline">
+        <mat-label>Fecha de la creacion</mat-label>
+        <input formControlName="dateCreate" matInput required type="date">
+      </mat-form-field>
+
+    </div>
+
+    <button
+      class="button-submit"
+      color="primary" mat-flat-button type="submit">Subir
+    </button>
 
   </form>
 
