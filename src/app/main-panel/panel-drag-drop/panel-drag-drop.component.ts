@@ -90,7 +90,7 @@ export class PanelDragDropComponent implements OnInit {
     //     , {state: {data: file}});
     //   }
     // })
-    this.router.navigate(['/new-file'])
+    this.router.navigateByUrl('newFile')
   }
 
   clickLeft(file: FileObject) {

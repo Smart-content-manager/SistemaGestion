@@ -8,8 +8,8 @@ import {
   faImage,
   IconDefinition
 } from "@fortawesome/free-solid-svg-icons";
-import {FileType, FileTypeFile, FileTypeFolder} from "./FileType";
 import {DocumentData} from "@angular/fire/firestore";
+import {FileType, FileTypeFile, FileTypeFolder} from "./FileType";
 
 export interface FileObject {
   name: string;
