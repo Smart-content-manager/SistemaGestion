@@ -1,5 +1,5 @@
 <mat-toolbar color="primary">
-  <button aria-label="Example icon-button with menu icon" class="example-icon" mat-icon-button>
+  <button (click)="backScreen()" aria-label="Example icon-button with menu icon" class="example-icon" mat-icon-button>
     <mat-icon>arrow_back</mat-icon>
   </button>
   <span>Nuevo Archivo</span>
@@ -55,7 +55,7 @@
 
       <mat-form-field appearance="outline">
         <mat-label>Color del material</mat-label>
-        <mat-select formControlName="color">
+        <mat-select formControlName="colorFile">
           <mat-option
             *ngFor="let type of listColor"
             [value]="type">{{type.value}}</mat-option>
@@ -64,7 +64,7 @@
 
       <mat-form-field appearance="outline">
         <mat-label>Sonido del material</mat-label>
-        <mat-select formControlName="sound">
+        <mat-select formControlName="soundFile">
           <mat-option
             *ngFor="let type of listSound"
             [value]="type">{{type.value}}</mat-option>

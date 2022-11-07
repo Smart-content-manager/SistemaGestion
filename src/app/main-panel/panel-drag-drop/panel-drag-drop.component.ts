@@ -84,12 +84,6 @@ export class PanelDragDropComponent implements OnInit {
   }
 
   openDialogAddFile() {
-    // const refDialog = DialogDropFileComponent.openDialog(this.dialog)
-    // refDialog.afterClosed().subscribe(file => {
-    //   if (file != null) {
-    //     , {state: {data: file}});
-    //   }
-    // })
     this.router.navigateByUrl('newFile')
   }
 
@@ -143,8 +137,8 @@ export class PanelDragDropComponent implements OnInit {
   }
 
   showDialogDownload(file: FileObject) {
-    DialogTaskComponent.openDialog(this.dialog, TaskType.DOWNLOAD)
-    this.storage.downloadFile(file.link, file.name)
+    const refDialog = DialogTaskComponent.openDialog(this.dialog, TaskType.DOWNLOAD)
+    this.storage.downloadFile(file.link, file.name, () => refDialog.close())
   }
 
   showToast(message: string) {
@@ -165,6 +159,6 @@ export class PanelDragDropComponent implements OnInit {
     const file = listFinalFiles[0]
     const idFile = uuidv4()
     const linkFile = await this.storage.uploadFile(idFile, file)
-    await this.database.createNewFile(file.name, idFile, linkFile)
+    // await this.database.createNewFile(file.name, idFile, linkFile)
   }
 }

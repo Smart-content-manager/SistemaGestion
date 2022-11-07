@@ -1,7 +1,14 @@
 import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {IconDefinition} from "@fortawesome/free-solid-svg-icons";
-import {getIconFileAndColor} from "../../main-panel/models/FileObject";
+import {FileObject, getIconFileAndColor} from "../../main-panel/models/FileObject";
+import {DatabaseService} from "../../services/database/database.service";
+import {DialogTaskComponent, TaskType} from "../../dialogs/dialog-task/dialog-task.component";
+import {MatDialog} from "@angular/material/dialog";
+import {StorageService} from "../../services/storage/storage.service";
+import {v4 as uuidv4} from 'uuid';
+import {FileType} from "../../main-panel/models/FileType";
+import {Location} from "@angular/common";
 
 export interface MapInput {
   key: string,
@@ -38,30 +45,53 @@ export class FormUploadFileComponent implements OnInit {
   fileSelected: File | null = null;
   iconFile: { color: string; icon: IconDefinition } | null = null;
 
-  constructor() {
+  constructor(
+    private storage: StorageService,
+    private database: DatabaseService,
+    private dialog: MatDialog,
+    private location: Location
+  ) {
     this.formFile = new FormGroup({
       name: new FormControl('', Validators.required),
       author: new FormControl('', Validators.required),
-      description: new FormControl('', Validators.required),
+      description: new FormControl(''),
       dateCreate: new FormControl('', Validators.required),
-      color: new FormControl('', Validators.required),
-      sound: new FormControl('', Validators.required),
+      colorFile: new FormControl('', Validators.required),
+      soundFile: new FormControl('', Validators.required),
     });
   }
 
   ngOnInit(): void {
   }
 
-  sendFile() {
-
+  async sendFile() {
+    console.log("click send|")
+    if (this.formFile.valid && this.fileSelected) {
+      console.log("Sending file")
+      const newId = uuidv4()
+      const refTask = DialogTaskComponent.openDialog(this.dialog, TaskType.UPLOAD)
+      const linkUrl = await this.storage.uploadFile(newId, this.fileSelected)
+      console.log(`url ${linkUrl}`)
+      if (linkUrl != "") {
+        const newFile = this.getObjectByForm(newId, linkUrl)
+        await this.database.createNewFile(newFile)
+        refTask.close()
+        this.backScreen()
+      }
+      refTask.close()
+    }
   }
 
-  async onFileDropped(listFiles: any[]) {
+  onFileDropped(listFiles: any[]) {
     const listFinalFiles = [...listFiles]
     const file = listFinalFiles[0]
     this.fileSelected = file
     this.formFile.controls["name"].setValue(file.name)
     this.iconFile = getIconFileAndColor(file.name)
+  }
+
+  backScreen() {
+    this.location.back()
   }
 
   onClickInputFile(event: any) {
@@ -74,4 +104,19 @@ export class FormUploadFileComponent implements OnInit {
   onFakeClickFile() {
     document.getElementById('input-file')?.click();
   }
+
+  private getObjectByForm(newId: string, linkUrl: string) {
+    return <FileObject>{
+      id: newId,
+      link: linkUrl,
+      type: FileType.FILE,
+      name: this.formFile.controls["name"].value,
+      author: this.formFile.controls["author"].value,
+      description: this.formFile.controls["description"].value,
+      colorFile: this.formFile.controls["colorFile"].value,
+      soundFile: this.formFile.controls["soundFile"].value,
+      dateCreate: this.formFile.controls["dateCreate"].value,
+    }
+  }
+
 }

@@ -25,6 +25,10 @@ export class StorageService {
     return this.progressState.progressState
   }
 
+  setInitState() {
+    this.progressState.setInitialState()
+  }
+
   async uploadFile(fileId: string, file: any) {
     const fileRef = ref(this.storage, fileId);
     let linkFile = ""
@@ -51,25 +55,26 @@ export class StorageService {
       this.progressState.setSuccess()
     } catch (e) {
       console.log(`error uploading file: ${file} ${e}`)
-    } finally {
-
-      // * restore init state
-      this.progressState.setInitialState()
-
     }
     return linkFile
 
   }
 
-  downloadFile(fileUrl: string, fileName: string) {
+  downloadFile(fileUrl: string, fileName: string, actionBefore: Function) {
     const request = new TaskDownload(
       {
         nameFile: fileName,
         urlFile: fileUrl,
-        actionAfter: () => this.progressState.setSuccess(),
+        actionAfter: () => {
+          this.progressState.setSuccess()
+          actionBefore()
+        },
         actionBefore: () => this.progressState.setInitialState(),
         actionUpdate: (percent) => this.progressState.setProgress(percent),
-        actionError: (error) => console.log(`error downloading file: ${fileName} ${error}`)
+        actionError: (error) => {
+          actionBefore()
+          console.log(`error downloading file: ${fileName} ${error}`)
+        }
       }
     )
     request.startRequest()

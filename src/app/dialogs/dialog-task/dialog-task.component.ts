@@ -4,7 +4,7 @@ import {AnimationOptions} from "ngx-lottie";
 import {ProgressBarMode} from "@angular/material/progress-bar";
 import {Subscription} from "rxjs";
 import {StorageService} from "../../services/storage/storage.service";
-import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from "@angular/material/dialog";
+import {MAT_DIALOG_DATA, MatDialog} from "@angular/material/dialog";
 import {StateFile} from "../../services/storage/ProgressState";
 
 
@@ -38,7 +38,6 @@ export class DialogTaskComponent implements OnInit, OnDestroy {
     private ngZone: NgZone,
     private storage: StorageService,
     @Inject(MAT_DIALOG_DATA) public data: ProgressData,
-    private dialogRef: MatDialogRef<DialogTaskComponent>
   ) {
     this.percentTask = 0;
     this.titleTask = this.getTitle(data.type);
@@ -47,12 +46,13 @@ export class DialogTaskComponent implements OnInit, OnDestroy {
   }
 
   static openDialog(dialog: MatDialog, taskType: TaskType) {
-    dialog.open(DialogTaskComponent, {
+    return dialog.open(DialogTaskComponent, {
       width: '350px',
       disableClose: true,
       data: {type: taskType}
     });
   }
+
 
   ngOnDestroy(): void {
     this.subscribePercent.unsubscribe()
@@ -70,7 +70,6 @@ export class DialogTaskComponent implements OnInit, OnDestroy {
   private subscribePercentWork() {
     return this.storage.progressBar.subscribe(async (filePercent) => {
       this.ngZone.run(() => {
-        console.log(filePercent.state)
         switch (filePercent.state) {
           case StateFile.INIT:
             this.percentTask = 0;
@@ -83,7 +82,6 @@ export class DialogTaskComponent implements OnInit, OnDestroy {
           case StateFile.SUCCESS:
             this.percentTask = 100;
             this.progressBarMode = 'indeterminate';
-            this.dialogRef.close()
             break;
         }
       })

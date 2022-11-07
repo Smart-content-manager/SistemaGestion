@@ -94,15 +94,9 @@ export class DatabaseService {
     await setDoc(newDoc, objectFolder)
   }
 
-  async createNewFile(name: string, fileId: string, linkFile: string) {
-    const objectFolder = FileObjectToMap(
-      <FileObject>{
-        name: name,
-        type: FileType.FILE,
-        link: linkFile
-      }
-    )
-    const newDoc = doc(this.firestore, `${this.currentPath.value}/files`, fileId)
+  async createNewFile(fileObject: FileObject) {
+    const objectFolder = FileObjectToMap(fileObject)
+    const newDoc = doc(this.firestore, `${this.currentPath.value}/files`, fileObject.id)
     await setDoc(newDoc, objectFolder)
   }
 
