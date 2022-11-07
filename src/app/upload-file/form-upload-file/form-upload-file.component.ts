@@ -65,20 +65,26 @@ export class FormUploadFileComponent implements OnInit {
   }
 
   async sendFile() {
-    console.log("click send|")
     if (this.formFile.valid && this.fileSelected) {
-      console.log("Sending file")
-      const newId = uuidv4()
-      const refTask = DialogTaskComponent.openDialog(this.dialog, TaskType.UPLOAD)
-      const linkUrl = await this.storage.uploadFile(newId, this.fileSelected)
-      console.log(`url ${linkUrl}`)
-      if (linkUrl != "") {
-        const newFile = this.getObjectByForm(newId, linkUrl)
-        await this.database.createNewFile(newFile)
+
+      const name = this.formFile.controls["name"].value
+      const objectSomeName = this.database.listCurrent.filter(fileObject => fileObject.type == FileType.FILE).find((value) => value.name == name)
+
+
+      if (objectSomeName) {
+        this.formFile.controls["name"].setErrors({exist: true})
+      } else {
+        const newId = uuidv4()
+        const refTask = DialogTaskComponent.openDialog(this.dialog, TaskType.UPLOAD)
+        const linkUrl = await this.storage.uploadFile(newId, this.fileSelected)
+        if (linkUrl != "") {
+          const newFile = this.getObjectByForm(newId, linkUrl)
+          await this.database.createNewFile(newFile)
+          refTask.close()
+          this.backScreen()
+        }
         refTask.close()
-        this.backScreen()
       }
-      refTask.close()
     }
   }
 

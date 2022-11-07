@@ -31,6 +31,7 @@
         <input #inputName [maxlength]="MAX_LENGTH_NAME" formControlName="name" matInput required type="text">
         <mat-hint align="end">{{inputName?.value?.length || 0}}/{{MAX_LENGTH_NAME}}</mat-hint>
         <mat-error *ngIf="formFile.controls['name'].hasError('required')">El nombre es requerido</mat-error>
+        <mat-error *ngIf="formFile.controls['name'].hasError('exist')">Ya hay un archivo con ese nombre</mat-error>
       </mat-form-field>
 
       <!-- * author -->

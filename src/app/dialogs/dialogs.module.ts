@@ -11,7 +11,6 @@ import {ReactiveFormsModule} from "@angular/forms";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
 import {MatButtonModule} from "@angular/material/button";
-import {DialogDropFileComponent} from './dialog-drop-file/dialog-drop-file.component';
 import {ShareModule} from "../share/share.module";
 import {FontAwesomeModule} from "@fortawesome/angular-fontawesome";
 
@@ -20,7 +19,6 @@ import {FontAwesomeModule} from "@fortawesome/angular-fontawesome";
     DialogTaskComponent,
     SelectAddDialogComponent,
     DialogInputNameComponent,
-    DialogDropFileComponent,
   ],
   imports: [
     CommonModule,
