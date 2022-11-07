@@ -26,16 +26,25 @@ export interface FileObject {
 
 export function FileObjectToMap(object: FileObject) {
   const typeEnum = object.type == FileType.FILE ? FileTypeFile : FileTypeFolder
-  return {
-    type: typeEnum,
-    name: object.name,
-    link: object.link,
-    author: object.author,
-    description: object.description,
-    colorFile: object.colorFile,
-    soundFile: object.soundFile,
-    dateCreate: object.dateCreate,
+  if (object.type == FileType.FILE) {
+    return {
+      type: typeEnum,
+      name: object.name,
+      link: object.link,
+      author: object.author,
+      description: object.description,
+      colorFile: object.colorFile,
+      soundFile: object.soundFile,
+      dateCreate: object.dateCreate,
+    }
+  } else {
+    return {
+      type: typeEnum,
+      name: object.name,
+      link: object.link,
+    }
   }
+
 }
 
 export function MapToFileObject(map: DocumentData) {

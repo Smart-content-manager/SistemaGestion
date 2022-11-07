@@ -19,18 +19,16 @@ export class MenuFileOptionsComponent implements OnInit {
 
   // * show all options with icon and text
   listFileOptions: ItemActionFile[] = [
-    { name: "Renombrar", action: ActionsFile.RENAME, iconAction: faPen },
-    { name: "Eliminar", action: ActionsFile.DELETE, iconAction: faTrash },
-    { name: "Descargar", action: ActionsFile.DOWNLOAD, iconAction: faDownload },
-    { name: "Obtener link", action: ActionsFile.GET_LINK, iconAction: faLink }
+    {name: "Renombrar", action: ActionsFile.RENAME, iconAction: faPen},
+    {name: "Eliminar", action: ActionsFile.DELETE, iconAction: faTrash},
+    {name: "Descargar", action: ActionsFile.DOWNLOAD, iconAction: faDownload},
+    {name: "Obtener link", action: ActionsFile.GET_LINK, iconAction: faLink},
+    {name: "Propiedades", action: ActionsFile.PROPERTY, iconAction: faPen}
   ];
 
   listFolderOptions: ItemActionFile[] = [
-    { name: "Eliminar", action: ActionsFile.DELETE, iconAction: faTrash },
+    {name: "Renombrar", action: ActionsFile.RENAME, iconAction: faPen},
   ];
-
-  //!No borrar es de una clase de css
-  lock = "lock"
 
 
   listCurrentOptions: ItemActionFile[] = []

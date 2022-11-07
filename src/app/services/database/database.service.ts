@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {collection, collectionData, deleteDoc, doc, Firestore, setDoc, updateDoc} from '@angular/fire/firestore';
+import {collection, collectionData, doc, Firestore, runTransaction} from '@angular/fire/firestore';
 import {FileObject, FileObjectToMap, MapToFileObject} from "../../main-panel/models/FileObject";
 import {BehaviorSubject, catchError, map, Observable, switchMap, tap} from "rxjs";
 import {FileType} from "../../main-panel/models/FileType";
@@ -91,22 +91,26 @@ export class DatabaseService {
       }
     )
     const newDoc = doc(this.firestore, `${this.currentPath.value}/files`, idFolder)
-    await setDoc(newDoc, objectFolder)
+    await runTransaction(this.firestore,
+      async (transaction) => transaction.set(newDoc, objectFolder))
   }
 
   async createNewFile(fileObject: FileObject) {
     const objectFolder = FileObjectToMap(fileObject)
     const newDoc = doc(this.firestore, `${this.currentPath.value}/files`, fileObject.id)
-    await setDoc(newDoc, objectFolder)
+    await runTransaction(this.firestore,
+      async (transaction) => transaction.set(newDoc, objectFolder))
   }
 
   async updateName(name: string, idFile: string) {
     const document = doc(this.firestore, `${this.currentPath.value}/files/${idFile}`)
-    await updateDoc(document, {name: name})
+    await runTransaction(this.firestore,
+      async (transaction) => transaction.update(document, {name: name}))
   }
 
   async deleteFile(idFile: string) {
     const document = doc(this.firestore, `${this.currentPath.value}/files/${idFile}`)
-    await deleteDoc(document)
+    await runTransaction(this.firestore,
+      async (transaction) => transaction.delete(document))
   }
 }

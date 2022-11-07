@@ -133,6 +133,9 @@ export class PanelDragDropComponent implements OnInit {
         this._clipboard.copy(event.file.link)
         this.showToast("Enlace copiado al portapapeles")
         break;
+      case ActionsFile.PROPERTY:
+        this.showToast("Enlace copiado al portapapeles")
+        break;
     }
   }
 

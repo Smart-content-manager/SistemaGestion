@@ -1,7 +1,7 @@
 import {IconDefinition} from "@fortawesome/free-solid-svg-icons";
 
-export enum ActionsFile {
-  DELETE, RENAME, DOWNLOAD, GET_LINK
+export const enum ActionsFile {
+  DELETE, RENAME, DOWNLOAD, GET_LINK, PROPERTY
 }
 
 export interface ItemActionFile {
