@@ -1,21 +1,17 @@
 <form (ngSubmit)="validateNameInput()" [formGroup]="formControlFolder!" class="form-add-folder">
   <h3>{{titleDialog}}</h3>
-  <mat-form-field appearance="outline">
+  <mat-form-field appearance="outline" hintLabel="Max {{maxLengthName}} caracteres">
     <mat-label>{{nameInput}}</mat-label>
     <input
       #inputFileName
       formControlName="nameInput"
       matInput
       placeholder="Escribe el nombre"
-      type="text">
-    <mat-hint
-      [ngStyle]="{'color' : (inputFileName?.value?.length || 0) > maxLengthName ? 'red' : 'black'}"
-      align="end"
-    >{{inputFileName.value.length}} /{{maxLengthName}}</mat-hint>
-    <mat-error *ngIf="formControlFolder.controls['nameInput']?.errors?.['required']">name is require</mat-error>
-    <mat-error *ngIf="formControlFolder.controls['nameInput']?.errors?.['maxlength']">name is very length</mat-error>
-    <mat-error *ngIf="formControlFolder.controls['nameInput']?.errors?.['exist']">the name already exists</mat-error>
-    <mat-error *ngIf="formControlFolder.controls['nameInput']?.errors?.['sameName']">the name is the same</mat-error>
+      [maxLength]="maxLengthName"
+      type="text"
+    >
+    <mat-hint align="end">{{inputFileName.value.length}}/{{maxLengthName}}</mat-hint>
+    <mat-error *ngIf="formControlFolder.invalid">{{getErrorName()}}</mat-error>
   </mat-form-field>
 
   <div mat-dialog-actions>

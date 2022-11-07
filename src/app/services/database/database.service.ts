@@ -33,7 +33,7 @@ export class DatabaseService {
               // * before order list files. First folders and after files
               .sort((doc1, doc2) => doc2.type.valueOf() - doc1.type.valueOf())),
           // * save one copy of list of files
-          tap(list => this.listCurrent = list.filter(item => item.type === FileType.FOLDER)),
+          tap(list => this.listCurrent = list),
           // * in case of error, send empty list
           catchError((error: any) => {
             console.error(`error get list files: ${error}`)

@@ -116,7 +116,7 @@ export class PanelDragDropComponent implements OnInit {
         const nameFileSelected = this.fileSelected?.name
         if (nameFileSelected) {
           this.openDialogInputName(
-            TypeInput.RENAME_FILE,
+            file.type == FileType.FOLDER ? TypeInput.RENAME_FOLDER : TypeInput.RENAME_FILE,
             async (name: string) => {
               await this.database.updateName(name, file.id)
               this.showToast("Elemento renombrado")
@@ -150,7 +150,6 @@ export class PanelDragDropComponent implements OnInit {
 
 
   documentClick(event: any) {
-    const elementRef = (event.target as Element)
     this.fileSelected = undefined
   }
 
