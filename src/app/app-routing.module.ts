@@ -6,9 +6,10 @@ import {MyAuthGuard} from "./MyAuthGuard";
 import {FormUploadFileComponent} from "./upload-file/form-upload-file/form-upload-file.component";
 
 const routes: Routes = [
-  {path: '', pathMatch: "full", component: PanelDragDropComponent, canActivate: [MyAuthGuard]},
   {path: 'login', component: AuthComponent},
-  {path: 'newFile', component: FormUploadFileComponent, canActivate: [MyAuthGuard]}
+  {path: '', redirectTo: '/home', pathMatch: 'full'},
+  {path: 'home', component: PanelDragDropComponent, canActivate: [MyAuthGuard]},
+  {path: 'newFile', component: FormUploadFileComponent, canActivate: [MyAuthGuard]},
 ];
 
 // configures NgModule imports and exports

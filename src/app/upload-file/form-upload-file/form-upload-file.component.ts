@@ -10,6 +10,7 @@ import {v4 as uuidv4} from 'uuid';
 import {FileType} from "../../main-panel/models/FileType";
 import {Location} from "@angular/common";
 import {MatDatepickerInputEvent} from "@angular/material/datepicker";
+import {Router} from "@angular/router";
 
 export interface MapInput {
   key: string,
@@ -51,6 +52,7 @@ export class FormUploadFileComponent implements OnInit {
     private storage: StorageService,
     private database: DatabaseService,
     private dialog: MatDialog,
+    private route: Router,
     private location: Location
   ) {
     this.formFile = new FormGroup({
@@ -104,7 +106,8 @@ export class FormUploadFileComponent implements OnInit {
   }
 
   backScreen() {
-    this.location.back()
+    this.route.navigateByUrl("/home")
+    // this.location.back()
   }
 
   onClickInputFile(event: any) {

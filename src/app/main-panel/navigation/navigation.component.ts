@@ -32,6 +32,7 @@ export class NavigationComponent {
 
 
     this.location.onPopState((event) => {
+      console.log(event)
       if (database.currentShowPath != "") {
         database.backDirectory()
       }

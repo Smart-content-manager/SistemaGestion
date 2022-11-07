@@ -15,6 +15,8 @@ import player from 'lottie-web';
 import {AuthModule} from "./auth/auth.module";
 import {MyAuthGuard} from "./MyAuthGuard";
 import {UploadFileModule} from "./upload-file/upload-file.module";
+import {RouteReuseStrategy} from "@angular/router";
+import {CustomReuseStrategy} from "./CustomReuseStrategy";
 
 export function playerFactory() {
   return player;
@@ -39,7 +41,11 @@ export function playerFactory() {
     LottieModule.forRoot({player: playerFactory})
   ],
   providers: [
-    MyAuthGuard
+    MyAuthGuard,
+    {
+      provide: RouteReuseStrategy,
+      useClass: CustomReuseStrategy
+    }
   ],
   exports: [],
   bootstrap: [AppComponent]

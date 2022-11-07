@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {AfterContentChecked, ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {FileObject} from "../models/FileObject";
 import {ActionsFile} from "../models/ActionsFile";
 import {StorageService} from "../../services/storage/storage.service";
@@ -11,14 +11,14 @@ import {DatabaseService} from "../../services/database/database.service";
 import {DialogTaskComponent, TaskType} from "../../dialogs/dialog-task/dialog-task.component";
 import {SelectAddDialogComponent} from "../../dialogs/select-add-dialog/select-add-dialog.component";
 import {DialogInputNameComponent, TypeInput} from "../../dialogs/dialog-input-name/dialog-input-name.component";
-import {Router} from "@angular/router";
+import {NavigationBehaviorOptions, Router} from "@angular/router";
 
 @Component({
   selector: 'app-panel-drag-drop',
   templateUrl: './panel-drag-drop.component.html',
   styleUrls: ['./panel-drag-drop.component.css']
 })
-export class PanelDragDropComponent implements OnInit {
+export class PanelDragDropComponent implements OnInit, AfterContentChecked {
 
   type = FileType.FOLDER
 
@@ -33,7 +33,8 @@ export class PanelDragDropComponent implements OnInit {
     private _snackBar: MatSnackBar,
     private _clipboard: Clipboard,
     private database: DatabaseService,
-    private router: Router
+    private router: Router,
+    private cdref: ChangeDetectorRef
   ) {
     // * add listener for change files for current directory
     this.listFiles = database.listFiles;
@@ -41,6 +42,12 @@ export class PanelDragDropComponent implements OnInit {
   }
 
   ngOnInit(): void {
+  }
+
+  ngAfterContentChecked() {
+
+    this.cdref.detectChanges();
+
   }
 
   openDialogCreate(event: any): void {
@@ -84,7 +91,7 @@ export class PanelDragDropComponent implements OnInit {
   }
 
   openDialogAddFile() {
-    this.router.navigateByUrl('newFile')
+    this.router.navigateByUrl('newFile', <NavigationBehaviorOptions>{relativeTo: this.router, skipLocationChange: true})
   }
 
   clickLeft(file: FileObject) {

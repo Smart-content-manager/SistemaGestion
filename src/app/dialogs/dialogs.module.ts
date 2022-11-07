@@ -13,12 +13,14 @@ import {MatInputModule} from "@angular/material/input";
 import {MatButtonModule} from "@angular/material/button";
 import {ShareModule} from "../share/share.module";
 import {FontAwesomeModule} from "@fortawesome/angular-fontawesome";
+import {DialogPropertyComponent} from './dialog-property/dialog-property.component';
 
 @NgModule({
   declarations: [
     DialogTaskComponent,
     SelectAddDialogComponent,
     DialogInputNameComponent,
+    DialogPropertyComponent,
   ],
   imports: [
     CommonModule,
