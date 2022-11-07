@@ -26,30 +26,28 @@
 
     <div class="container-field">
       <!-- * name -->
-      <mat-form-field appearance="outline">
+      <mat-form-field appearance="outline" hintLabel="Max {{MAX_LENGTH_NAME}} caracteres">
         <mat-label>Nombre</mat-label>
-        <input #inputName formControlName="name" matInput required type="text">
-        <mat-hint
-          [class.error-hint]="(inputName?.value?.length || 0) > MAX_LENGTH_NAME "
-          align="end">{{inputName?.value?.length || 0}}/{{MAX_LENGTH_NAME}}</mat-hint>
+        <input #inputName [maxlength]="MAX_LENGTH_NAME" formControlName="name" matInput required type="text">
+        <mat-hint align="end">{{inputName?.value?.length || 0}}/{{MAX_LENGTH_NAME}}</mat-hint>
+        <mat-error *ngIf="formFile.controls['name'].hasError('required')">El nombre es requerido</mat-error>
       </mat-form-field>
 
       <!-- * author -->
-      <mat-form-field appearance="outline">
+      <mat-form-field appearance="outline" hintLabel="Max {{MAX_LENGTH_AUTHOR}} caracteres">
         <mat-label>Autor</mat-label>
-        <input #inputAuthor formControlName="author" matInput required type="text">
-        <mat-hint
-          [class.error-hint]="(inputAuthor?.value?.length || 0) > MAX_LENGTH_AUTHOR"
-          align="end">{{inputAuthor?.value?.length || 0}}/{{MAX_LENGTH_AUTHOR}}</mat-hint>
+        <input #inputAuthor [maxlength]="MAX_LENGTH_AUTHOR" formControlName="author" matInput required type="text">
+        <mat-hint align="end">{{inputAuthor?.value?.length || 0}}/{{MAX_LENGTH_AUTHOR}}</mat-hint>
+        <mat-error *ngIf="formFile.controls['author'].hasError('required')">El autor es requerido</mat-error>
       </mat-form-field>
 
       <!-- * description -->
-      <mat-form-field appearance="outline" class="container-description">
+      <mat-form-field appearance="outline" class="container-description"
+                      hintLabel="Max {{MAX_LENGTH_DESCRIPTION}} caracteres">
         <mat-label>Descripcion</mat-label>
-        <textarea #inputDescription formControlName="author" matInput required type="text"></textarea>
-        <mat-hint
-          [class.error-hint]="(inputDescription?.value?.length || 0) > MAX_LENGTH_DESCRIPTION"
-          align="end">{{inputDescription?.value?.length || 0}}/{{MAX_LENGTH_DESCRIPTION}}</mat-hint>
+        <textarea #inputDescription [maxlength]="MAX_LENGTH_DESCRIPTION" formControlName="description" matInput
+                  type="text"></textarea>
+        <mat-hint align="end">{{inputDescription?.value?.length || 0}}/{{MAX_LENGTH_DESCRIPTION}}</mat-hint>
       </mat-form-field>
 
 
@@ -60,6 +58,7 @@
             *ngFor="let type of listColor"
             [value]="type">{{type.value}}</mat-option>
         </mat-select>
+        <mat-error *ngIf="formFile.controls['colorFile'].hasError('required')">El color es requerido</mat-error>
       </mat-form-field>
 
       <mat-form-field appearance="outline">
@@ -69,15 +68,17 @@
             *ngFor="let type of listSound"
             [value]="type">{{type.value}}</mat-option>
         </mat-select>
+        <mat-error *ngIf="formFile.controls['soundFile'].hasError('required')">El tipo de sonido es requerido
+        </mat-error>
       </mat-form-field>
 
 
-      <!-- * description -->
+      <!-- * date create -->
       <mat-form-field appearance="outline">
         <mat-label>Fecha de la creacion</mat-label>
         <input formControlName="dateCreate" matInput required type="date">
+        <mat-error *ngIf="formFile.controls['dateCreate'].hasError('required')">La fecha es necesaria</mat-error>
       </mat-form-field>
-
     </div>
 
     <button

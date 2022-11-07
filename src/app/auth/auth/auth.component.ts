@@ -1,7 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {AuthService} from '../services/auth.service';
-import {ToastrService} from "ngx-toastr";
 
 
 @Component({
@@ -15,13 +14,12 @@ export class AuthComponent implements OnInit {
   formAuth: FormGroup
 
   readonly MAX_LENGTH_EMAIL = 50;
-  readonly MAX_LENGTH_PASSWORD = 50;
+  readonly MAX_LENGTH_PASSWORD = 80;
 
   isAuthenticating = false;
 
   constructor(
     private auth: AuthService,
-    private toastr: ToastrService
   ) {
     this.formAuth = new FormGroup(
       {
@@ -46,6 +44,15 @@ export class AuthComponent implements OnInit {
       let password = this.formAuth.controls['password'].value;
       await this.auth.loginWithEmailAndPassword(email, password)
       this.isAuthenticating = false;
+    }
+  }
+
+  getErrorMessage(nameControl: string, showName: string, prefix: string = "El") {
+    const formControl = this.formAuth.controls[nameControl]
+    if (formControl.hasError("required")) {
+      return `${prefix} ${showName} es requerido`
+    } else {
+      return ''
     }
   }
 }

@@ -24,8 +24,8 @@ export class FormUploadFileComponent implements OnInit {
 
   readonly formFile: FormGroup;
   readonly MAX_LENGTH_NAME = 50
-  readonly MAX_LENGTH_DESCRIPTION = 50
   readonly MAX_LENGTH_AUTHOR = 50
+  readonly MAX_LENGTH_DESCRIPTION = 200
 
   readonly listColor = [
     <MapInput>{key: "a", value: "Un color"},
@@ -52,7 +52,7 @@ export class FormUploadFileComponent implements OnInit {
     private location: Location
   ) {
     this.formFile = new FormGroup({
-      name: new FormControl('', Validators.required),
+      name: new FormControl('', [Validators.required]),
       author: new FormControl('', Validators.required),
       description: new FormControl(''),
       dateCreate: new FormControl('', Validators.required),
