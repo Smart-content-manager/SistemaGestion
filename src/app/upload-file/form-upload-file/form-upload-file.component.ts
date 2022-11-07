@@ -9,6 +9,7 @@ import {StorageService} from "../../services/storage/storage.service";
 import {v4 as uuidv4} from 'uuid';
 import {FileType} from "../../main-panel/models/FileType";
 import {Location} from "@angular/common";
+import {MatDatepickerInputEvent} from "@angular/material/datepicker";
 
 export interface MapInput {
   key: string,
@@ -44,6 +45,7 @@ export class FormUploadFileComponent implements OnInit {
   readonly options = {path: "/assets/select-file.json"}
   fileSelected: File | null = null;
   iconFile: { color: string; icon: IconDefinition } | null = null;
+  firstDate = Date();
 
   constructor(
     private storage: StorageService,
@@ -55,14 +57,19 @@ export class FormUploadFileComponent implements OnInit {
       name: new FormControl('', [Validators.required]),
       author: new FormControl('', Validators.required),
       description: new FormControl(''),
-      dateCreate: new FormControl('', Validators.required),
+      dateCreate: new FormControl(this.getTimeNow(), Validators.required),
       colorFile: new FormControl('', Validators.required),
       soundFile: new FormControl('', Validators.required),
     });
   }
 
-  ngOnInit(): void {
+  dateChangeHandler(date: MatDatepickerInputEvent<Date, Date>) {
+    const newDate = date.value as Date
+    const stringDate: string = `${newDate.getDate()}/${newDate.getMonth() + 1}/${newDate.getFullYear()}`;
+    this.formFile.controls['dateCreate'].setValue(stringDate)
+    console.log(stringDate)
   }
+
 
   async sendFile() {
     if (this.formFile.valid && this.fileSelected) {
@@ -125,4 +132,11 @@ export class FormUploadFileComponent implements OnInit {
     }
   }
 
+  ngOnInit(): void {
+  }
+
+  private getTimeNow() {
+    const today = new Date();
+    return `${today.getDate()}/${today.getMonth() + 1}/${today.getFullYear()}`;
+  }
 }

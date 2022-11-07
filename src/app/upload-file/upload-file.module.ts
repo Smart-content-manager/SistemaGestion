@@ -11,6 +11,8 @@ import {LottieModule} from "ngx-lottie";
 import {ShareModule} from '../share/share.module';
 import {MatToolbarModule} from "@angular/material/toolbar";
 import {MatButtonModule} from "@angular/material/button";
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import {MatNativeDateModule} from "@angular/material/core";
 
 @NgModule({
   declarations: [
@@ -28,10 +30,15 @@ import {MatButtonModule} from "@angular/material/button";
     LottieModule,
     ShareModule,
     MatToolbarModule,
-    MatButtonModule
+    MatButtonModule,
+    MatDatepickerModule,
+    MatNativeDateModule
   ],
   exports: [
     FormUploadFileComponent
+  ],
+  providers: [
+    MatDatepickerModule,
   ]
 })
 export class UploadFileModule {
