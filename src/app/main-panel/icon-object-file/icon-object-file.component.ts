@@ -1,6 +1,6 @@
-import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { FileObject } from "../models/FileObject";
-import { MatMenuPanel, MatMenuTrigger } from "@angular/material/menu";
+import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
+import {FileObject} from "../models/FileObject";
+import {MatMenuPanel, MatMenuTrigger} from "@angular/material/menu";
 
 @Component({
   selector: 'app-icon-object-file',
@@ -33,7 +33,8 @@ export class IconObjectFileComponent implements OnInit {
 
   // * send event click left and no open the contextual menu
   // ! os no has "no open action", so close menu
-  clickFileLeft() {
+  clickFileLeft(event: any) {
+    event.stopPropagation()
     this.fileClickLeft.emit(this.fileObject!)
     this.iconFileTrigger?.closeMenu()
   }
@@ -41,6 +42,7 @@ export class IconObjectFileComponent implements OnInit {
   // * prevent normal menu when clicked right and show owner menu
   clickFileRight(event: any) {
     event.preventDefault()
+    event.stopPropagation()
     this.fileClickRight.emit(this.fileObject!)
     this.iconFileTrigger?.openMenu()
   }

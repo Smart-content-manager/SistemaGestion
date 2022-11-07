@@ -1,6 +1,6 @@
-<div class="container-panel">
+<div (click)="documentClick($event)" class="container-panel">
   <app-navigation></app-navigation>
-  <div (click)="documentClick($event)" id="main-panel">
+  <div id="main-panel">
     <!-- * init panel with listener clicks for list file -->
     <!-- ! is import pass "fileMenu", this is a ref for open mat menu -->
 
@@ -40,7 +40,7 @@
       </mat-menu>
     </ng-container>
 
-    <button (click)="openDialogCreate()" color="primary" id="button-add" mat-fab>
+    <button (click)="openDialogCreate($event)" color="primary" id="button-add" mat-fab>
       <mat-icon>add</mat-icon>
     </button>
   </div>

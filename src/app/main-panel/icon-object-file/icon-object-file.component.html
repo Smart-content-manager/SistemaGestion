@@ -1,5 +1,5 @@
 <div
-  (click)="clickFileLeft()"
+  (click)="clickFileLeft($event)"
   (contextmenu)="clickFileRight($event)"
   [matMenuTriggerData]="{ file: fileObject! }"
   [matMenuTriggerFor]="menu"

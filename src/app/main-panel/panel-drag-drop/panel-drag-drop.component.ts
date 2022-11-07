@@ -11,7 +11,6 @@ import {DatabaseService} from "../../services/database/database.service";
 import {DialogTaskComponent, TaskType} from "../../dialogs/dialog-task/dialog-task.component";
 import {SelectAddDialogComponent} from "../../dialogs/select-add-dialog/select-add-dialog.component";
 import {DialogInputNameComponent, TypeInput} from "../../dialogs/dialog-input-name/dialog-input-name.component";
-import {v4 as uuidv4} from "uuid";
 import {Router} from "@angular/router";
 
 @Component({
@@ -44,7 +43,8 @@ export class PanelDragDropComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  openDialogCreate(): void {
+  openDialogCreate(event: any): void {
+    event.stopPropagation();
     this.fileSelected = undefined
     const dialogCreateRef = SelectAddDialogComponent.openDialog(this.dialog);
 
@@ -148,17 +148,7 @@ export class PanelDragDropComponent implements OnInit {
 
   documentClick(event: any) {
     const elementRef = (event.target as Element)
-    if (elementRef.id === 'main-panel' || elementRef.className === 'ng-star-inserted') {
-      this.fileSelected = undefined
-    }
+    this.fileSelected = undefined
   }
 
-  async onFileDropped(listFiles: any[]) {
-    const listFinalFiles = [...listFiles]
-    DialogTaskComponent.openDialog(this.dialog, TaskType.UPLOAD)
-    const file = listFinalFiles[0]
-    const idFile = uuidv4()
-    const linkFile = await this.storage.uploadFile(idFile, file)
-    // await this.database.createNewFile(file.name, idFile, linkFile)
-  }
 }
