@@ -57,7 +57,7 @@
         <mat-select formControlName="colorFile">
           <mat-option
             *ngFor="let type of listColor"
-            [value]="type">{{type.value}}</mat-option>
+            [value]="type">{{type}}</mat-option>
         </mat-select>
         <mat-error *ngIf="formFile.controls['colorFile'].hasError('required')">El color es requerido</mat-error>
       </mat-form-field>
@@ -67,7 +67,7 @@
         <mat-select formControlName="soundFile">
           <mat-option
             *ngFor="let type of listSound"
-            [value]="type">{{type.value}}</mat-option>
+            [value]="type">{{type}}</mat-option>
         </mat-select>
         <mat-error *ngIf="formFile.controls['soundFile'].hasError('required')">El tipo de sonido es requerido
         </mat-error>

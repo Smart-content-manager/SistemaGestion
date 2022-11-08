@@ -12,6 +12,7 @@ import {DialogTaskComponent, TaskType} from "../../dialogs/dialog-task/dialog-ta
 import {SelectAddDialogComponent} from "../../dialogs/select-add-dialog/select-add-dialog.component";
 import {DialogInputNameComponent, TypeInput} from "../../dialogs/dialog-input-name/dialog-input-name.component";
 import {NavigationBehaviorOptions, Router} from "@angular/router";
+import {DialogPropertyComponent} from "../../dialogs/dialog-property/dialog-property.component";
 
 @Component({
   selector: 'app-panel-drag-drop',
@@ -141,7 +142,7 @@ export class PanelDragDropComponent implements OnInit, AfterContentChecked {
         this.showToast("Enlace copiado al portapapeles")
         break;
       case ActionsFile.PROPERTY:
-        this.showToast("Enlace copiado al portapapeles")
+        DialogPropertyComponent.openDialog(this.dialog, file)
         break;
     }
   }

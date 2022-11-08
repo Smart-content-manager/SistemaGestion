@@ -49,7 +49,7 @@ export class DialogTaskComponent implements OnInit, OnDestroy {
     return dialog.open(DialogTaskComponent, {
       width: '350px',
       disableClose: true,
-      data: {type: taskType}
+      data: <ProgressData>{type: taskType}
     });
   }
 

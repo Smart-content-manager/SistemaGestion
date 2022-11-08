@@ -8,7 +8,6 @@ import {FileObject} from "../../main-panel/models/FileObject";
 export const enum TypeInput {
   RENAME_FILE, RENAME_FOLDER, CREATE_FOLDER
 }
-
 export interface DialogInputNameData {
   typeInput: TypeInput,
   namePassed: string;

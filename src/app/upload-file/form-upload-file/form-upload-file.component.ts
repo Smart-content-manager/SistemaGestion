@@ -8,8 +8,6 @@ import {MatDialog} from "@angular/material/dialog";
 import {StorageService} from "../../services/storage/storage.service";
 import {v4 as uuidv4} from 'uuid';
 import {FileType} from "../../main-panel/models/FileType";
-import {Location} from "@angular/common";
-import {MatDatepickerInputEvent} from "@angular/material/datepicker";
 import {Router} from "@angular/router";
 
 export interface MapInput {
@@ -30,46 +28,37 @@ export class FormUploadFileComponent implements OnInit {
   readonly MAX_LENGTH_DESCRIPTION = 200
 
   readonly listColor = [
-    <MapInput>{key: "a", value: "Un color"},
-    <MapInput>{key: "b", value: "Blanco y negro"},
-    <MapInput>{key: "c", value: "Multicolor"},
-    <MapInput>{key: "g", value: "Escala de gris"},
-    <MapInput>{key: "n", value: "No se aplica al caso "},
+    "Un color",
+    "Blanco y negro",
+    "Multicolor",
+    "Escala de gris",
+    "No se aplica al caso "
   ];
 
   readonly listSound = [
-    <MapInput>{key: "#", value: "Sin sonido"},
-    <MapInput>{key: "a", value: "Contiene sonido"},
-    <MapInput>{key: "u", value: "Desconocido"},
+    "Sin sonido",
+    "Contiene sonido",
+    "Desconocido",
   ];
 
   readonly options = {path: "/assets/select-file.json"}
   fileSelected: File | null = null;
   iconFile: { color: string; icon: IconDefinition } | null = null;
-  firstDate = Date();
 
   constructor(
     private storage: StorageService,
     private database: DatabaseService,
     private dialog: MatDialog,
     private route: Router,
-    private location: Location
   ) {
     this.formFile = new FormGroup({
       name: new FormControl('', [Validators.required]),
       author: new FormControl('', Validators.required),
       description: new FormControl(''),
-      dateCreate: new FormControl(this.getTimeNow(), Validators.required),
+      dateCreate: new FormControl("", Validators.required),
       colorFile: new FormControl('', Validators.required),
       soundFile: new FormControl('', Validators.required),
     });
-  }
-
-  dateChangeHandler(date: MatDatepickerInputEvent<Date, Date>) {
-    const newDate = date.value as Date
-    const stringDate: string = `${newDate.getDate()}/${newDate.getMonth() + 1}/${newDate.getFullYear()}`;
-    this.formFile.controls['dateCreate'].setValue(stringDate)
-    console.log(stringDate)
   }
 
 
@@ -107,7 +96,6 @@ export class FormUploadFileComponent implements OnInit {
 
   backScreen() {
     this.route.navigateByUrl("/home")
-    // this.location.back()
   }
 
   onClickInputFile(event: any) {
@@ -131,7 +119,7 @@ export class FormUploadFileComponent implements OnInit {
       description: this.formFile.controls["description"].value,
       colorFile: this.formFile.controls["colorFile"].value,
       soundFile: this.formFile.controls["soundFile"].value,
-      dateCreate: this.formFile.controls["dateCreate"].value,
+      dateCreate: new Date(this.formFile.controls["dateCreate"].value),
     }
   }
 

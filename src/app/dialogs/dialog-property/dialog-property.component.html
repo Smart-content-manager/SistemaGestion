@@ -1,1 +1,22 @@
-<p>dialog-property works!</p>
+<div class="container-dialog-property">
+  <div class="container-img">
+    <fa-icon
+      [icon]="fileAndColor.icon"
+      [style.color]="fileAndColor.color" size="5x"></fa-icon>
+  </div>
+
+  <div class="container-list-property">
+    <div *ngFor="let property of listProperty" class="property">
+      <span>{{property.name}}</span><span>{{property.value}}</span>
+    </div>
+    <div class="property">
+      <span>Fecha de creacion</span><span>{{fileObject.dateCreate | date:'dd/MMM/yyyy' }}</span>
+    </div>
+    <div class="property">
+      <span>Fecha de subida</span><span>{{fileObject.uploadTime | date:'dd/MMM/yyyy hh:mm:ss' }}</span>
+    </div>
+  </div>
+  <div mat-dialog-actions>
+    <button [mat-dialog-close]="" cdkFocusInitial color="primary" mat-button mat-raised-button>Ok</button>
+  </div>
+</div>

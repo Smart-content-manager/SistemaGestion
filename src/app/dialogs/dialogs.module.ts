@@ -38,8 +38,10 @@ import {DialogPropertyComponent} from './dialog-property/dialog-property.compone
   exports: [
     DialogTaskComponent,
     SelectAddDialogComponent,
-    DialogInputNameComponent
-  ]
+    DialogInputNameComponent,
+    DialogPropertyComponent
+  ],
+
 })
 export class DialogsModule {
 }

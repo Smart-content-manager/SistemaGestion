@@ -17,6 +17,7 @@ import {MyAuthGuard} from "./MyAuthGuard";
 import {UploadFileModule} from "./upload-file/upload-file.module";
 import {RouteReuseStrategy} from "@angular/router";
 import {CustomReuseStrategy} from "./CustomReuseStrategy";
+import {DialogsModule} from "./dialogs/dialogs.module";
 
 export function playerFactory() {
   return player;
@@ -38,7 +39,8 @@ export function playerFactory() {
     provideDatabase(() => getDatabase()),
     provideFirestore(() => getFirestore()),
     provideStorage(() => getStorage()),
-    LottieModule.forRoot({player: playerFactory})
+    LottieModule.forRoot({player: playerFactory}),
+    DialogsModule
   ],
   providers: [
     MyAuthGuard,

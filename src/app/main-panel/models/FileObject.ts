@@ -9,6 +9,8 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import {DocumentData} from "@angular/fire/firestore";
 import {FileType, FileTypeFile, FileTypeFolder} from "./FileType";
+import {serverTimestamp} from "firebase/firestore";
+
 
 export interface FileObject {
   link: any;
@@ -21,7 +23,8 @@ export interface FileObject {
   description: string,
   colorFile: string,
   soundFile: string,
-  dateCreate: string,
+  dateCreate: Date,
+  uploadTime: Date
 }
 
 export function FileObjectToMap(object: FileObject) {
@@ -36,12 +39,15 @@ export function FileObjectToMap(object: FileObject) {
       colorFile: object.colorFile,
       soundFile: object.soundFile,
       dateCreate: object.dateCreate,
+      uploadTime: serverTimestamp()
     }
   } else {
     return {
       type: typeEnum,
       name: object.name,
       link: object.link,
+      dateCreate: new Date(),
+      uploadTime: serverTimestamp()
     }
   }
 
@@ -65,7 +71,8 @@ export function MapToFileObject(map: DocumentData) {
     description: map["description"],
     colorFile: map["colorFile"],
     soundFile: map["soundFile"],
-    dateCreate: map["dateCreate"],
+    dateCreate: map["dateCreate"].toDate(),
+    uploadTime: map["uploadTime"].toDate(),
   }
 }
 

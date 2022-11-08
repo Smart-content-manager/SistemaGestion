@@ -28,6 +28,7 @@ export class MenuFileOptionsComponent implements OnInit {
 
   listFolderOptions: ItemActionFile[] = [
     {name: "Renombrar", action: ActionsFile.RENAME, iconAction: faPen},
+    {name: "Propiedades", action: ActionsFile.PROPERTY, iconAction: faPen}
   ];
 
 

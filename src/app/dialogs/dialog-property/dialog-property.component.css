@@ -1,0 +1,22 @@
+.container-dialog-property {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 370px;
+}
+
+.container-img {
+  margin: 10px;
+}
+
+.property > * {
+  margin: 5px 10px;
+}
+
+.property {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  border: 1px solid grey;
+  align-items: center;
+}

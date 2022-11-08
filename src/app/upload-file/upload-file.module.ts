@@ -12,7 +12,7 @@ import {ShareModule} from '../share/share.module';
 import {MatToolbarModule} from "@angular/material/toolbar";
 import {MatButtonModule} from "@angular/material/button";
 import {MatDatepickerModule} from '@angular/material/datepicker';
-import {MatNativeDateModule} from "@angular/material/core";
+import {MAT_DATE_LOCALE, MatNativeDateModule} from "@angular/material/core";
 
 @NgModule({
   declarations: [
@@ -39,6 +39,7 @@ import {MatNativeDateModule} from "@angular/material/core";
   ],
   providers: [
     MatDatepickerModule,
+    {provide: MAT_DATE_LOCALE, useValue: 'en-GB'}
   ]
 })
 export class UploadFileModule {
