@@ -9,7 +9,7 @@
   padding: 20px;
   display: flex;
   justify-content: center;
-  height: calc(100% - 20px - 84px);
+  /*height: calc(100% - 20px - 84px);*/
 }
 
 form {
@@ -39,6 +39,9 @@ textarea {
   background: #ff79c6;
   border-radius: 10px;
   cursor: pointer;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
 }
 
 #input-file {

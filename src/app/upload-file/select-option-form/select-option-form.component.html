@@ -1,0 +1,13 @@
+<div *ngIf="form" [formGroup]="form">
+  <mat-form-field appearance="outline">
+    <mat-label>{{label}}</mat-label>
+    <mat-select (selectionChange)="changeOption($event)" [formControlName]="nameControl">
+      <mat-option
+        *ngFor="let option of listOptions"
+        [value]="option.code">{{option.description}}
+      </mat-option>
+    </mat-select>
+    <mat-error *ngIf="form.controls[nameControl].hasError('required')">{{errorRequire}}</mat-error>
+  </mat-form-field>
+</div>
+

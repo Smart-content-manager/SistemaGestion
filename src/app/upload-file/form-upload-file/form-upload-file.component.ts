@@ -9,6 +9,17 @@ import {StorageService} from "../../services/storage/storage.service";
 import {v4 as uuidv4} from 'uuid';
 import {FileType} from "../../main-panel/models/FileType";
 import {Router} from "@angular/router";
+import {
+  listActor,
+  listColorsFile,
+  listCopyright,
+  listFactorySite,
+  listLanguage,
+  listStateFile,
+  listStateLegacy,
+  listTypeFiles,
+  listTypeSound
+} from "../PropertysEncode";
 
 export interface MapInput {
   key: string,
@@ -27,19 +38,15 @@ export class FormUploadFileComponent implements OnInit {
   readonly MAX_LENGTH_AUTHOR = 50
   readonly MAX_LENGTH_DESCRIPTION = 200
 
-  readonly listColor = [
-    "Un color",
-    "Blanco y negro",
-    "Multicolor",
-    "Escala de gris",
-    "No se aplica al caso "
-  ];
-
-  readonly listSound = [
-    "Sin sonido",
-    "Contiene sonido",
-    "Desconocido",
-  ];
+  readonly listColor = listColorsFile;
+  readonly listTypes = listTypeFiles;
+  readonly listSound = listTypeSound;
+  readonly listActors = listActor;
+  readonly listCopyright = listCopyright;
+  readonly listLanguage = listLanguage;
+  readonly listSiteFactory = listFactorySite;
+  readonly listStateLegacy = listStateLegacy;
+  readonly listState = listStateFile
 
   readonly options = {path: "/assets/select-file.json"}
   fileSelected: File | null = null;
@@ -57,12 +64,20 @@ export class FormUploadFileComponent implements OnInit {
       description: new FormControl(''),
       dateCreate: new FormControl("", Validators.required),
       colorFile: new FormControl('', Validators.required),
+      typeFile: new FormControl('', Validators.required),
       soundFile: new FormControl('', Validators.required),
+      actorFile: new FormControl('', Validators.required),
+      copyRight: new FormControl('', Validators.required),
+      languageFile: new FormControl('', Validators.required),
+      siteFactoryFile: new FormControl('', Validators.required),
+      stateLegacyFile: new FormControl('', Validators.required),
+      stateFile: new FormControl('', Validators.required),
     });
   }
 
 
   async sendFile() {
+    this.formFile.markAllAsTouched();
     if (this.formFile.valid && this.fileSelected) {
 
       const name = this.formFile.controls["name"].value
@@ -124,10 +139,5 @@ export class FormUploadFileComponent implements OnInit {
   }
 
   ngOnInit(): void {
-  }
-
-  private getTimeNow() {
-    const today = new Date();
-    return `${today.getDate()}/${today.getMonth() + 1}/${today.getFullYear()}`;
   }
 }

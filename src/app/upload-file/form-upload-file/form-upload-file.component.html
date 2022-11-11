@@ -51,28 +51,71 @@
         <mat-hint align="end">{{inputDescription?.value?.length || 0}}/{{MAX_LENGTH_DESCRIPTION}}</mat-hint>
       </mat-form-field>
 
+      <app-select-option-form
+        [form]="formFile"
+        [listOptions]="listTypes"
+        errorRequire="El tipo de archivo es necesario"
+        label="Tipo de archivo"
+        nameControl="typeFile"
+      ></app-select-option-form>
 
-      <mat-form-field appearance="outline">
-        <mat-label>Color del material</mat-label>
-        <mat-select formControlName="colorFile">
-          <mat-option
-            *ngFor="let type of listColor"
-            [value]="type">{{type}}</mat-option>
-        </mat-select>
-        <mat-error *ngIf="formFile.controls['colorFile'].hasError('required')">El color es requerido</mat-error>
-      </mat-form-field>
+      <app-select-option-form
+        [form]="formFile"
+        [listOptions]="listSound"
+        errorRequire="El tipo de sonido es requerido"
+        label="Sonido contendio en el material"
+        nameControl="soundFile"
+      ></app-select-option-form>
 
-      <mat-form-field appearance="outline">
-        <mat-label>Sonido del material</mat-label>
-        <mat-select formControlName="soundFile">
-          <mat-option
-            *ngFor="let type of listSound"
-            [value]="type">{{type}}</mat-option>
-        </mat-select>
-        <mat-error *ngIf="formFile.controls['soundFile'].hasError('required')">El tipo de sonido es requerido
-        </mat-error>
-      </mat-form-field>
+      <app-select-option-form
+        [form]="formFile"
+        [listOptions]="listActors"
+        errorRequire="Los actores son necesarios"
+        label="Actores en el material"
+        nameControl="actorFile"
+      ></app-select-option-form>
 
+
+      <app-select-option-form
+        [form]="formFile"
+        [listOptions]="listCopyright"
+        errorRequire="Este campo es requerido"
+        label="Copyrigth del material"
+        nameControl="copyRight"
+      ></app-select-option-form>
+
+
+      <app-select-option-form
+        [form]="formFile"
+        [listOptions]="listLanguage"
+        errorRequire="El lenguaje es necesario"
+        label="Idioma del material"
+        nameControl="languageFile"
+      ></app-select-option-form>
+
+      <app-select-option-form
+        [form]="formFile"
+        [listOptions]="listSiteFactory"
+        errorRequire="Este campo es necesario"
+        label="Fabricacion del material"
+        nameControl="siteFactoryFile"
+      ></app-select-option-form>
+
+      <app-select-option-form
+        [form]="formFile"
+        [listOptions]="listStateLegacy"
+        errorRequire="Este campo es necesario"
+        label="Estado legal del material"
+        nameControl="stateLegacyFile"
+      ></app-select-option-form>
+
+      <app-select-option-form
+        [form]="formFile"
+        [listOptions]="listState"
+        errorRequire="Este campo muy importante"
+        label="Estado interno del material"
+        nameControl="stateFile"
+      ></app-select-option-form>
 
       <!-- * date create -->
       <mat-form-field appearance="outline">
@@ -95,5 +138,4 @@
     </button>
 
   </form>
-
 </div>

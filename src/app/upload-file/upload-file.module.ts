@@ -13,10 +13,12 @@ import {MatToolbarModule} from "@angular/material/toolbar";
 import {MatButtonModule} from "@angular/material/button";
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MAT_DATE_LOCALE, MatNativeDateModule} from "@angular/material/core";
+import {SelectOptionFormComponent} from './select-option-form/select-option-form.component';
 
 @NgModule({
   declarations: [
     FormUploadFileComponent,
+    SelectOptionFormComponent,
   ],
   imports: [
     CommonModule,
