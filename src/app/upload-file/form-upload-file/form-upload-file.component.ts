@@ -9,17 +9,8 @@ import {StorageService} from "../../services/storage/storage.service";
 import {v4 as uuidv4} from 'uuid';
 import {FileType} from "../../main-panel/models/FileType";
 import {Router} from "@angular/router";
-import {
-  listActor,
-  listColorsFile,
-  listCopyright,
-  listFactorySite,
-  listLanguage,
-  listStateFile,
-  listStateLegacy,
-  listTypeFiles,
-  listTypeSound
-} from "../PropertysEncode";
+import {createNameCode, listProperties} from "../PropertysEncode";
+import {ToastrService} from "ngx-toastr";
 
 export interface MapInput {
   key: string,
@@ -38,16 +29,6 @@ export class FormUploadFileComponent implements OnInit {
   readonly MAX_LENGTH_AUTHOR = 50
   readonly MAX_LENGTH_DESCRIPTION = 200
 
-  readonly listColor = listColorsFile;
-  readonly listTypes = listTypeFiles;
-  readonly listSound = listTypeSound;
-  readonly listActors = listActor;
-  readonly listCopyright = listCopyright;
-  readonly listLanguage = listLanguage;
-  readonly listSiteFactory = listFactorySite;
-  readonly listStateLegacy = listStateLegacy;
-  readonly listState = listStateFile
-
   readonly options = {path: "/assets/select-file.json"}
   fileSelected: File | null = null;
   iconFile: { color: string; icon: IconDefinition } | null = null;
@@ -57,12 +38,13 @@ export class FormUploadFileComponent implements OnInit {
     private database: DatabaseService,
     private dialog: MatDialog,
     private route: Router,
+    private toastr: ToastrService
   ) {
     this.formFile = new FormGroup({
-      name: new FormControl('', [Validators.required]),
+      name: new FormControl('', Validators.required),
       author: new FormControl('', Validators.required),
       description: new FormControl(''),
-      dateCreate: new FormControl("", Validators.required),
+      dateCreate: new FormControl('', Validators.required),
       colorFile: new FormControl('', Validators.required),
       typeFile: new FormControl('', Validators.required),
       soundFile: new FormControl('', Validators.required),
@@ -75,6 +57,10 @@ export class FormUploadFileComponent implements OnInit {
     });
   }
 
+
+  get listPropertiesValue() {
+    return Object.values(listProperties)
+  }
 
   async sendFile() {
     this.formFile.markAllAsTouched();
@@ -98,6 +84,8 @@ export class FormUploadFileComponent implements OnInit {
         }
         refTask.close()
       }
+    } else {
+      this.toastr.error("Verifique los datos")
     }
   }
 
@@ -132,11 +120,11 @@ export class FormUploadFileComponent implements OnInit {
       name: this.formFile.controls["name"].value,
       author: this.formFile.controls["author"].value,
       description: this.formFile.controls["description"].value,
-      colorFile: this.formFile.controls["colorFile"].value,
-      soundFile: this.formFile.controls["soundFile"].value,
       dateCreate: new Date(this.formFile.controls["dateCreate"].value),
+      propertiesCode: createNameCode(this.formFile)
     }
   }
+
 
   ngOnInit(): void {
   }

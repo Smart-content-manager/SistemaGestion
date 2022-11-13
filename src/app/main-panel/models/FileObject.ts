@@ -21,10 +21,9 @@ export interface FileObject {
   icon: IconDefinition;
   author: string,
   description: string,
-  colorFile: string,
-  soundFile: string,
   dateCreate: Date,
-  uploadTime: Date
+  uploadTime: Date,
+  propertiesCode: string
 }
 
 export function FileObjectToMap(object: FileObject) {
@@ -36,8 +35,7 @@ export function FileObjectToMap(object: FileObject) {
       link: object.link,
       author: object.author,
       description: object.description,
-      colorFile: object.colorFile,
-      soundFile: object.soundFile,
+      propertiesCode: object.propertiesCode,
       dateCreate: object.dateCreate,
       uploadTime: serverTimestamp()
     }
@@ -69,10 +67,9 @@ export function MapToFileObject(map: DocumentData) {
     link: map["link"],
     author: map["author"],
     description: map["description"],
-    colorFile: map["colorFile"],
-    soundFile: map["soundFile"],
     dateCreate: map["dateCreate"].toDate(),
     uploadTime: map["uploadTime"].toDate(),
+    propertiesCode: map["propertiesCode"]
   }
 }
 

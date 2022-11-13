@@ -3,11 +3,7 @@ import {FileType} from "../../main-panel/models/FileType";
 import {FileObject, getIconFileAndColor} from "../../main-panel/models/FileObject";
 import {IconDefinition} from "@fortawesome/free-solid-svg-icons";
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
-
-export interface Properties {
-  name: string,
-  value: string
-}
+import {getListProperties, Properties} from "../../upload-file/PropertysEncode";
 
 export interface DialogPropertyData {
   fileObject: FileObject
@@ -47,12 +43,12 @@ export class DialogPropertyComponent implements OnInit {
   getListShowProperty(fileObject: FileObject) {
     const listProperty = [<Properties>{name: 'Nombre', value: fileObject.name}]
     if (fileObject.type == FileType.FILE) {
+      // * add properties general file
       listProperty.push(
         <Properties>{name: 'Autor', value: fileObject.author},
         <Properties>{name: 'Descripcion', value: fileObject.description},
-        <Properties>{name: 'Color', value: fileObject.colorFile},
-        <Properties>{name: 'Sonido', value: fileObject.soundFile},
       )
+      listProperty.push(...getListProperties(fileObject.propertiesCode))
     }
     return listProperty
   }
